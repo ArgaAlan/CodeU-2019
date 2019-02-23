@@ -47,9 +47,17 @@ function showMessageFormIfViewingSelf() {
 }
 
 /** Fetches messages and add them to the page. */
+/*
+Gets our data from our server (not going to hang up)
+Try and make a request to the URL, instead of waiting for it to come back,
+we have a promise - go get this response, grab JSON from it, 
+call JSON messages, then you can do something with messages.
+*/
 function fetchMessages() {
+  /* parameterUsername: URL queries/parameters
+     make a request to /messages, just grabbing data (GET)  */
   const url = '/messages?user=' + parameterUsername;
-  fetch(url)
+  fetch(url) //GET REQUEST
       .then((response) => {
         return response.json();
       })
