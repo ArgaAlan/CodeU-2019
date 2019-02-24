@@ -58,6 +58,6 @@ public class AboutMeServlet extends HttpServlet{
         System.out.println("Saving about me for "+userEmail);
         //TODO: Save the data
 
-        response.sendRedirect("/user_page.htlm?user="+userEmail);
+        response.sendRedirect("/user-page.html?user="+userEmail);
       }
 }
