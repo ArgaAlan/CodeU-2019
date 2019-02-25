@@ -38,7 +38,7 @@ public class AboutMeServlet extends HttpServlet{
 
       String user = request.getParameter("user");
       if (user == null || user.equals("")) {
-        System.err.Println("Error from AboutMeServlet: User parameter invalid.");
+        System.err.println("Error from AboutMeServlet: User parameter invalid.");
         response.sendRedirect("/index.html");
         return;
       }
