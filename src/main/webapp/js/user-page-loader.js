@@ -94,7 +94,7 @@ function buildMessageDiv(message) {
 function fetchAboutMe(){
   const url = '/about?user='+parameterUsername;
   fetch(url).then((response) => {
-    return response.txt();
+    return response.text();
   }).then((aboutMe) => {
     const aboutMeContainer = document.getElementById('about-me-container');
     if (aboutMe == '') {
