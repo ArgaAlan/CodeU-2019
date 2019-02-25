@@ -37,15 +37,16 @@ public class AboutMeServlet extends HttpServlet{
       response.setContentType("text/html");
 
       String user = request.getParameter("user");
-      if(user == null || user.equals("")){
-        response.getOutputStream().println("INVALID RESPONSE: STOP HACKING THE MAINFRAME");
+      if (user == null || user.equals("")) {
+        System.err.Println("Error from AboutMeServlet: User parameter invalid.");
+        response.sendRedirect("/index.html");
         return;
       }
 
       User userData = datastore.getUser(user);
-      if(userData == null || userData.getAboutMe() == null)
-      {
-        response.getOutputStream().println("Yo! This is looking prettty empty to me!");
+      if (userData == null || userData.getAboutMe() == null) {
+        response.getOutputStream().println("This user page is empty :(");
+        response.getOutputStream().println("Tell them to add their \"About me\" page!");
         return;
       }
 
@@ -58,7 +59,7 @@ public class AboutMeServlet extends HttpServlet{
 
         UserService userService = UserServiceFactory.getUserService();
 
-        if(!userService.isUserLoggedIn()){
+        if (!userService.isUserLoggedIn()) {
           response.sendRedirect("/index.html");
           return;
         }
