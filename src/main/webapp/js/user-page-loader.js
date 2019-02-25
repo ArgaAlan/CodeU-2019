@@ -91,15 +91,13 @@ function buildMessageDiv(message) {
   return messageDiv;
 }
 
-// TODO:Understand what in the world this means
-// Arrows are scary
 function fetchAboutMe(){
   const url = '/about?user='+parameterUsername;
   fetch(url).then((response) => {
     return response.txt();
   }).then((aboutMe) => {
     const aboutMeContainer = document.getElementById('about-me-container');
-    if(aboutMe == ''){
+    if (aboutMe == '') {
       aboutMe = "No information to show";
     }
     aboutMeContainer.innerHTML = aboutMe;
