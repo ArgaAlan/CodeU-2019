@@ -109,7 +109,7 @@ public class Datastore {
 
   //Return aboutMe
   String aboutMe = (String) userEntity.getProperty("aboutMe");
-  User user = new User(userEntity.getProperty("email");, aboutMe);
+  User user = new User((String)userEntity.getProperty("email"), aboutMe);
   return user;
 }
 }
