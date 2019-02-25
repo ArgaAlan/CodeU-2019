@@ -103,13 +103,13 @@ public class Datastore {
                                             );
   PreparedQuery results = datastore.prepare(query);
   Entity userEntity = results.asSingleEntity();
-  if(userEntity == null) {
+  if (userEntity == null) {
    return null;
   }
 
   //Return aboutMe
   String aboutMe = (String) userEntity.getProperty("aboutMe");
-  User user = new User(email, aboutMe);
+  User user = new User(userEntity.getProperty("email");, aboutMe);
   return user;
 }
 }
