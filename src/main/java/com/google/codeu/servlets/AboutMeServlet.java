@@ -10,36 +10,46 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
+import com.google.codeu.data.User;
+
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 /**
-* Second Test - Basic AboutMe section
+* Third Test - Fetches and saves user data
 */
 @WebServlet("/about")
 public class AboutMeServlet extends HttpServlet{
   private Datastore datastore;
+
   @Override
   public void init(){
     datastore = new Datastore();
   }
 
   /**
-  * This is the part that adds the "About me" section (?)
+  * Responds with "about me" section for the user
   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException{
 
       response.setContentType("text/html");
-      String user = request.getParameter("user");
 
+      String user = request.getParameter("user");
       if(user == null || user.equals("")){
         response.getOutputStream().println("INVALID RESPONSE: STOP HACKING THE MAINFRAME");
         return;
       }
 
-      String aboutMe = "This is " + user + "'s about me.";
+      User userData = datastore.getUser(user);
+      if(userData == null || userData.getAboutMe() == null)
+      {
+        response.getOutputStream().println("Yo! This is looking prettty empty to me!");
+        return;
+      }
 
-      response.getOutputStream().println(aboutMe);
+      response.getOutputStream().println(userData.getAboutMe());
     }
 
     @Override
@@ -54,9 +64,10 @@ public class AboutMeServlet extends HttpServlet{
         }
 
         String userEmail = userService.getCurrentUser().getEmail();
+        String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.none());
 
-        System.out.println("Saving about me for "+userEmail);
-        //TODO: Save the data
+        User user = new User(userEmail, aboutMe);
+        datastore.storeUser(user);
 
         response.sendRedirect("/user-page.html?user="+userEmail);
       }
