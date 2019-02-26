@@ -61,21 +61,7 @@ public class Datastore {
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
-    for (Entity entity : results.asIterable()) {
-      try {
-        String idString = entity.getKey().getName();
-        UUID id = UUID.fromString(idString);
-        String text = (String) entity.getProperty("text");
-        long timestamp = (long) entity.getProperty("timestamp");
-
-        Message message = new Message(id, user, text, timestamp);
-        messages.add(message);
-      } catch (Exception e) {
-        System.err.println("Error reading message.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
-      }
-    }
+    prepareMessages(messages, results);
 
     return messages;
   }
@@ -93,6 +79,18 @@ public List<Message> getAllMessages(){
     .addSort("timestamp", SortDirection.DESCENDING);
   PreparedQuery results = datastore.prepare(query);
 
+  prepareMessages(messages, results);
+
+  return messages;
+ }
+
+  /**
+   * Gets messages of all useres specified by the PreparedQuery.
+   *
+   * @return a list of messages posted by users in the PreparedQuery, or empty list if no user 
+   * 	 has ever posted a message. List is sorted by time descending.
+   */
+public void prepareMessages(List<Message> messages, PreparedQuery results){
   for (Entity entity : results.asIterable()) {
    try {
     String idString = entity.getKey().getName();
@@ -109,7 +107,8 @@ public List<Message> getAllMessages(){
     e.printStackTrace();
    }
   }
+}
 
-  return messages;
- }
+
+
 }
