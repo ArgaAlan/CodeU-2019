@@ -87,8 +87,7 @@ public List<Message> getAllMessages(){
   /**
    * Gets messages of all useres specified by the PreparedQuery.
    *
-   * @return a list of messages posted by users in the PreparedQuery, or empty list if no user 
-   * 	 has ever posted a message. List is sorted by time descending.
+   * @return null, updates List<Message> messages
    */
 public void prepareMessages(List<Message> messages, PreparedQuery results){
   for (Entity entity : results.asIterable()) {
@@ -109,6 +108,36 @@ public void prepareMessages(List<Message> messages, PreparedQuery results){
   }
 }
 
+  /**
+  * Stores the User in Datastore Entity
+  */
+ public void storeUser(User user) {
+  Entity userEntity = new Entity("User", user.getEmail());
+  userEntity.setProperty("email", user.getEmail());
+  userEntity.setProperty("aboutMe", user.getAboutMe());
+  datastore.put(userEntity);
+ }
 
+ /**
+  * Returns the User of email address with aboutMe, or
+  * null if no matching User was found.
+  */
+ public User getUser(String email) {
+  Query query = new Query("User") .setFilter(new Query.FilterPredicate(
+                                                        "email",
+                                                        FilterOperator.EQUAL,
+                                                        email
+                                                      )
+                                            );
+  PreparedQuery results = datastore.prepare(query);
+  Entity userEntity = results.asSingleEntity();
+  if (userEntity == null) {
+   return null;
+  }
 
+  //Return aboutMe
+  String aboutMe = (String) userEntity.getProperty("aboutMe");
+  User user = new User((String)userEntity.getProperty("email"), aboutMe);
+  return user;
+ }
 }
