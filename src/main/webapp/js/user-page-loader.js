@@ -42,7 +42,23 @@ function showMessageFormIfViewingSelf() {
             loginStatus.username == parameterUsername) {
           const messageForm = document.getElementById('message-form');
           messageForm.classList.remove('hidden');
-          document.getElementById('about-me-form').classList.remove('hidden')
+        }
+      });
+}
+
+/**
+* Shows the AboutMe form if the user is logged in and viewing their own page
+*/
+function showAboutFormIfViewingSelf() {
+  fetch('/login-status')
+      .then((response) => {
+        return response.json();
+      })
+      .then((loginStatus) => {
+        if (loginStatus.isLoggedIn &&
+            loginStatus.username == parameterUsername) {
+          const aboutForm = document.getElementById('about-me-form');
+          aboutForm.classList.remove('hidden');
         }
       });
 }
@@ -108,6 +124,7 @@ function fetchAboutMe(){
 function buildUI() {
   setPageTitle();
   showMessageFormIfViewingSelf();
+  showAboutFormIfViewingSelf();
   fetchMessages();
   fetchAboutMe();
 }
