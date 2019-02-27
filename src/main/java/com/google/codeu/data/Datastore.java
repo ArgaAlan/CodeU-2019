@@ -53,32 +53,58 @@ public class Datastore {
    *     message. List is sorted by time descending.
    */
   public List<Message> getMessages(String user) {
-    List<Message> messages = new ArrayList<>();
-
+  	
     Query query =
         new Query("Message")
             .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
-    for (Entity entity : results.asIterable()) {
-      try {
-        String idString = entity.getKey().getName();
-        UUID id = UUID.fromString(idString);
-        String text = (String) entity.getProperty("text");
-        long timestamp = (long) entity.getProperty("timestamp");
-
-        Message message = new Message(id, user, text, timestamp);
-        messages.add(message);
-      } catch (Exception e) {
-        System.err.println("Error reading message.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
-      }
-    }
-
-    return messages;
+    convertEntitiesToMessages(results);
   }
+
+  /**
+   * Gets messages posted by all users.
+   *
+   * @return a list of messages posted by all users, or empty list if no user has ever posted a
+   *     message. List is sorted by time descending.
+   */
+public List<Message> getAllMessages(){
+
+  Query query = new Query("Message")
+    .addSort("timestamp", SortDirection.DESCENDING);
+  PreparedQuery results = datastore.prepare(query);
+
+  return convertEntitiesToMessages(results);
+ }
+
+  /**
+   * Gets messages of all useres specified by s/useres/users/
+   *
+   * @return null, updates List<Message> messages
+   */
+public List<Message> convertEntitiesToMessages(PreparedQuery results){
+  List<Message> messages = new ArrayList<>();
+
+  for (Entity entity : results.asIterable()) {
+   try {
+    String idString = entity.getKey().getName();
+    UUID id = UUID.fromString(idString);
+    String user = (String) entity.getProperty("user");
+    String text = (String) entity.getProperty("text");
+    long timestamp = (long) entity.getProperty("timestamp");
+
+    Message message = new Message(id, user, text, timestamp);
+    messages.add(message);
+   } catch (Exception e) {
+    System.err.println("Error reading message.");
+    System.err.println(entity.toString());
+    e.printStackTrace();
+   }
+  }
+
+  return messages;
+}
 
   /**
   * Stores the User in Datastore Entity
@@ -111,5 +137,5 @@ public class Datastore {
   String aboutMe = (String) userEntity.getProperty("aboutMe");
   User user = new User((String)userEntity.getProperty("email"), aboutMe);
   return user;
-}
+ }
 }
