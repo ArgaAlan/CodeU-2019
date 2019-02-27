@@ -35,21 +35,20 @@ limitations under the License.
     <form id="message-form" action="/messages" method="POST" class="hidden">
       Enter a new message:
       <br/>
-      <textarea name="text" placeholder="Enter a message" id="message-input">
-      </textarea>
+      <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
       <br/>
       <input type="submit" value="Submit">
     </form>
     <hr/>
 
+    <b>About Me:</b> 
     <div id="about-me-container">Loading...</div>
-    About Me: <br/>
+    <br/>
     <form id="about-me-form" action="/about" method="POST" class="hidden">
+      <br/>
       Update AboutMe:
       <br/>
-      <textarea name="about-me" placeholder="About me" id="about-me-input"
-        rows=4 required>
-      </textarea>
+      <textarea name="about-me" placeholder="About me" id="about-me-input"></textarea>
       <br/>
       <input type="submit" value="Submit">
     </form>
