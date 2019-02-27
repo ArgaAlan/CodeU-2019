@@ -53,17 +53,14 @@ public class Datastore {
    *     message. List is sorted by time descending.
    */
   public List<Message> getMessages(String user) {
-    List<Message> messages = new ArrayList<>();
-
+  	
     Query query =
         new Query("Message")
             .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
-    prepareMessages(messages, results);
-
-    return messages;
+    convertEntitiesToMessages(results);
   }
 
   /**
@@ -73,23 +70,22 @@ public class Datastore {
    *     message. List is sorted by time descending.
    */
 public List<Message> getAllMessages(){
-  List<Message> messages = new ArrayList<>();
 
   Query query = new Query("Message")
     .addSort("timestamp", SortDirection.DESCENDING);
   PreparedQuery results = datastore.prepare(query);
 
-  prepareMessages(messages, results);
-
-  return messages;
+  return convertEntitiesToMessages(results);
  }
 
   /**
-   * Gets messages of all useres specified by the PreparedQuery.
+   * Gets messages of all useres specified by s/useres/users/
    *
    * @return null, updates List<Message> messages
    */
-public void prepareMessages(List<Message> messages, PreparedQuery results){
+public List<Message> convertEntitiesToMessages(PreparedQuery results){
+  List<Message> messages = new ArrayList<>();
+
   for (Entity entity : results.asIterable()) {
    try {
     String idString = entity.getKey().getName();
@@ -106,6 +102,8 @@ public void prepareMessages(List<Message> messages, PreparedQuery results){
     e.printStackTrace();
    }
   }
+
+  return messages;
 }
 
   /**
