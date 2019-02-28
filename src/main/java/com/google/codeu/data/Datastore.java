@@ -61,7 +61,7 @@ public class Datastore {
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
-    convertEntitiesToMessages(results);
+   return convertEntitiesToMessages(results);
   }
 
   /**
