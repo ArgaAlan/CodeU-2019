@@ -32,7 +32,7 @@ function setPageTitle() {
 /**
  * Shows the message form if the user is logged in and viewing their own page.
  */
-function showMessageFormIfViewingSelf() {
+function showFormsIfViewingSelf() {
   fetch('/login-status')
       .then((response) => {
         return response.json();
@@ -41,8 +41,11 @@ function showMessageFormIfViewingSelf() {
         if (loginStatus.isLoggedIn &&
             loginStatus.username == parameterUsername) {
           const messageForm = document.getElementById('message-form');
+          const aboutMeForm = document.getElementById('about-me-form');
+
           messageForm.classList.remove('hidden');
-          document.getElementById('about-me-form').classList.remove('hidden')
+          aboutMeForm.classList.remove('hidden');
+
         }
       });
 }
@@ -107,7 +110,7 @@ function fetchAboutMe(){
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
-  showMessageFormIfViewingSelf();
   fetchMessages();
   fetchAboutMe();
+  showFormsIfViewingSelf();
 }

@@ -31,23 +31,28 @@ limitations under the License.
     </nav>
     <h1 id="page-title">User Page</h1>
 
+    <div id="message-container">Loading...</div>
     <form id="message-form" action="/messages" method="POST" class="hidden">
       Enter a new message:
       <br/>
-      <textarea name="text" id="message-input"></textarea>
+      <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
       <br/>
       <input type="submit" value="Submit">
     </form>
     <hr/>
 
-    <div id="message-container">Loading...</div>
+    <b>About Me:</b> 
     <div id="about-me-container">Loading...</div>
-      <div id="about-me-form" class="hidden">
-        <form action ="/about" method="POST">
-          <textarea name="about-me" placeholder="about me" rows= required></textarea>
-          <br/>
-          <input type="submit" value="Submit">
-        </form>
-      </div>
+    <br/>
+    <form id="about-me-form" action="/about" method="POST" class="hidden">
+      <br/>
+      Update AboutMe:
+      <br/>
+      <textarea name="about-me" placeholder="About me" id="about-me-input"></textarea>
+      <br/>
+      <input type="submit" value="Submit">
+    </form>
+    <hr/>
+
   </body>
 </html>

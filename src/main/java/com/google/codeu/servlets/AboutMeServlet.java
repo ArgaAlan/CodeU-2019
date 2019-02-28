@@ -45,8 +45,7 @@ public class AboutMeServlet extends HttpServlet{
 
       User userData = datastore.getUser(user);
       if (userData == null || userData.getAboutMe() == null) {
-        response.getOutputStream().println("This user page is empty :(");
-        response.getOutputStream().println("Tell them to add their \"About me\" page!");
+        response.getOutputStream().println("This \"About me\" page is empty :(");
         return;
       }
 
