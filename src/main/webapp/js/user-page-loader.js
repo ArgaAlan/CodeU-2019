@@ -32,7 +32,7 @@ function setPageTitle() {
 /**
  * Shows the message form if the user is logged in and viewing their own page.
  */
-function showMessageFormIfViewingSelf() {
+function showFormsIfViewingSelf() {
   fetch('/login-status')
       .then((response) => {
         return response.json();
@@ -41,24 +41,11 @@ function showMessageFormIfViewingSelf() {
         if (loginStatus.isLoggedIn &&
             loginStatus.username == parameterUsername) {
           const messageForm = document.getElementById('message-form');
-          messageForm.classList.remove('hidden');
-        }
-      });
-}
+          const aboutMeForm = document.getElementById('about-me-form');
 
-/**
-* Shows the AboutMe form if the user is logged in and viewing their own page
-*/
-function showAboutFormIfViewingSelf() {
-  fetch('/login-status')
-      .then((response) => {
-        return response.json();
-      })
-      .then((loginStatus) => {
-        if (loginStatus.isLoggedIn &&
-            loginStatus.username == parameterUsername) {
-          const aboutForm = document.getElementById('about-me-form');
-          aboutForm.classList.remove('hidden');
+          messageForm.classList.remove('hidden');
+          aboutMeForm.classList.remove('hidden');
+
         }
       });
 }
@@ -123,8 +110,7 @@ function fetchAboutMe(){
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
-  showMessageFormIfViewingSelf();
-  showAboutFormIfViewingSelf();
   fetchMessages();
   fetchAboutMe();
+  showFormsIfViewingSelf();
 }
