@@ -22,7 +22,7 @@ import java.util.UUID;
 public class Message {
 
   private UUID id;
-  private String user;
+  private String user; //author of message
   private String text;
   private long timestamp;
   private String recipient; //receiver of message

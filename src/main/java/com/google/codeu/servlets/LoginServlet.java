@@ -27,8 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Redirects the user to the Google login page or their page if they're already logged in.
+   Responds to any request made at /login.
  */
-//responds to any request made at /login
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 

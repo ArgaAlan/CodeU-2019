@@ -49,7 +49,6 @@ public class MessageServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     response.setContentType("application/json");
-      //grabs the user parameter
     String user = request.getParameter("user");
 
     if (user == null || user.equals("")) {

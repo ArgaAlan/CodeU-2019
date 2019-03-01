@@ -54,7 +54,7 @@ public class Datastore {
    *     message. List is sorted by time descending.
    */
   public List<Message> getMessages(String user) {
-    //messages stored in an arraylist
+  
     List<Message> messages = new ArrayList<>();
 
     Query query =
@@ -65,12 +65,11 @@ public class Datastore {
 
     for (Entity entity : results.asIterable()) {
       try {
-        String recipient = (String) entity.getProperty("recipient");
         String idString = entity.getKey().getName();
         UUID id = UUID.fromString(idString);
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
-
+        String recipient = (String) entity.getProperty("recipient");
         Message message = new Message(id, user, text, timestamp, recipient);
         messages.add(message);
       } catch (Exception e) {

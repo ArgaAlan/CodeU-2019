@@ -46,12 +46,12 @@ function showMessageFormIfViewingSelf() {
       });
 }
 
-/** Fetches messages and add them to the page. */
 /*
 Gets our data from our server (not going to hang up)
 Try and make a request to the URL, instead of waiting for it to come back,
 we have a promise - go get this response, grab JSON from it, 
 call JSON messages, then you can do something with messages.
+Fetches messages and adds them to page.
 */
 function fetchMessages() {
   /* parameterUsername: URL queries/parameters
