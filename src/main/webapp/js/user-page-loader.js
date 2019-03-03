@@ -113,4 +113,6 @@ function buildUI() {
   fetchMessages();
   fetchAboutMe();
   showFormsIfViewingSelf();
+  ClassicEditor.create( document.getElementById('message-input') );
+  ClassicEditor.create( document.getElementById('about-me-input') );
 }
