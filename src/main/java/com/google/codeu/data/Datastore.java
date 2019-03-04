@@ -19,6 +19,7 @@ package com.google.codeu.data;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -54,16 +55,96 @@ public class Datastore {
    *     message. List is sorted by time descending.
    *     Messages are public and will display on recipient's user page.
    */
-  public List<Message> getMessages(String recipient) {
-    List<Message> messages = new ArrayList<>();
 
+  public List<Message> getMessages(String user) {
     Query query =
         new Query("Message")
             .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
-
-    return convertEntitiesToMessages(results);
- 
+  
+   return convertEntitiesToMessages(results);
   }
+
+  /**
+   * Gets messages posted by all users.
+   *
+   * @return a list of messages posted by all users, or empty list if no user has ever posted a
+   *     message. List is sorted by time descending.
+   */
+public List<Message> getAllMessages(){
+
+  Query query = new Query("Message")
+    .addSort("timestamp", SortDirection.DESCENDING);
+  PreparedQuery results = datastore.prepare(query);
+
+  return convertEntitiesToMessages(results);
+ }
+
+  /**
+   * Gets messages of all useres specified by s/useres/users/
+   *
+   * @return null, updates List<Message> messages
+   */
+public List<Message> convertEntitiesToMessages(PreparedQuery results){
+  List<Message> messages = new ArrayList<>();
+
+  for (Entity entity : results.asIterable()) {
+   try {
+    String idString = entity.getKey().getName();
+    UUID id = UUID.fromString(idString);
+    String user = (String) entity.getProperty("user");
+    String text = (String) entity.getProperty("text");
+    long timestamp = (long) entity.getProperty("timestamp");
+
+    Message message = new Message(id, user, text, timestamp);
+    messages.add(message);
+   } catch (Exception e) {
+    System.err.println("Error reading message.");
+    System.err.println(entity.toString());
+    e.printStackTrace();
+   }
+  }
+  return messages;
+}
+  
+  /** Returns the total number of messages for all users. */
+  public int getTotalMessageCount(){
+    Query query = new Query("Message");
+    PreparedQuery results = datastore.prepare(query);
+    return results.countEntities(FetchOptions.Builder.withLimit(1000));
+  }
+
+  /**
+  * Stores the User in Datastore Entity
+  */
+ public void storeUser(User user) {
+  Entity userEntity = new Entity("User", user.getEmail());
+  userEntity.setProperty("email", user.getEmail());
+  userEntity.setProperty("aboutMe", user.getAboutMe());
+  datastore.put(userEntity);
+ }
+
+ /**
+  * Returns the User of email address with aboutMe, or
+  * null if no matching User was found.
+  */
+ public User getUser(String email) {
+  Query query = new Query("User") .setFilter(new Query.FilterPredicate(
+                                                        "email",
+                                                        FilterOperator.EQUAL,
+                                                        email
+                                                      )
+                                            );
+  PreparedQuery results = datastore.prepare(query);
+  Entity userEntity = results.asSingleEntity();
+  if (userEntity == null) {
+   return null;
+  }
+
+  //Return aboutMe
+  String aboutMe = (String) userEntity.getProperty("aboutMe");
+  User user = new User((String)userEntity.getProperty("email"), aboutMe);
+  return user;
+ }
 }

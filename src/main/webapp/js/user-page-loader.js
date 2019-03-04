@@ -33,6 +33,7 @@ function setPageTitle() {
  * Shows the message form if the user is logged in
  * Shows the aboutMe form if the user is logged in  and viewing their own page
  */
+
 function showFormsIfLoggedIn() {
   fetch('/login-status')
       .then((response) => {
@@ -41,8 +42,8 @@ function showFormsIfLoggedIn() {
       .then((loginStatus) => {
         if (loginStatus.isLoggedIn){
           const messageForm = document.getElementById('message-form');
+          const aboutMeForm = document.getElementById('about-me-form');
           messageForm.classList.remove('hidden');
-
         } 
         if (loginStatus.username == parameterUsername) {
           const aboutMeForm = document.getElementById('about-me-form');
@@ -103,9 +104,23 @@ function buildMessageDiv(message) {
   return messageDiv;
 }
 
+function fetchAboutMe(){
+  const url = '/about?user='+parameterUsername;
+  fetch(url).then((response) => {
+    return response.text();
+  }).then((aboutMe) => {
+    const aboutMeContainer = document.getElementById('about-me-container');
+    if (aboutMe == '') {
+      aboutMe = "No information to show";
+    }
+    aboutMeContainer.innerHTML = aboutMe;
+  })
+}
+
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
-  showMessageFormIfViewingSelf();
   fetchMessages();
+  fetchAboutMe();
+  showFormsIfLoggedIn();
 }
