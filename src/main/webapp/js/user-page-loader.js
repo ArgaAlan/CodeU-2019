@@ -30,18 +30,23 @@ function setPageTitle() {
 }
 
 /**
- * Shows the message form if the user is logged in and viewing their own page.
+ * Shows the message form if the user is logged in
+ * Shows the aboutMe form if the user is logged in  and viewing their own page
  */
-function showMessageFormIfViewingSelf() {
+function showFormsIfLoggedIn() {
   fetch('/login-status')
       .then((response) => {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn &&
-            loginStatus.username == parameterUsername) {
+        if (loginStatus.isLoggedIn){
           const messageForm = document.getElementById('message-form');
           messageForm.classList.remove('hidden');
+
+        } 
+        if (loginStatus.username == parameterUsername) {
+          const aboutMeForm = document.getElementById('about-me-form');
+          aboutMeForm.classList.remove('hidden');
         }
       });
 }

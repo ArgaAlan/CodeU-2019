@@ -52,33 +52,18 @@ public class Datastore {
    *
    * @return a list of messages posted by the user, or empty list if user has never posted a
    *     message. List is sorted by time descending.
+   *     Messages are public and will display on recipient's user page.
    */
-  public List<Message> getMessages(String user) {
-  
+  public List<Message> getMessages(String recipient) {
     List<Message> messages = new ArrayList<>();
 
     Query query =
         new Query("Message")
-            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+            .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
-    for (Entity entity : results.asIterable()) {
-      try {
-        String idString = entity.getKey().getName();
-        UUID id = UUID.fromString(idString);
-        String text = (String) entity.getProperty("text");
-        long timestamp = (long) entity.getProperty("timestamp");
-        String recipient = (String) entity.getProperty("recipient");
-        Message message = new Message(id, user, text, timestamp, recipient);
-        messages.add(message);
-      } catch (Exception e) {
-        System.err.println("Error reading message.");
-        System.err.println(entity.toString());
-        e.printStackTrace();
-      }
-    }
-
-    return messages;
+    return convertEntitiesToMessages(results);
+ 
   }
 }
