@@ -30,30 +30,40 @@ function setPageTitle() {
 }
 
 /**
- * Shows the message form if the user is logged in and viewing their own page.
+ * Shows the message form if the user is logged in
+ * Shows the aboutMe form if the user is logged in  and viewing their own page
  */
-function showFormsIfViewingSelf() {
+
+function showFormsIfLoggedIn() {
   fetch('/login-status')
       .then((response) => {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn &&
-            loginStatus.username == parameterUsername) {
+        if (loginStatus.isLoggedIn){
           const messageForm = document.getElementById('message-form');
           const aboutMeForm = document.getElementById('about-me-form');
-
           messageForm.classList.remove('hidden');
+        } 
+        if (loginStatus.username == parameterUsername) {
+          const aboutMeForm = document.getElementById('about-me-form');
           aboutMeForm.classList.remove('hidden');
-
         }
       });
 }
 
-/** Fetches messages and add them to the page. */
+/*
+Gets our data from our server (not going to hang up)
+Try and make a request to the URL, instead of waiting for it to come back,
+we have a promise - go get this response, grab JSON from it, 
+call JSON messages, then you can do something with messages.
+Fetches messages and adds them to page.
+*/
 function fetchMessages() {
+  /* parameterUsername: URL queries/parameters
+     make a request to /messages, just grabbing data (GET)  */
   const url = '/messages?user=' + parameterUsername;
-  fetch(url)
+  fetch(url) //GET REQUEST
       .then((response) => {
         return response.json();
       })
@@ -112,5 +122,5 @@ function buildUI() {
   setPageTitle();
   fetchMessages();
   fetchAboutMe();
-  showFormsIfViewingSelf();
+  showFormsIfLoggedIn();
 }
