@@ -41,6 +41,9 @@ function addLoginOrLogoutLinkToNavigation() {
               createListItem(createLink('/logout', 'Logout')));
         } else {
           navigationElement.appendChild(
+          	  createListItem(createLink('/feed.html', 'Public Feed')));
+
+          navigationElement.appendChild(
               createListItem(createLink('/login', 'Login')));
         }
       });
