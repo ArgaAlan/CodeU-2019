@@ -64,6 +64,8 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
+
+
   /** Stores a new {@link Message}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -73,6 +75,7 @@ public class MessageServlet extends HttpServlet {
       response.sendRedirect("/index.html");
       return;
     } 
+
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
     //check if user is valid
