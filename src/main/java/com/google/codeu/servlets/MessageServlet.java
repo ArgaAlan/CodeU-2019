@@ -78,12 +78,13 @@ public class MessageServlet extends HttpServlet {
 
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    String recipient = request.getParameter("recipient");
+
     //check if user is valid
-    if (dataStore.getUser(recipient) == null) {
+    if (datastore.getUser(recipient) == null) {
       response.sendRedirect("/user-page.html?user=" + user);
       return;
     }
-    String recipient = request.getParameter("recipient");
 
     Message message = new Message(user, text, recipient);
     datastore.storeMessage(message);
