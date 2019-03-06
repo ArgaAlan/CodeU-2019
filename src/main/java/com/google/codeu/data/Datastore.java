@@ -55,8 +55,7 @@ public class Datastore {
    *     message. List is sorted by time descending.
    *     Messages are public and will display on recipient's user page.
    */
-
-  public List<Message> getMessages(String user) {
+  public List<Message> getMessages(String recipient) {
     Query query =
         new Query("Message")
             .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
