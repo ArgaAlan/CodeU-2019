@@ -90,7 +90,7 @@ public List<Message> convertEntitiesToMessages(PreparedQuery results){
   List<Message> messages = new ArrayList<>();
 
   for (Entity entity : results.asIterable()) {
-     try {
+    try {
       String idString = entity.getKey().getName();
       UUID id = UUID.fromString(idString);
       String user = (String) entity.getProperty("user");
@@ -99,11 +99,11 @@ public List<Message> convertEntitiesToMessages(PreparedQuery results){
       String recipient = (String) entity.getProperty("recipient");
       Message message = new Message(id, user, text, timestamp, recipient);
       messages.add(message);
-     } catch (Exception e) {
+    } catch (Exception e) {
       System.err.println("Error reading message.");
       System.err.println(entity.toString());
       e.printStackTrace();
-     }
+    }
   }
   return messages;
 }
