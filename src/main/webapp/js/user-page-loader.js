@@ -42,6 +42,7 @@ function showFormsIfLoggedIn() {
         if (loginStatus.isLoggedIn){
           const messageForm = document.getElementById('message-form');
           const aboutMeForm = document.getElementById('about-me-form');
+          messageForm.action = '/messages?recipient=' + parameterUsername;
           messageForm.classList.remove('hidden');
         } 
         if (loginStatus.username == parameterUsername) {
