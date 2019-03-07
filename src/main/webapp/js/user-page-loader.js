@@ -44,7 +44,7 @@ function showFormsIfLoggedIn() {
           const aboutMeForm = document.getElementById('about-me-form');
           messageForm.action = '/messages?recipient=' + parameterUsername;
           messageForm.classList.remove('hidden');
-        } 
+        }
         if (loginStatus.username == parameterUsername) {
           const aboutMeForm = document.getElementById('about-me-form');
           aboutMeForm.classList.remove('hidden');
@@ -55,7 +55,7 @@ function showFormsIfLoggedIn() {
 /*
 Gets our data from our server (not going to hang up)
 Try and make a request to the URL, instead of waiting for it to come back,
-we have a promise - go get this response, grab JSON from it, 
+we have a promise - go get this response, grab JSON from it,
 call JSON messages, then you can do something with messages.
 Fetches messages and adds them to page.
 */
@@ -104,6 +104,10 @@ function buildMessageDiv(message) {
   return messageDiv;
 }
 
+/**
+ * Gets the aboutMe data through our server
+ * (Using a promise to avoid too much waiting)
+**/
 function fetchAboutMe(){
   const url = '/about?user='+parameterUsername;
   fetch(url).then((response) => {
@@ -117,10 +121,21 @@ function fetchAboutMe(){
   })
 }
 
+/**
+ * Turns the aboutMe and message forms into rich text editors
+ * Removes image plugin because it's not properly implemented yet
+**/
+function addRichTextEditor(){
+  const config = {removePlugins: [ 'ImageUpload']};
+  ClassicEditor.create( document.getElementById('message-input'), config);
+  ClassicEditor.create( document.getElementById('about-me-input'), config);
+}
+
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
   fetchMessages();
   fetchAboutMe();
   showFormsIfLoggedIn();
+  addRichTextEditor();
 }
