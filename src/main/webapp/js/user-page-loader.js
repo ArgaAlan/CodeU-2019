@@ -105,8 +105,8 @@ function buildMessageDiv(message) {
 }
 
 /**
- * Gets the aboutME data through our server
- * Through a promise to avoid too much waiting
+ * Gets the aboutMe data through our server
+ * (Using a promise to avoid too much waiting)
 **/
 function fetchAboutMe(){
   const url = '/about?user='+parameterUsername;
