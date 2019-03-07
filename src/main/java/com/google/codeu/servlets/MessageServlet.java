@@ -49,7 +49,6 @@ public class MessageServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     response.setContentType("application/json");
-
     String user = request.getParameter("user");
 
     if (user == null || user.equals("")) {
@@ -77,10 +76,13 @@ public class MessageServlet extends HttpServlet {
 
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
+    // get value of query parameter
 
-    Message message = new Message(user, text);
+    String recipient = request.getParameter("recipient");
+
+    Message message = new Message(user, text, recipient);
     datastore.storeMessage(message);
 
-    response.sendRedirect("/user-page.html?user=" + user);
+    response.sendRedirect("/user-page.html?user=" + recipient);
   }
 }
