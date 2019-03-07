@@ -104,6 +104,10 @@ function buildMessageDiv(message) {
   return messageDiv;
 }
 
+/**
+ * Gets the aboutME data through our server
+ * Through a promise to avoid too much waiting
+**/
 function fetchAboutMe(){
   const url = '/about?user='+parameterUsername;
   fetch(url).then((response) => {
@@ -117,6 +121,10 @@ function fetchAboutMe(){
   })
 }
 
+/**
+ * Turns the aboutMe and message forms into rich text editors
+ * Removes image plugin because it's not properly implemented yet
+**/
 function addRichTextEditor(){
   const config = {removePlugins: [ 'ImageUpload']};
   ClassicEditor.create( document.getElementById('message-input'), config);
