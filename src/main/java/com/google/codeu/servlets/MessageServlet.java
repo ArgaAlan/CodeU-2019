@@ -76,9 +76,15 @@ public class MessageServlet extends HttpServlet {
 
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
-    // get value of query parameter
 
+    // get value of query parameter
     String recipient = request.getParameter("recipient");
+
+    // check if user is valid
+    if (datastore.getUser(recipient) == null) {
+      response.sendRedirect("/user-page.html?user=" + user);
+      return;
+    }
 
     Message message = new Message(user, text, recipient);
     datastore.storeMessage(message);

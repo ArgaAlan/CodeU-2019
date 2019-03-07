@@ -33,7 +33,6 @@ function setPageTitle() {
  * Shows the message form if the user is logged in
  * Shows the aboutMe form if the user is logged in  and viewing their own page
  */
-
 function showFormsIfLoggedIn() {
   fetch('/login-status')
       .then((response) => {
