@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Maps Part One</title>
+  <link rel="stylesheet" href="/css/map.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgr6Zutm1Os7q9V5Fi9N_g2poKcDG2G0A">
+    </script>
+    <script>
+      let map;
+      function createMap(){
+        var trexCoords = {lat: 37.422, lng: -122.084};
+
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: trexCoords,
+          zoom: 4
+        });
+        var trexMarker = new google.maps.Marker({
+          map: map,
+          animation: google.maps.Animation.DROP,
+          position: trexCoords,
+          title: 'Google HQ'
+        });
+        var trexInfoWindow = new google.maps.InfoWindow({
+          content: 'Google HQ'
+        });
+        trexInfoWindow.open(map, trexMarker);
+
+        trexMarker.addListener('click', function() {
+          trexInfoWindow.open(map, trexMarker);
+        });
+      }
+    </script>
+</head>
+<body onload="createMap();">
+  <h1>Map Project</h1>
+  <div id="map"></div>
+</body>
+</html>
