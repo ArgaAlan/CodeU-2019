@@ -64,8 +64,6 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-
-
   /** Stores a new {@link Message}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -74,15 +72,25 @@ public class MessageServlet extends HttpServlet {
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/index.html");
       return;
-    } 
+    }
 
     String user = userService.getCurrentUser().getEmail();
-    String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
-    //get value of query parameter 
-    
+    String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
+
+    // get value of query parameter
     String recipient = request.getParameter("recipient");
 
-    Message message = new Message(user, text, recipient);
+    String regex = "(https?://\\S+\\.(png|jpg))";
+    String replacement = "<img src=\"$1\" />";
+    String textWithImagesReplaced = text.replaceAll(regex, replacement);
+
+    // check if user is valid
+    if (datastore.getUser(recipient) == null) {
+      response.sendRedirect("/user-page.html?user=" + user);
+      return;
+    }
+
+    Message message = new Message(user, textWithImagesReplaced, recipient);
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + recipient);

@@ -22,8 +22,9 @@ limitations under the License.
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/user-page-loader.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
   </head>
-  <body onload="buildUI();">
+  <body onload="buildUI()">
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>
@@ -40,7 +41,7 @@ limitations under the License.
       <input type="submit" value="Submit">
     </form>
     <hr/>
-
+  
     <b>About Me:</b>
     <div id="about-me-container">Loading...</div>
     <br/>
@@ -53,6 +54,18 @@ limitations under the License.
       <input type="submit" value="Submit">
     </form>
     <hr/>
+
+    <div id="message-container">Loading...</div>
+    <form id="message-form" action="/messages" method="POST" class="hidden">
+      Enter a new message:
+      <br/>
+      <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+      <br/>
+      <input type="submit" value="Submit">
+    </form>
+    <hr/>
+
+
 
   </body>
 </html>
