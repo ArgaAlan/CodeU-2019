@@ -53,11 +53,19 @@ public class Datastore {
    *         message. List is sorted by time descending. Messages are public and will display on
    *         recipient's user page.
    */
+<<<<<<< HEAD
 
   public List<Message> getMessages(String user) {
     Query query = new Query("Message")
         .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
         .addSort("timestamp", SortDirection.DESCENDING);
+=======
+  public List<Message> getMessages(String recipient) {
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
+            .addSort("timestamp", SortDirection.DESCENDING);
+>>>>>>> 507ea43e8625e4ab5d39d6e4e9aaf31e6dba7eae
     PreparedQuery results = datastore.prepare(query);
 
     return convertEntitiesToMessages(results);
