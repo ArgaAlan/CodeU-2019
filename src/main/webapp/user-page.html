@@ -32,6 +32,16 @@ limitations under the License.
     </nav>
     <h1 id="page-title">User Page</h1>
 
+    <div id="message-container">Loading...</div>
+    <form id="message-form" action="/messages" method="POST" class="hidden">
+      Enter a new message:
+      <br/>
+      <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+      <br/>
+      <input type="submit" value="Submit">
+    </form>
+    <hr/>
+  
     <b>About Me:</b>
     <div id="about-me-container">Loading...</div>
     <br/>
