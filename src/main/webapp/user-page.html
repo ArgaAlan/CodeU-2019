@@ -30,14 +30,20 @@ limitations under the License.
         <li><a href="/">Home</a></li>
       </ul>
     </nav>
-    <h1 id="page-title">User Page</h1>
+    <center>
+      <div id="user-name"><h1 id="page-title">User Page</h1></div>
+    </center>
 
-    <b>About Me:</b>
-    <div id="about-me-container">Loading...</div>
-    <br/>
+    <center>
+      <br/>
+      <b>About Me</b>
+      <br/>
+      <div id="about-me-container">Loading...</div>
+      <br/>
+    </center>
     <form id="about-me-form" action="/about" method="POST" class="hidden">
       <br/>
-      Update AboutMe:
+      <div id="update-text">Update AboutMe:</div>
       <br/>
       <textarea name="about-me" placeholder="About me" id="about-me-input"></textarea>
       <br/>
@@ -47,7 +53,7 @@ limitations under the License.
 
     <div id="message-container">Loading...</div>
     <form id="message-form" action="/messages" method="POST" class="hidden">
-      Enter a new message:
+      <div id="update-text">Enter a new message:</div>
       <br/>
       <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
       <br/>

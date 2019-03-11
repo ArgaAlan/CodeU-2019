@@ -13,6 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+body {
+  background-color: #CCFFFF;
+}
+
+#user-name {
+  border: 2px solid blue;
+  background-color:white;
+  border-radius: 10px;
+  font-family: sans-serif;
+  padding:2px;
+}
+
+#update-text {
+  color: blue;
+}
 
 /* Set the size of the message input to be 100 pixels high
    and will fill the width of its parent element. */
@@ -33,6 +48,7 @@
   border: thin solid black;
   border-radius: 5px;
   margin-bottom: 20px;
+  background-color: #CCFFFF;;
 }
 
 /* Add a bottom border to the message header. */
