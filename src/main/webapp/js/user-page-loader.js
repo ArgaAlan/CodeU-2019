@@ -134,7 +134,6 @@ function addRichTextEditor(){
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
-  fetchMessages();
   fetchAboutMe();
   showFormsIfLoggedIn();
   addRichTextEditor();
