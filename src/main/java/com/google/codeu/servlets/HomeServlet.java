@@ -9,12 +9,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/home")
+@WebServlet("/")
 public class HomeServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
+    // If page does not exist
+    if (request.getServletPath() != "/") {
+      System.err.println("Invalid path requested:");
+      System.err.println("\tpath " + request.getServletPath());
+      System.err.println("\turl " + request.getRequestURL());
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      response.setContentType("text/html;");
+      response.getOutputStream().println("<a href=\"/\">Home</a>");
+      return;
+    }
 
     UserService userService = UserServiceFactory.getUserService();
 
