@@ -1,7 +1,9 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.util.Date" %>
-<% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
-<% List<Message> messages = (ArrayList<Message>) request.getAttribute("messages"); %>
+<%@ page import="java.util.*" %>
+<%@ page import="com.google.codeu.data.Message" %>
+<% //boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
+<% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 
 <!DOCTYPE html>
 <html>
@@ -21,7 +23,7 @@
     </nav>
     <h1 id="page-title">User Page</h1>
 
-    <b>About Me: <%= isUserLoggedIn %></b>
+    <b>About Me: </b>
     <div id="about-me-container">Loading...</div>
     <br/>
     <form id="about-me-form" action="/about" method="POST" class="hidden">
@@ -39,19 +41,18 @@
           <p>This user has no posts yet.</p>
     <%  } else { %>
           <p>User has messages</p>;
-          <% System.err.out("Here"); %>
     <%  }
-        for(int i = 0; i < messages.size(); i++)
+        for(int i = 0; i < messages.size(); i++) {
     %>
           <div class="message-div">
             <div class="message-header">
-              <%= messages.get(i).user %> - <%= new Date(messages.get(i).timestamp) %>
+              <%= messages.get(i).getUser() %> - <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
-              <%= messages.get(i).text %>
+              <%= messages.get(i).getText() %>
             </div>
           </div>
-    <%=
+    <%
         }
     %>
     </div>
@@ -63,7 +64,7 @@
       <input type="submit" value="Submit">
     </form>
     <hr/>
-
+    <% System.err.println("Finished loading jsp..."); %>
 
 
   </body>
