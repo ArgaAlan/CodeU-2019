@@ -1,17 +1,15 @@
 /*
  * Copyright 2019 Google Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.google.codeu.data;
@@ -44,6 +42,7 @@ public class Datastore {
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
     messageEntity.setProperty("recipient", message.getRecipient());
+    messageEntity.setProperty("sentimentScore", message.getSentimentScore());
 
     datastore.put(messageEntity);
   }
@@ -52,14 +51,14 @@ public class Datastore {
    * Gets messages posted by a specific user.
    *
    * @return a list of messages posted by the user, or empty list if user has never posted a
-   *     message. List is sorted by time descending. Messages are public and will display on
-   *     recipient's user page.
+   *     message. List is sorted by time descending.
    */
   public List<Message> getMessages(String recipient) {
     Query query =
         new Query("Message")
             .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
             .addSort("timestamp", SortDirection.DESCENDING);
+
     PreparedQuery results = datastore.prepare(query);
 
     return convertEntitiesToMessages(results);
@@ -95,7 +94,11 @@ public class Datastore {
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
         String recipient = (String) entity.getProperty("recipient");
-        Message message = new Message(id, user, text, timestamp, recipient);
+        float sentimentScore =
+            entity.getProperty("sentimentScore") == null
+                ? (float) 0.0
+                : ((Double) entity.getProperty("sentimentScore")).floatValue();
+        Message message = new Message(id, user, text, timestamp, recipient, sentimentScore);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
