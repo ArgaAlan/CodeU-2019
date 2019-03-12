@@ -22,10 +22,10 @@ import java.util.UUID;
 public class Message {
 
   private UUID id;
-  private String user; //author of message
+  private String user; // author of message
   private String text;
   private long timestamp;
-  private String recipient; //receiver of message
+  private String recipient; // receiver of message
 
   /**
    * Constructs a new {@link Message} posted by {@code user} with {@code text} content. Generates a
