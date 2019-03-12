@@ -16,17 +16,6 @@ public class HomeServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-    // If page does not exist
-    if (request.getServletPath() != "/") {
-      System.err.println("Invalid path requested:");
-      System.err.println("\tpath " + request.getServletPath());
-      System.err.println("\turl " + request.getRequestURL());
-      response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      response.setContentType("text/html;");
-      response.getOutputStream().println("<a href=\"/\">Home</a>");
-      return;
-    }
-
     UserService userService = UserServiceFactory.getUserService();
 
     boolean isUserLoggedIn = userService.isUserLoggedIn();
@@ -35,6 +24,16 @@ public class HomeServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
       String username = userService.getCurrentUser().getEmail();
       request.setAttribute("username", username);
+    }
+
+    // If page does not exist
+    if (request.getServletPath() != "/") {
+      System.err.println("Invalid path requested:");
+      System.err.println("\tpath " + request.getServletPath());
+      System.err.println("\turl " + request.getRequestURL());
+      response.sendError(HttpServletResponse.SC_NOT_FOUND);
+      request.getRequestDispatcher("/error.jsp").forward(request, response);
+      return;
     }
 
     request.getRequestDispatcher("/index.jsp").forward(request, response);
