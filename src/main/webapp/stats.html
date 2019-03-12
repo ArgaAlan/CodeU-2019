@@ -1,14 +1,13 @@
-<!DOCTYPE html>
 <html>
 <head>
   <title>Stats</title>
-  <link rel="stylesheet" href="/css/main.css">
 
   <script>
     // Fetch stats and display them in the page.
     function fetchStats(){
       const url = '/stats';
       fetch(url).then((response) => {
+        console.log(response);
         return response.json();
       }).then((stats) => {
         const statsContainer = document.getElementById('stats-container');
@@ -16,6 +15,23 @@
 
         const messageCountElement = buildStatElement('Message count: ' + stats.messageCount);
         statsContainer.appendChild(messageCountElement);
+
+        const messageAverageElement = buildStatElement('Message average: ' + stats.messageAvg);
+        statsContainer.appendChild(messageAverageElement);
+
+        const messageBigElement = buildStatElement('Biggest Message: ' + stats.biggestMessage);
+        statsContainer.appendChild(messageBigElement);
+
+        const usersCountElement = buildStatElement('Total number of users: ' + stats.usersCount);
+        statsContainer.appendChild(usersCountElement);
+
+        const usersListElement = buildStatElement('List of all users: ' + stats.usersList);
+        statsContainer.appendChild(usersListElement);
+
+        const mostActiveElement = buildStatElement('Most active user: ' + stats.mostActiveUser);
+        statsContainer.appendChild(mostActiveElement);
+
+        //document.getElementById('stats-container').innerHTML=5;
       });
     }
 
