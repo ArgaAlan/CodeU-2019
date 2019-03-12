@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
 
 <!DOCTYPE html>
@@ -7,7 +8,7 @@
     <title>CodeU Starter Project</title>
     <link rel="stylesheet" href="/css/main.css">
   </head>
-  <body bgcolor = "#8cdbe2">
+  <body>
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>
