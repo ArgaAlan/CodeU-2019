@@ -1,74 +1,65 @@
 package com.google.codeu.servlets;
 
-import java.io.IOException;
-
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.User;
-
+import java.io.IOException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-/**
-* Third Test - Fetches and saves user data
-*/
+/** Third Test - Fetches and saves user data */
 @WebServlet("/about")
-public class AboutMeServlet extends HttpServlet{
+public class AboutMeServlet extends HttpServlet {
   private Datastore datastore;
 
   @Override
-  public void init(){
+  public void init() {
     datastore = new Datastore();
   }
 
-  /**
-  * Responds with "about me" section for the user
-  */
+  /** Responds with "about me" section for the user */
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException{
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-      response.setContentType("text/html");
+    response.setContentType("text/html");
 
-      String user = request.getParameter("user");
-      if (user == null || user.equals("")) {
-        System.err.println("Error from AboutMeServlet: User parameter invalid.");
-        response.sendRedirect("/index.html");
-        return;
-      }
-
-      User userData = datastore.getUser(user);
-      if (userData == null || userData.getAboutMe() == null) {
-        response.getOutputStream().println("This \"About me\" page is empty :(");
-        return;
-      }
-
-      response.getOutputStream().println(userData.getAboutMe());
+    String user = request.getParameter("user");
+    if (user == null || user.equals("")) {
+      System.err.println("Error from AboutMeServlet: User parameter invalid.");
+      response.sendRedirect("/index.html");
+      return;
     }
 
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException{
+    User userData = datastore.getUser(user);
+    if (userData == null || userData.getAboutMe() == null) {
+      response.getOutputStream().println("This \"About me\" page is empty :(");
+      return;
+    }
 
-        UserService userService = UserServiceFactory.getUserService();
+    response.getOutputStream().println(userData.getAboutMe());
+  }
 
-        if (!userService.isUserLoggedIn()) {
-          response.sendRedirect("/index.html");
-          return;
-        }
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        String userEmail = userService.getCurrentUser().getEmail();
-        String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.relaxed());
+    UserService userService = UserServiceFactory.getUserService();
 
-        User user = new User(userEmail, aboutMe);
-        datastore.storeUser(user);
+    if (!userService.isUserLoggedIn()) {
+      response.sendRedirect("/index.html");
+      return;
+    }
 
-        response.sendRedirect("/user-page.html?user="+userEmail);
-      }
+    String userEmail = userService.getCurrentUser().getEmail();
+    String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.relaxed());
+
+    User user = new User(userEmail, aboutMe);
+    datastore.storeUser(user);
+
+    response.sendRedirect("/user-page.html?user=" + userEmail);
+  }
 }

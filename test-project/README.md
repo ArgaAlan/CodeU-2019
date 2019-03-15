@@ -22,9 +22,10 @@ file being tested can be run.
 
   - If you are working with a new library, add the needed dependency to pom.xml
 
-  - Run `mvn compile` <i>to compile all files. If you have build errors, fix them then recompile </i>
+  - Run `mvn compile` to compile all files.  <i> If you have build errors, recompile after fixing</i>
+    - It may be necessary to run `mvn package` before compiling to build the proper packaging dependencies
 
-  - Run `mvn exec:java -Dexec.mainClass="com.codeU.demo.[Filename without '.java']"`
+  - Run `mvn exec:java -Dexec.mainClass="com.codeU.demo.[Filename without '.java']"` to run your specific file
     - <i> Example: `mvn exec:java -Dexec.mainClass="com.codeU.demo.SentimentTest"`
 
 <i> Things printed to the console should show up just before "Build Success" </i>
