@@ -18,9 +18,10 @@
 body {
   width: 80%;
   margin: 10%;
-  background-color: lightblue;
   text-align:center;
   display:inline-block;
+  font-family: sans-serif;
+  background-color: #BADFFB;
 }
 
 
@@ -36,12 +37,6 @@ nav li {
   margin-right: 10px
 }
 
-/* Map formatting and size */
-#map {
-	width: 900px;
-    height: 700px;
-    border: thin solid black;
-    margin-top: 20px;
-  	position:relative;
-  	text-align:center;
+h2 {
+  text-align:left;
 }
