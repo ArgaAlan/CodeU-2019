@@ -30,3 +30,10 @@ nav li {
   display: inline-block;
   margin-right: 10px
 }
+
+/* Gives a good visual to the image */
+.message-body img {
+  display: block;
+  margin-top: 25px;
+  max-width: 75%;
+}
