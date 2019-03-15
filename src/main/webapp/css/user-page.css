@@ -13,20 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-body {
-  background-color: #CCFFFF;
+
+.submit-button {
+  padding:10px;
+}
+
+#about-me-container {
+  text-align:center;
+}
+
+#about-me-header {
+  text-align:center;
 }
 
 #user-name {
-  border: 2px solid blue;
-  background-color:white;
+  border: 5px solid white;
   border-radius: 10px;
-  font-family: sans-serif;
   padding:2px;
-}
-
-#update-text {
-  color: blue;
+  text-align:center;
+  background-color:#259EFA;
 }
 
 /* Set the size of the message input to be 100 pixels high
@@ -48,7 +53,7 @@ body {
   border: thin solid black;
   border-radius: 5px;
   margin-bottom: 20px;
-  background-color: #CCFFFF;;
+  background-color: white;
 }
 
 /* Add a bottom border to the message header. */
@@ -63,6 +68,7 @@ body {
   margin: 5px;
 }
 
+/* Formats img tags from urls posted by user */
 .message-body img {
   display: block;
   margin: 10px;
