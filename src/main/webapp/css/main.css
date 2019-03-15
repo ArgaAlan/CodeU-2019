@@ -18,9 +18,12 @@
 body {
   width: 80%;
   margin: 10%;
+  text-align:center;
+  display:inline-block;
   font-family: sans-serif;
   background-color: #BADFFB;
 }
+
 
 /* Remove bullet points from navigation bar. */
 nav ul {
