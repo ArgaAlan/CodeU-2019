@@ -39,31 +39,26 @@ function fetchMessages(){
  * @param {Message} message
  * @return {Element}
  */
-function buildMessageDiv(message){
- const usernameDiv = document.createElement('div');
- usernameDiv.classList.add("left-align");
- usernameDiv.appendChild(document.createTextNode(message.user));
+ function buildMessageDiv(message) {
+   const headerDiv = document.createElement('div');
+   headerDiv.classList.add('message-header');
+   headerDiv.appendChild(document.createTextNode(
+   message.user + ' - ' +
+   new Date(message.timestamp) +
+   ' [' + message.sentimentScore + ']'));
 
- const timeDiv = document.createElement('div');
- timeDiv.classList.add('right-align');
- timeDiv.appendChild(document.createTextNode(new Date(message.timestamp)));
+   const bodyDiv = document.createElement('div');
+   bodyDiv.classList.add('message-body');
+   bodyDiv.innerHTML = message.text;
 
- const headerDiv = document.createElement('div');
- headerDiv.classList.add('message-header');
- headerDiv.appendChild(usernameDiv);
- headerDiv.appendChild(timeDiv);
+   const messageDiv = document.createElement('div');
+   messageDiv.classList.add('message-div');
+   messageDiv.appendChild(headerDiv);
+   messageDiv.appendChild(bodyDiv);
 
- const bodyDiv = document.createElement('div');
- bodyDiv.classList.add('message-body');
- bodyDiv.appendChild(document.createTextNode(message.text));
+   return messageDiv;
+ }
 
- const messageDiv = document.createElement('div');
- messageDiv.classList.add("message-div");
- messageDiv.appendChild(headerDiv);
- messageDiv.appendChild(bodyDiv);
-
- return messageDiv;
-}
 
 /** Fetches data and populates the UI of the page. */
 function buildUI(){
