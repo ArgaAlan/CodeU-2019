@@ -76,11 +76,16 @@ public class MessageServlet extends HttpServlet {
     String user = userService.getCurrentUser().getEmail();
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
 
-    String regex = "(https?://\\S+\\.(png|jpg|gif))";
-    String replacement = "<img src=\"$1\" />";
-    String textWithImagesReplaced = userText.replaceAll(regex, replacement);
+    String regexImage = "(https?://\\S+\\.(png|jpg|gif))";
+    String replacementImage = "<img src=\"$1\" />";
+    String regexVideo = "(https?://www.youtube.com/\\S+)";
+    String replacementVideo = "<iframe width=\"420\" height=\"345\" src=\"$1\">" + "</iframe>";
+    String textWithImgAndVidReplaced = userText.replaceAll(regexImage, replacementImage);
+    // Change the format of the normal Youtube URL to an embed one
+    textWithImgAndVidReplaced = textWithImgAndVidReplaced.replace("watch?v=", "embed/");
+    textWithImgAndVidReplaced = textWithImgAndVidReplaced.replaceAll(regexVideo, replacementVideo);
 
-    Message message = new Message(user, textWithImagesReplaced);
+    Message message = new Message(user, textWithImgAndVidReplaced);
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + user);
