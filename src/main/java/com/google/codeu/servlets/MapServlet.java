@@ -31,8 +31,8 @@ public class MapServlet extends HttpServlet {
       double lng = Double.parseDouble(cells[2]);
 
       restaurantsArray.add(gson.toJsonTree(new FamousRestaurant(state, lat, lng)));
-      //scanner.close();
     }
+    scanner.close();
   }
 
   @Override
@@ -54,20 +54,3 @@ public class MapServlet extends HttpServlet {
   	}
   }
  }
-
-
-/*Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/Restaurants.csv"));
-while(scanner.hasNextLine()) {
-  String line = scanner.nextLine();
-  String[] cells = line.split(",");
-    
-  String city = cells[0];
-  double lat = Double.parseDouble(cells[1]);
-  double lng = Double.parseDouble(cells[2]);
-
-  System.out.println("city: " + city);
-  System.out.println("lat: " + lat);
-  System.out.println("lng: " + lng);
-  System.out.println();
-}
-scanner.close();*/
