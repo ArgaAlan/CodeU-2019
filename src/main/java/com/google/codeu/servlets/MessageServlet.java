@@ -26,7 +26,12 @@ import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -68,6 +73,19 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
+  // Validates if an URL posted is valid
+  public static boolean urlValidator(String url) {
+
+    try {
+      new URL(url).toURI();
+      return true;
+    } catch (URISyntaxException exception) {
+      return false;
+    } catch (MalformedURLException exception) {
+      return false;
+    }
+  }
+
   /** Stores a new {@link Message}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -79,14 +97,53 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
-    String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
+    String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+
+    String regexImage = "(https?://\\S+\\.(png|jpg|gif))";
+    String replacementImage = "<img src=\"$1\" />";
+    String regexVideo = "(https?://www.youtube.com/\\S+)";
+    String replacementVideo = "<iframe width=\"420\" height=\"345\" src=\"$1\">" + "</iframe>";
+
+    String textForImageAndVideo = userText;
+
+    // Validation of URL
+    Pattern patternImg = Pattern.compile(regexImage);
+    Pattern patternVid = Pattern.compile(regexVideo);
+    Matcher matcherImg = patternImg.matcher(userText);
+    Matcher matcherVid = patternVid.matcher(userText);
+
+    // Checks if the URL is valid and if it´s then it changes to insert the image
+    if (matcherImg.find()) {
+      try {
+        new URL(matcherImg.group()).toURI();
+        textForImageAndVideo = userText.replaceAll(regexImage, replacementImage);
+      } catch (URISyntaxException exception) {
+        // Not valid URL
+      } catch (MalformedURLException exception) {
+        // Not valid URL
+      }
+    }
+
+    // Checks if the URL is valid and if it´s then it changes to insert the image
+    if (matcherVid.find()) {
+      try {
+        new URL(matcherVid.group()).toURI();
+        // Change the format of the normal Youtube URL to an embed one
+        textForImageAndVideo = textForImageAndVideo.replace("watch?v=", "embed/");
+        textForImageAndVideo = textForImageAndVideo.replaceAll(regexVideo, replacementVideo);
+      } catch (URISyntaxException exception) {
+        // Not valid URL
+      } catch (MalformedURLException exception) {
+        // Not valid URL
+      }
+    }
 
     // get value of query parameter
     String recipient = request.getParameter("recipient");
 
     String regex = "(https?://\\S+\\.(png|jpg))";
     String replacement = "<img src=\"$1\" />";
-    String textWithImagesReplaced = text.replaceAll(regex, replacement);
+    String textWithImagesReplaced = userText.replaceAll(regex, replacement);
 
     String cleanText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
     float sentimentScore = this.getSentimentScore(cleanText);

@@ -40,3 +40,10 @@ nav li {
 h2 {
   text-align:left;
 }
+
+/* Gives a good visual to the image */
+.message-body img {
+  display: block;
+  margin-top: 25px;
+  max-width: 75%;
+}
