@@ -12,6 +12,7 @@
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>
+        <li><a href="/map.html">Map</a></li>
         <li><a href="/feed.html">Public Feed</li>
 
     <%
