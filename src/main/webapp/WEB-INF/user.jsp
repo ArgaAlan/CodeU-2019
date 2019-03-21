@@ -2,9 +2,8 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
-<% //boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
+<% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
-<% String user = request.getAttribute("user"); %>
 
 <!DOCTYPE html>
 <html>
@@ -22,7 +21,7 @@
         <li><a href="/">Home</a></li>
       </ul>
     </nav>
-    <h1 id="page-title"><%= user %></h1>
+    <h1 id="page-title"><% request.getAttribute("user"); %></h1>
 
     <b>About Me: </b>
     <div id="about-me-container">Loading...</div>

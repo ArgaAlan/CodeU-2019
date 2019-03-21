@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import javax.servlet.http.HttpServlet;
@@ -25,8 +28,10 @@ public class UsersServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
+	UserService userService = UserServiceFactory.getUserService();
     String requestUrl = request.getRequestURI();
     String user = requestUrl.substring("/users/".length());
+    request.setAttribute("user", user);
 
     // Confirm that user is valid
     if (user == null || user.equals("")) {
@@ -37,6 +42,7 @@ public class UsersServlet extends HttpServlet {
 
     // Fetch user messages
     List<Message> messages = datastore.getMessages(user);
+    request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
 
     // Add them to the request
     request.setAttribute("messages", messages);
