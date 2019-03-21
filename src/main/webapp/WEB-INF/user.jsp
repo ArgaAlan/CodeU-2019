@@ -4,6 +4,7 @@
 <%@ page import="com.google.codeu.data.Message" %>
 <% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
+<% String user = (String) request.getAttribute("user"); %>
 
 <!DOCTYPE html>
 <html>
@@ -21,12 +22,16 @@
         <li><a href="/">Home</a></li>
       </ul>
     </nav>
-    <h1 id="page-title"><% request.getAttribute("user"); %></h1>
-
+    <h1 id="page-title"><%= user %></h1>
     <b>About Me: </b>
-    <div id="about-me-container">Loading...</div>
+    <div id="about-me-container"><%= (String) request.getAttribute("aboutMe") %></div>
     <br/>
+    
+    <% if(isUserLoggedIn){ %>
+    <form id="about-me-form" action="/about" method="POST" class>
+    <% } else { %>
     <form id="about-me-form" action="/about" method="POST" class="hidden">
+    <% } %>
       <br/>
       Update AboutMe:
       <br/>
@@ -56,7 +61,11 @@
         }
     %>
     </div>
-    <form id="message-form" action="/messages" method="POST" class="hidden">
+    <% if(isUserLoggedIn){ %>
+    <form id="message-form" action="/messages?recipient=<%= request.getAttribute("user") %>" method="POST" class>
+    <% } else { %>
+    <form id="message-form" action="/messages?recipient=" method="POST" class="hidden">
+    <% } %>
       Enter a new message:
       <br/>
       <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
@@ -64,7 +73,6 @@
       <input type="submit" value="Submit">
     </form>
     <hr/>
-    <% System.err.println("Finished loading jsp..."); %>
 
 
   </body>

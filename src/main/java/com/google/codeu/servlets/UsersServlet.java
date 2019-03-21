@@ -10,6 +10,8 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.User;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,10 +45,16 @@ public class UsersServlet extends HttpServlet {
     // Fetch user messages
     List<Message> messages = datastore.getMessages(user);
     request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
+    User userData = datastore.getUser(user);
+    String aboutMe = userData.getAboutMe();
+    if (userData == null || userData.getAboutMe() == null) {
+        aboutMe = "This \"About me\" page is empty :(";
+    }
+    
 
     // Add them to the request
     request.setAttribute("messages", messages);
-    System.err.println("Forwarding...");
+    request.setAttribute("aboutMe", aboutMe);
 
     request.getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response);
   }

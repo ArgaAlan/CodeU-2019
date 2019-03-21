@@ -23,12 +23,6 @@ if (!parameterUsername) {
   //window.location.replace('/');
 }
 
-/** Sets the page title based on the URL parameter username. */
-function setPageTitle() {
-  document.getElementById('page-title').innerText = parameterUsername;
-  document.title = parameterUsername + ' - User Page';
-}
-
 /**
  * Shows the message form if the user is logged in
  * Shows the aboutMe form if the user is logged in  and viewing their own page
@@ -133,8 +127,7 @@ function addRichTextEditor(){
 
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
-  //setPageTitle();
-  fetchAboutMe();
-  showFormsIfLoggedIn();
+  //fetchAboutMe();
+  //showFormsIfLoggedIn();
   addRichTextEditor();
 }
