@@ -108,12 +108,19 @@ public class MessageServlet extends HttpServlet {
    * LanguageServiceClient Returns this sentiment as a float
    */
   private float getSentimentScore(String text) throws IOException {
-    Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
+    float score = 0.0f;
+    try {
+      Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
 
-    LanguageServiceClient languageService = LanguageServiceClient.create();
-    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
-    languageService.close();
+      LanguageServiceClient languageService = LanguageServiceClient.create();
+      Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+      languageService.close();
 
-    return sentiment.getScore();
+      score = sentiment.getScore();
+    } catch (Exception e) {
+      e.printStackTrace(System.err);
+    }
+
+    return score;
   }
 }
