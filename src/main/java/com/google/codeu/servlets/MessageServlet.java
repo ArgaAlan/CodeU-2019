@@ -95,24 +95,24 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
-    String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
 
     String regexImage = "(https?://\\S+\\.(png|jpg|gif))";
     String replacementImage = "<img src=\"$1\" />";
     String regexVideo = "(https?://www.youtube.com/\\S+)";
     String replacementVideo = "<iframe width=\"420\" height=\"345\" src=\"$1\">" + "</iframe>";
 
-    String textForImageAndVideo = userText;
+    String textForImageAndVideo = text;
 
     // Validation of URL
     Pattern patternImg = Pattern.compile(regexImage);
     Pattern patternVid = Pattern.compile(regexVideo);
-    Matcher matcherImg = patternImg.matcher(userText);
-    Matcher matcherVid = patternVid.matcher(userText);
+    Matcher matcherImg = patternImg.matcher(text);
+    Matcher matcherVid = patternVid.matcher(text);
 
     // Checks if the URL is valid and if it´s then it changes to insert the image
     if (matcherImg.find() && urlValidator(matcherImg.group())) {
-      textForImageAndVideo = userText.replaceAll(regexImage, replacementImage);
+      textForImageAndVideo = text.replaceAll(regexImage, replacementImage);
     }
 
     // Checks if the URL is valid and if it´s then it changes to insert the video
@@ -127,10 +127,9 @@ public class MessageServlet extends HttpServlet {
 
     String regex = "(https?://\\S+\\.(png|jpg))";
     String replacement = "<img src=\"$1\" />";
-    String textWithImagesReplaced = userText.replaceAll(regex, replacement);
+    String textWithImagesReplaced = text.replaceAll(regex, replacement);
 
-    String cleanText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
-    float sentimentScore = this.getSentimentScore(cleanText);
+    float sentimentScore = this.getSentimentScore(text);
 
     // check if user is valid
     if (datastore.getUser(recipient) == null) {
