@@ -79,7 +79,7 @@ public class Datastore {
   }
 
   /**
-   * Gets messages of all useres specified by s/useres/users/
+   * Gets messages of all users specified by s/users/users/
    *
    * @return null, updates List<Message> messages
    */
