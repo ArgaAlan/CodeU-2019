@@ -1,30 +1,19 @@
 /*
  * Copyright 2019 Google Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-import com.google.cloud.language.v1.Document;
-import com.google.cloud.language.v1.Document.Type;
-import com.google.cloud.language.v1.LanguageServiceClient;
-import com.google.cloud.language.v1.Sentiment;
-import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Message;
-import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -38,6 +27,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.Document.Type;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
+import com.google.codeu.data.Datastore;
+import com.google.codeu.data.Message;
+import com.google.gson.Gson;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -113,29 +111,15 @@ public class MessageServlet extends HttpServlet {
     Matcher matcherVid = patternVid.matcher(userText);
 
     // Checks if the URL is valid and if it´s then it changes to insert the image
-    if (matcherImg.find()) {
-      try {
-        new URL(matcherImg.group()).toURI();
-        textForImageAndVideo = userText.replaceAll(regexImage, replacementImage);
-      } catch (URISyntaxException exception) {
-        // Not valid URL
-      } catch (MalformedURLException exception) {
-        // Not valid URL
-      }
+    if (matcherImg.find() && urlValidator(matcherImg.group())) {
+      textForImageAndVideo = userText.replaceAll(regexImage, replacementImage);
     }
 
-    // Checks if the URL is valid and if it´s then it changes to insert the image
-    if (matcherVid.find()) {
-      try {
-        new URL(matcherVid.group()).toURI();
-        // Change the format of the normal Youtube URL to an embed one
-        textForImageAndVideo = textForImageAndVideo.replace("watch?v=", "embed/");
-        textForImageAndVideo = textForImageAndVideo.replaceAll(regexVideo, replacementVideo);
-      } catch (URISyntaxException exception) {
-        // Not valid URL
-      } catch (MalformedURLException exception) {
-        // Not valid URL
-      }
+    // Checks if the URL is valid and if it´s then it changes to insert the video
+    if (matcherVid.find() && urlValidator(matcherVid.group())) {
+      // Change the format of the normal Youtube URL to an embed one
+      textForImageAndVideo = textForImageAndVideo.replace("watch?v=", "embed/");
+      textForImageAndVideo = textForImageAndVideo.replaceAll(regexVideo, replacementVideo);
     }
 
     // get value of query parameter
