@@ -93,14 +93,14 @@ public class MessageServlet extends HttpServlet {
 
     // check if user is valid
     if (datastore.getUser(recipient) == null) {
-      response.sendRedirect("/user-page.html?user=" + user);
+      response.sendRedirect("/users/" + user);
       return;
     }
 
     Message message = new Message(user, textWithImagesReplaced, recipient, sentimentScore);
     datastore.storeMessage(message);
 
-    response.sendRedirect("/user-page.html?user=" + recipient);
+    response.sendRedirect("/users/" + recipient);
   }
 
   /**
