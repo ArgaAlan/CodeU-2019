@@ -12,13 +12,14 @@
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>
+        <li><a href="/map.html">Map</a></li>
         <li><a href="/feed.html">Public Feed</li>
 
     <%
       if (isUserLoggedIn) {
         String username = (String) request.getAttribute("username");
     %>
-        <a href="/user-page.html?user=<%= username %>">Your Page</a>
+        <a href="/users/<%= username %>">Your Page</a>
         <a href="/logout">Logout</a>
     <% } else {   %>
        <a href="/login">Login</a>

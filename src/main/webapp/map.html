@@ -1,81 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Maps Part One</title>
+  <title>Maps</title>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/map.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgr6Zutm1Os7q9V5Fi9N_g2poKcDG2G0A">
-    </script>
+    </script> 
+    
     <script>
-      
-      // coordinates of homeless shelters in Washington
-      var shelters = [
-          {lat: 38.8507, lng: -76.9947}, 
-          {lat: 38.9196, lng: -76.9749},
-          {lat: 38.9151, lng: -76.9858},
-          {lat: 38.9308, lng: -77.0305},
-          {lat: 38.9004, lng: -77.0192},
-          {lat: 38.9438, lng: -77.0330},
-
-          {lat: 38.8987, lng: -77.0111}, 
-          {lat: 38.8436, lng: -76.9742},
-          {lat: 38.9268, lng: -77.0232},
-          {lat: 38.8970, lng: -76.9918},
-          {lat: 38.9011, lng: -76.9970},
-          {lat: 38.8955, lng: -77.0133},
-
-          {lat: 38.9136, lng: -77.0079}, 
-          {lat: 38.8852, lng: -76.9756},
-          {lat: 38.9364, lng: -77.0292},
-          {lat: 38.9147, lng: -77.0177},
-          {lat: 38.9634, lng: -77.0283},
-          {lat: 38.9075, lng: -77.0206},
-        ];
-
       var map;
       var markers = [];
 
-      //initializes the map with specified center and zoom
-      function createMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 12, 
-          center: {lat: 38.90, lng: -77}
-        })
-      }
-
-      // clears map of markers
-      function clearMarkers() {
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(null);
-        }
-        markers = [];
-      }
-
-      function drop() {
-        clearMarkers();
-        for (var i = 0; i < shelters.length; i++) {
-          addMarkerWithTimeout(shelters[i], i * 100);
-        }
-      }
-
-      // uses window.setTimeout() to drop markers consecutively
+      //uses window.setTimeout() to drop markers consecutively
       function addMarkerWithTimeout(position, timeout) {
         window.setTimeout(function() {
           markers.push(new google.maps.Marker({
-            position: position, 
-            map: map, 
-            animation: google.maps.Animation.DROP
+            position: position,
+            map: map,
           }));
         }, timeout);
       }
 
+      //initializes the map with specified center and zoom
+      function createRestaurantsMap(){
+        fetch('/Restaurants').then(function(response) {
+          return response.json();
+        }).then((FamousRestaurants) => {
+            map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 33.4774, lng: -81.97},
+            zoom: 7
+          });
+          FamousRestaurants.forEach((FamousRestaurant) => {
+            new google.maps.Marker({
+              position: {lat: FamousRestaurant.lat, lng: FamousRestaurant.lng},
+              map: map
+            }); 
+          });
+        });
+      }
+
     </script>
 </head>
-<body onload="createMap();">
-  <h1>Map Project</h1>
-  <div id = "floating-panel">
-    <button id="drop" onclick="drop()">Drop Markers</button>
-  </div>
-  <div id="map"></div>
+
+<body onload="createRestaurantsMap();">
+ <h1>Best Restaurants in Cities Globally</h1>
+ <div id="map"></div>
 </body>
 </html>
+
+
