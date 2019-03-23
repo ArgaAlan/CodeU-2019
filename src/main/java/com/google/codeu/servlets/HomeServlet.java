@@ -16,7 +16,6 @@ public class HomeServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-	System.err.println("HomeServlet doGet...");
     // If page does not exist
     if (request.getServletPath() != "/") {
       System.err.println("Invalid path requested:");
