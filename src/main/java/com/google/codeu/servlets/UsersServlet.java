@@ -46,9 +46,9 @@ public class UsersServlet extends HttpServlet {
     List<Message> messages = datastore.getMessages(user);
     request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
     User userData = datastore.getUser(user);
-    String aboutMe = userData.getAboutMe();
-    if (userData == null || userData.getAboutMe() == null) {
-        aboutMe = "This \"About me\" page is empty :(";
+    String aboutMe = "This \"About me\" page is empty :(";
+    if (userData != null && userData.getAboutMe() != null) {
+    	aboutMe = userData.getAboutMe();
     }
     
 
