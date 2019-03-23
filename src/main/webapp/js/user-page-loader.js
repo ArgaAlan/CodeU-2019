@@ -18,11 +18,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const parameterUsername = urlParams.get('user');
 
-// URL must include ?user=XYZ parameter. If not, redirect to homepage.
-if (!parameterUsername) {
-  //window.location.replace('/');
-}
-
 /**
  * Turns the aboutMe and message forms into rich text editors
  * Removes image plugin because it's not properly implemented yet
