@@ -26,7 +26,7 @@
     <b>About Me: </b>
     <div id="about-me-container"><%= (String) request.getAttribute("aboutMe") %></div>
     <br/>
-    
+
     <% if(isUserLoggedIn){ %>
     <form id="about-me-form" action="/about" method="POST" class>
     <% } else { %>
@@ -51,7 +51,9 @@
     %>
           <div class="message-div">
             <div class="message-header">
-              <%= messages.get(i).getUser() %> - <%= new Date(messages.get(i).getTimestamp()) %>
+              User: <%= messages.get(i).getUser() %> -
+              Time: <%= new Date(messages.get(i).getTimestamp()) %> -
+              Sentiment Score: <%= messages.get(i).getSentimentScore() %>
             </div>
             <div class="message-body">
               <%= messages.get(i).getText() %>
