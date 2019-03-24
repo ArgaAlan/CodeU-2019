@@ -22,7 +22,7 @@
         <li><a href="/users/<%= username %>">Your Page</a></li>
         <li><a href="/logout">Logout</a></li>
     <% } else {   %>
-       <li><a href="/login">Login</a>
+        <li><a href="/login">Login</a></li>
     <% } %>
 
       </ul>
