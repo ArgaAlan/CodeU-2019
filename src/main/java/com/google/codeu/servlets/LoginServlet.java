@@ -18,6 +18,8 @@ package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.codeu.data.Datastore;
+import com.google.codeu.data.User;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,6 +32,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+  private Datastore datastore;
+
+  @Override
+  public void init() {
+    datastore = new Datastore();
+  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -38,8 +46,9 @@ public class LoginServlet extends HttpServlet {
 
     // If the user is already logged in, redirect to their page
     if (userService.isUserLoggedIn()) {
-      String user = userService.getCurrentUser().getEmail();
-      response.sendRedirect("/users/" + user);
+      String userEmail = userService.getCurrentUser().getEmail();
+      createUserIfNew(userEmail);
+      response.sendRedirect("/users/" + userEmail);
       return;
     }
 
@@ -47,5 +56,12 @@ public class LoginServlet extends HttpServlet {
     // which will be handled by the above if statement.
     String googleLoginUrl = userService.createLoginURL("/login");
     response.sendRedirect(googleLoginUrl);
+  }
+
+  private void createUserIfNew(String userEmail) {
+    if (datastore.getUser(userEmail) == null) {
+      User user = new User(userEmail, "This \"About me\" page is empty :(");
+      datastore.storeUser(user);
+    }
   }
 }

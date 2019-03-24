@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-/** Third Test - Fetches and saves user data */
+/** Fetches and saves user data */
 @WebServlet("/about")
 public class AboutMeServlet extends HttpServlet {
   private Datastore datastore;
@@ -31,7 +31,7 @@ public class AboutMeServlet extends HttpServlet {
     String user = request.getParameter("user");
     if (user == null || user.equals("")) {
       System.err.println("Error from AboutMeServlet: User parameter invalid.");
-      response.sendRedirect("/index.html");
+      response.sendRedirect("/");
       return;
     }
 
@@ -50,7 +50,7 @@ public class AboutMeServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
 
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/index.html");
+      response.sendRedirect("/");
       return;
     }
 

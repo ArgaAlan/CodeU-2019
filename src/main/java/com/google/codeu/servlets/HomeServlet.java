@@ -32,7 +32,7 @@ public class HomeServlet extends HttpServlet {
       System.err.println("\tpath " + request.getServletPath());
       System.err.println("\turl " + request.getRequestURL());
       response.sendError(HttpServletResponse.SC_NOT_FOUND);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
+      request.getRequestDispatcher("/WEB-INF/error.jsp").forward(request, response);
       return;
     }
 
