@@ -39,6 +39,17 @@ public class UsersServlet extends HttpServlet {
       return;
     }
 
+    User userData = datastore.getUser(user);
+
+    // Send to error page if user does not exist
+    if (userData == null) {
+      System.err.println("Invalid path requested:");
+      System.err.println("\tpath " + request.getServletPath());
+      System.err.println("\turl " + request.getRequestURL());
+      response.sendRedirect("/invalid-user/" + user);
+      return;
+    }
+
     // Fetch user messages
     List<Message> messages = datastore.getMessages(user);
     User userData = datastore.getUser(user);
