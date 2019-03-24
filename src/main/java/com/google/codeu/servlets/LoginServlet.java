@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
       String userEmail = userService.getCurrentUser().getEmail();
       createUserIfNew(userEmail);
-      response.sendRedirect("/user-page.html?user=" + userEmail);
+      response.sendRedirect("/users/" + userEmail);
       return;
     }
 

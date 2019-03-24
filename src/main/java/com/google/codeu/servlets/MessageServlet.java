@@ -93,14 +93,14 @@ public class MessageServlet extends HttpServlet {
 
     // check if user is valid
     if (datastore.getUser(recipient) == null) {
-      response.sendRedirect("/user-page.html?user=" + user);
+      response.sendRedirect("/users/" + user);
       return;
     }
 
     Message message = new Message(user, textWithImagesReplaced, recipient, sentimentScore);
     datastore.storeMessage(message);
 
-    response.sendRedirect("/user-page.html?user=" + recipient);
+    response.sendRedirect("/users/" + recipient);
   }
 
   /**
@@ -108,12 +108,19 @@ public class MessageServlet extends HttpServlet {
    * LanguageServiceClient Returns this sentiment as a float
    */
   private float getSentimentScore(String text) throws IOException {
-    Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
+    float score = 0.0f;
+    try {
+      Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
 
-    LanguageServiceClient languageService = LanguageServiceClient.create();
-    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
-    languageService.close();
+      LanguageServiceClient languageService = LanguageServiceClient.create();
+      Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+      languageService.close();
 
-    return sentiment.getScore();
+      score = sentiment.getScore();
+    } catch (Exception e) {
+      e.printStackTrace(System.err);
+    }
+
+    return score;
   }
 }
