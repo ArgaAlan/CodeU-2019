@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-/** Third Test - Fetches and saves user data */
+/** Fetches and saves user data */
 @WebServlet("/about")
 public class AboutMeServlet extends HttpServlet {
   private Datastore datastore;
