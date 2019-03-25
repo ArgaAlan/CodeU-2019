@@ -1,21 +1,32 @@
 /*
  * Copyright 2019 Google Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.google.codeu.servlets;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.cloud.language.v1.Document;
@@ -25,14 +36,6 @@ import com.google.cloud.language.v1.Sentiment;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.gson.Gson;
-import java.io.IOException;
-import java.util.List;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -68,6 +71,19 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
+  // Validates if an URL posted is valid
+  public static boolean urlValidator(String url) {
+
+    try {
+      new URL(url).toURI();
+      return true;
+    } catch (URISyntaxException exception) {
+      return false;
+    } catch (MalformedURLException exception) {
+      return false;
+    }
+  }
+
   /** Stores a new {@link Message}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -81,6 +97,31 @@ public class MessageServlet extends HttpServlet {
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
 
+    String regexImage = "(https?://\\S+\\.(png|jpg|gif))";
+    String replacementImage = "<img src=\"$1\" />";
+    String regexVideo = "(https?://www.youtube.com/\\S+)";
+    String replacementVideo = "<iframe width=\"420\" height=\"345\" src=\"$1\">" + "</iframe>";
+
+    String textForImageAndVideo = text;
+
+    // Validation of URL
+    Pattern patternImg = Pattern.compile(regexImage);
+    Pattern patternVid = Pattern.compile(regexVideo);
+    Matcher matcherImg = patternImg.matcher(text);
+    Matcher matcherVid = patternVid.matcher(text);
+
+    // Checks if the URL is valid and if it´s then it changes to insert the image
+    if (matcherImg.find() && urlValidator(matcherImg.group())) {
+      textForImageAndVideo = text.replaceAll(regexImage, replacementImage);
+    }
+
+    // Checks if the URL is valid and if it´s then it changes to insert the video
+    if (matcherVid.find() && urlValidator(matcherVid.group())) {
+      // Change the format of the normal Youtube URL to an embed one
+      textForImageAndVideo = textForImageAndVideo.replace("watch?v=", "embed/");
+      textForImageAndVideo = textForImageAndVideo.replaceAll(regexVideo, replacementVideo);
+    }
+
     // get value of query parameter
     String recipient = request.getParameter("recipient");
 
@@ -88,8 +129,7 @@ public class MessageServlet extends HttpServlet {
     String replacement = "<img src=\"$1\" />";
     String textWithImagesReplaced = text.replaceAll(regex, replacement);
 
-    String cleanText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
-    float sentimentScore = this.getSentimentScore(cleanText);
+    float sentimentScore = this.getSentimentScore(text);
 
     // check if user is valid
     if (datastore.getUser(recipient) == null) {
