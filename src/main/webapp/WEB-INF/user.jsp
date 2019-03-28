@@ -5,6 +5,7 @@
 <% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String user = (String) request.getAttribute("user"); %>
+<% boolean isViewingSelf = (boolean) request.getAttribute("isViewingSelf"); %>
 
 <!DOCTYPE html>
 <html>
@@ -27,11 +28,8 @@
     <div id="about-me-container"><%= (String) request.getAttribute("aboutMe") %></div>
     <br/>
 
-    <% if(isUserLoggedIn){ %>
+    <% if(isUserLoggedIn && isViewingSelf){ %>
     <form id="about-me-form" action="/about" method="POST" class>
-    <% } else { %>
-    <form id="about-me-form" action="/about" method="POST" class="hidden">
-    <% } %>
       <br/>
       Update AboutMe:
       <br/>
@@ -40,12 +38,23 @@
       <input type="submit" value="Submit">
     </form>
     <hr/>
+    <% }  %>
+
+    <% if(isUserLoggedIn){ %>
+    <form id="message-form" action="/messages?recipient=<%= request.getAttribute("user") %>" method="POST" class>
+    Enter a new message:
+    <br/>
+    <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+    <br/>
+    <input type="submit" value="Submit">
+    </form>
+    <% }  %>
 
     <div id="message-container">
-    <%  if (true) { %>
+    <%  if (messages.isEmpty()) { %>
           <p>This user has no posts yet.</p>
     <%  } else { %>
-          <p>User has messages</p>;
+          <p>User has messages:</p>
     <%  }
         for(int i = 0; i < messages.size(); i++) {
     %>
@@ -59,23 +68,8 @@
               <%= messages.get(i).getText() %>
             </div>
           </div>
-    <%
-        }
-    %>
+    <% }  %>
     </div>
-    <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?recipient=<%= request.getAttribute("user") %>" method="POST" class>
-    <% } else { %>
-    <form id="message-form" action="/messages?recipient=" method="POST" class="hidden">
-    <% } %>
-      Enter a new message:
-      <br/>
-      <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-      <br/>
-      <input type="submit" value="Submit">
-    </form>
-    <hr/>
-
 
   </body>
 </html>

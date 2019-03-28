@@ -52,14 +52,16 @@ public class UsersServlet extends HttpServlet {
 
     // Fetch user messages
     List<Message> messages = datastore.getMessages(user);
-    request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
-
     String aboutMe = userData.getAboutMe();
+    boolean isViewingSelf =
+        userService.isUserLoggedIn()
+            && userData.getEmail().equals(userService.getCurrentUser().getEmail());
 
-    // Add them to the request
+    // Add attributes to the request
     request.setAttribute("messages", messages);
     request.setAttribute("aboutMe", aboutMe);
-
+    request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
+    request.setAttribute("isViewingSelf", isViewingSelf);
     request.getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response);
   }
 }
