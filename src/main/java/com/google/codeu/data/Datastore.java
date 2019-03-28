@@ -41,29 +41,28 @@ public class Datastore {
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
-    messageEntity.setProperty("recipient", message.getRecipient());
+    messageEntity.setProperty("country", message.getCountry());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
 
     datastore.put(messageEntity);
   }
 
   /**
-   * Gets messages posted by a specific user.
+   * Gets messages posted to a specific country page.
    *
-   * @return a list of messages posted by the user, or empty list if user has never posted a
-   *     message. List is sorted by time descending.
+   * @return a list of messages posted to country page, or empty list if no messages posted to
+   *     country page. List is sorted by time descending.
    */
-  public List<Message> getMessages(String recipient) {
+  public List<Message> getMessages(String country) {
     Query query =
         new Query("Message")
-            .setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient))
+            .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, country))
             .addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
 
     return convertEntitiesToMessages(results);
   }
-
   /**
    * Gets messages posted by all users.
    *
@@ -134,10 +133,18 @@ public class Datastore {
     if (userEntity == null) {
       return null;
     }
-
     // Return aboutMe
     String aboutMe = (String) userEntity.getProperty("aboutMe");
     User user = new User((String) userEntity.getProperty("email"), aboutMe);
     return user;
+  }
+  /** Returns true if country is stored in datastore, false o.w. */
+  public boolean isValidCountry(String countryName) {
+    Query query =
+        new Query("Country")
+            .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, countryName));
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+    return (userEntity != null);
   }
 }

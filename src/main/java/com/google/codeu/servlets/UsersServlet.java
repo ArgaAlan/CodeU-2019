@@ -30,7 +30,6 @@ public class UsersServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     String requestUrl = request.getRequestURI();
     String user = requestUrl.substring("/users/".length());
-    request.setAttribute("user", user);
 
     // Confirm that user is valid
     if (user == null || user.equals("")) {
@@ -57,7 +56,7 @@ public class UsersServlet extends HttpServlet {
         userService.isUserLoggedIn()
             && userData.getEmail().equals(userService.getCurrentUser().getEmail());
 
-    // Add attributes to the request
+    request.setAttribute("user", user);
     request.setAttribute("messages", messages);
     request.setAttribute("aboutMe", aboutMe);
     request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());

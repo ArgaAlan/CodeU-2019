@@ -14,7 +14,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
-    <script src="/js/user-page-loader.js"></script>
+    <script src="/js/message-loader.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
   </head>
   <body onload="buildUI()">
@@ -41,7 +41,7 @@
     <% }  %>
 
     <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?recipient=<%= request.getAttribute("user") %>" method="POST" class>
+    <form id="message-form" action="/messages?recipient=<%= user %>" method="POST" class>
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
