@@ -36,7 +36,7 @@ public class CountryServlet extends HttpServlet {
       return;
     }
 
-    // Send to error page if user does not exist
+    // Send to error page if country does not exist
     if (!datastore.isValidCountry(country)) {
       System.err.println("Invalid path requested:");
       System.err.println("\tpath " + request.getServletPath());
