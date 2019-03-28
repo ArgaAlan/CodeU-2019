@@ -30,9 +30,6 @@
 
     <% if(isUserLoggedIn && isViewingSelf){ %>
     <form id="about-me-form" action="/about" method="POST" class>
-    <% } else { %>
-    <form id="about-me-form" action="/about" method="POST" class="hidden">
-    <% } %>
       <br/>
       Update AboutMe:
       <br/>
@@ -41,21 +38,20 @@
       <input type="submit" value="Submit">
     </form>
     <hr/>
+    <% }  %>
 
     <% if(isUserLoggedIn){ %>
     <form id="message-form" action="/messages?recipient=<%= request.getAttribute("user") %>" method="POST" class>
-    <% } else { %>
-    <form id="message-form" action="/messages?recipient=" method="POST" class="hidden">
-    <% } %>
-      Enter a new message:
-      <br/>
-      <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-      <br/>
-      <input type="submit" value="Submit">
+    Enter a new message:
+    <br/>
+    <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+    <br/>
+    <input type="submit" value="Submit">
     </form>
+    <% }  %>
 
     <div id="message-container">
-    <%  if (messages.size() == 0) { %>
+    <%  if (messages.isEmpty()) { %>
           <p>This user has no posts yet.</p>
     <%  } else { %>
           <p>User has messages:</p>
@@ -72,9 +68,7 @@
               <%= messages.get(i).getText() %>
             </div>
           </div>
-    <%
-        }
-    %>
+    <% }  %>
     </div>
 
   </body>
