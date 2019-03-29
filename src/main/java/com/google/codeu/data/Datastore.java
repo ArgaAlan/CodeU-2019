@@ -148,7 +148,10 @@ public class Datastore {
     User user = new User((String) userEntity.getProperty("email"), aboutMe);
     return user;
   }
-  /** Returns true if country is stored in datastore, false o.w. */
+  /**
+   * Returns the country entity associated with the country code, or null if no matching Country was
+   * found
+   */
   public Country getCountry(String countryCode) {
     Query query =
         new Query("Country")
