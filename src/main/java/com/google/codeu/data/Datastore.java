@@ -53,10 +53,10 @@ public class Datastore {
    * @return a list of messages posted to country page, or empty list if no messages posted to
    *     country page. List is sorted by time descending.
    */
-  public List<Message> getMessages(String country) {
+  public List<Message> getMessages(String countryCode) {
     Query query =
         new Query("Message")
-            .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, country))
+            .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode))
             .addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
@@ -123,6 +123,16 @@ public class Datastore {
     datastore.put(userEntity);
   }
 
+  /** Stores the Country in Datastore Entity */
+  public void storeCountry(Country country) {
+    Entity countryEntity = new Entity("Country", country.getCode());
+    countryEntity.setProperty("code", country.getCode());
+    countryEntity.setProperty("name", country.getName());
+    countryEntity.setProperty("lat", country.getLat());
+    countryEntity.setProperty("lng", country.getLng());
+    datastore.put(countryEntity);
+  }
+
   /** Returns the User of email address with aboutMe, or null if no matching User was found. */
   public User getUser(String email) {
     Query query =
@@ -139,12 +149,20 @@ public class Datastore {
     return user;
   }
   /** Returns true if country is stored in datastore, false o.w. */
-  public boolean isValidCountry(String countryName) {
+  public Country getCountry(String countryCode) {
     Query query =
         new Query("Country")
-            .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, countryName));
+            .setFilter(new Query.FilterPredicate("code", FilterOperator.EQUAL, countryCode));
     PreparedQuery results = datastore.prepare(query);
-    Entity userEntity = results.asSingleEntity();
-    return (userEntity != null);
+    Entity countryEntity = results.asSingleEntity();
+    if (countryEntity == null) {
+      return null;
+    }
+    String name = (String) countryEntity.getProperty("name");
+    double lat = (double) countryEntity.getProperty("lat");
+    double lng = (double) countryEntity.getProperty("lng");
+
+    Country country = new Country(countryCode, name, lat, lng);
+    return country;
   }
 }

@@ -1,4 +1,10 @@
-<% String country = (String) request.getAttribute("country"); %>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.*" %>
+<%@ page import="com.google.codeu.data.Message" %>
+
+<% String countryCode = (String) request.getAttribute("code"); %>
+<% String countryName = (String) request.getAttribute("name"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
 
@@ -18,10 +24,10 @@
         <li><a href="/">Home</a></li>
       </ul>
     </nav>
-    <h1 id="page-title"><%= country %></h1>
+    <h1 id="page-title"><%= countryName %></h1>
 
     <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?country=<%= country %>" method="POST" class>
+    <form id="message-form" action="/messages?countryCode=<%= countryCode %>" method="POST" class>
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>

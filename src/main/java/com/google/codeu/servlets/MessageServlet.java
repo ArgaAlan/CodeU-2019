@@ -89,7 +89,7 @@ public class MessageServlet extends HttpServlet {
     String country = request.getParameter("country");
 
     // Redirect to home on invalid country
-    if (!datastore.isValidCountry(country)) {
+    if (datastore.getCountry(country) == null) {
       response.sendRedirect("/");
       return;
     }
