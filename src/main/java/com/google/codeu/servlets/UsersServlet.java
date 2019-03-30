@@ -50,7 +50,7 @@ public class UsersServlet extends HttpServlet {
     }
 
     // Fetch user messages
-    List<Message> messages = datastore.getMessages(user);
+    List<Message> messages = datastore.getMessagesByUser(user);
     String aboutMe = userData.getAboutMe();
     boolean isViewingSelf =
         userService.isUserLoggedIn()
@@ -59,7 +59,6 @@ public class UsersServlet extends HttpServlet {
     request.setAttribute("user", user);
     request.setAttribute("messages", messages);
     request.setAttribute("aboutMe", aboutMe);
-    request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
     request.setAttribute("isViewingSelf", isViewingSelf);
     request.getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response);
   }
