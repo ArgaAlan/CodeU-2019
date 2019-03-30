@@ -12,13 +12,6 @@
       var markers = [];
       var count = 0;
 
-      function clearMarkers() {
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(null);
-        }
-        markers = [];
-      }
-
       //uses window.setTimeout() to drop markers consecutively
       function addMarkerWithTimeout(position, timeout) {
         window.setTimeout(function() {
