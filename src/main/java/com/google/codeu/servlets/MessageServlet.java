@@ -14,6 +14,15 @@
 
 package com.google.codeu.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.Document.Type;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
+import com.google.codeu.data.Datastore;
+import com.google.codeu.data.Message;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -27,15 +36,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-import com.google.cloud.language.v1.Document;
-import com.google.cloud.language.v1.Document.Type;
-import com.google.cloud.language.v1.LanguageServiceClient;
-import com.google.cloud.language.v1.Sentiment;
-import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Message;
-import com.google.gson.Gson;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -71,23 +71,11 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  // Validates if an URL posted is valid
-  public static boolean urlValidator(String url) {
-
-    try {
-      new URL(url).toURI();
-      return true;
-    } catch (URISyntaxException exception) {
-      return false;
-    } catch (MalformedURLException exception) {
-      return false;
-    }
-  }
-
   /** Stores a new {@link Message}. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    // Only allow users to post messages if they are logged in
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/index.html");
@@ -96,51 +84,21 @@ public class MessageServlet extends HttpServlet {
 
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
+    String textWithMedia = getMediaEmbeddedText(text);
 
-    String regexImage = "(https?://\\S+\\.(png|jpg|gif))";
-    String replacementImage = "<img src=\"$1\" />";
-    String regexVideo = "(https?://www.youtube.com/\\S+)";
-    String replacementVideo = "<iframe width=\"420\" height=\"345\" src=\"$1\">" + "</iframe>";
+    String country = request.getParameter("country");
 
-    String textForImageAndVideo = text;
-
-    // Validation of URL
-    Pattern patternImg = Pattern.compile(regexImage);
-    Pattern patternVid = Pattern.compile(regexVideo);
-    Matcher matcherImg = patternImg.matcher(text);
-    Matcher matcherVid = patternVid.matcher(text);
-
-    // Checks if the URL is valid and if it´s then it changes to insert the image
-    if (matcherImg.find() && urlValidator(matcherImg.group())) {
-      textForImageAndVideo = text.replaceAll(regexImage, replacementImage);
-    }
-
-    // Checks if the URL is valid and if it´s then it changes to insert the video
-    if (matcherVid.find() && urlValidator(matcherVid.group())) {
-      // Change the format of the normal Youtube URL to an embed one
-      textForImageAndVideo = textForImageAndVideo.replace("watch?v=", "embed/");
-      textForImageAndVideo = textForImageAndVideo.replaceAll(regexVideo, replacementVideo);
-    }
-
-    // get value of query parameter
-    String recipient = request.getParameter("recipient");
-
-    String regex = "(https?://\\S+\\.(png|jpg))";
-    String replacement = "<img src=\"$1\" />";
-    String textWithImagesReplaced = text.replaceAll(regex, replacement);
-
-    float sentimentScore = this.getSentimentScore(text);
-
-    // check if user is valid
-    if (datastore.getUser(recipient) == null) {
-      response.sendRedirect("/users/" + user);
+    // Redirect to home on invalid country
+    if (datastore.getCountry(country) == null) {
+      response.sendRedirect("/");
       return;
     }
+    float sentimentScore = this.getSentimentScore(text);
 
-    Message message = new Message(user, textWithImagesReplaced, recipient, sentimentScore);
+    Message message = new Message(user, textWithMedia, country, sentimentScore);
     datastore.storeMessage(message);
 
-    response.sendRedirect("/users/" + recipient);
+    response.sendRedirect("/country/" + country);
   }
 
   /**
@@ -162,5 +120,49 @@ public class MessageServlet extends HttpServlet {
     }
 
     return score;
+  }
+
+  private String getMediaEmbeddedText(String text) {
+    String regexImage = "(https?://\\S+\\.(png|jpg|gif))";
+    String replacementImage = "<img src=\"$1\" />";
+    String regexVideo = "(https?://www.youtube.com/\\S+)";
+    String replacementVideo = "<iframe width=\"420\" height=\"345\" src=\"$1\">" + "</iframe>";
+
+    // Validation of URL
+    Pattern patternImg = Pattern.compile(regexImage);
+    Pattern patternVid = Pattern.compile(regexVideo);
+    Matcher matcherImg = patternImg.matcher(text);
+    Matcher matcherVid = patternVid.matcher(text);
+
+    // Checks if the URL is valid and if it´s then it changes to insert the image
+    if (matcherImg.find() && urlValidator(matcherImg.group())) {
+      text = text.replaceAll(regexImage, replacementImage);
+    }
+
+    // Checks if the URL is valid and if it´s then it changes to insert the video
+    if (matcherVid.find() && urlValidator(matcherVid.group())) {
+      // Change the format of the normal Youtube URL to an embed one
+      text = text.replace("watch?v=", "embed/");
+      text = text.replaceAll(regexVideo, replacementVideo);
+    }
+
+    String regex = "(https?://\\S+\\.(png|jpg))";
+    String replacement = "<img src=\"$1\" />";
+    String mediaEmbeddedText = text.replaceAll(regex, replacement);
+
+    return mediaEmbeddedText;
+  }
+
+  // Validates if an URL posted is valid
+  private static boolean urlValidator(String url) {
+
+    try {
+      new URL(url).toURI();
+      return true;
+    } catch (URISyntaxException exception) {
+      return false;
+    } catch (MalformedURLException exception) {
+      return false;
+    }
   }
 }

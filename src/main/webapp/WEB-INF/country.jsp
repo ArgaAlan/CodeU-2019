@@ -2,10 +2,11 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
-<% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
+
+<% String countryCode = (String) request.getAttribute("code"); %>
+<% String countryName = (String) request.getAttribute("name"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
-<% String user = (String) request.getAttribute("user"); %>
-<% boolean isViewingSelf = (boolean) request.getAttribute("isViewingSelf"); %>
+<% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
 
 <!DOCTYPE html>
 <html>
@@ -23,25 +24,10 @@
         <li><a href="/">Home</a></li>
       </ul>
     </nav>
-    <h1 id="page-title"><%= user %></h1>
-    <b>About Me: </b>
-    <div id="about-me-container"><%= (String) request.getAttribute("aboutMe") %></div>
-    <br/>
-
-    <% if(isUserLoggedIn && isViewingSelf){ %>
-    <form id="about-me-form" action="/about" method="POST" class>
-      <br/>
-      Update AboutMe:
-      <br/>
-      <textarea name="about-me" placeholder="About me" id="about-me-input"></textarea>
-      <br/>
-      <input type="submit" value="Submit">
-    </form>
-    <hr/>
-    <% }  %>
+    <h1 id="page-title"><%= countryName %></h1>
 
     <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?recipient=<%= user %>" method="POST" class>
+    <form id="message-form" action="/messages?countryCode=<%= countryCode %>" method="POST" class>
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
@@ -52,9 +38,8 @@
 
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
-          <p>This user has no posts yet.</p>
-    <%  } else { %>
-          <p>User has messages:</p>
+          <p>No posts about this country yet.</p>
+          <p><strong> Be the first to post </strong> </p>
     <%  }
         for(int i = 0; i < messages.size(); i++) {
     %>

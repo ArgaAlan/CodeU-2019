@@ -25,7 +25,7 @@ public class Message {
   private String user; // author of message
   private String text;
   private long timestamp;
-  private String recipient; // receiver of message
+  private String country;
   private float sentimentScore;
 
   /**
@@ -33,22 +33,22 @@ public class Message {
    * content and {@code sentimentScore}. Generates a random ID and uses the current system time for
    * the creation time.
    */
-  public Message(String user, String text, String recipient, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), recipient, sentimentScore);
+  public Message(String user, String text, String country, float sentimentScore) {
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, sentimentScore);
   }
 
   public Message(
-      UUID id, String user, String text, long timestamp, String recipient, float sentimentScore) {
+      UUID id, String user, String text, long timestamp, String country, float sentimentScore) {
     this.id = id;
     this.user = user;
     this.text = text;
     this.timestamp = timestamp;
-    this.recipient = recipient;
+    this.country = country;
     this.sentimentScore = sentimentScore;
   }
 
-  public String getRecipient() {
-    return recipient;
+  public String getCountry() {
+    return country;
   }
 
   public UUID getId() {

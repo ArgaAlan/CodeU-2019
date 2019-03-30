@@ -23,7 +23,7 @@ const parameterUsername = urlParams.get('user');
  * Removes image plugin because it's not properly implemented yet
 **/
 function addRichTextEditor(){
-  const config = {removePlugins: [ 'ImageUpload']};
+  const config = {removePlugins: []};
   ClassicEditor.create( document.getElementById('message-input'), config);
   ClassicEditor.create( document.getElementById('about-me-input'), config);
 }
