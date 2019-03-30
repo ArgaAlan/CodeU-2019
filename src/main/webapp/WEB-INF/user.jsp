@@ -49,7 +49,7 @@
     %>
           <div class="message-div">
             <div class="message-header">
-              User: <%= messages.get(i).getUser() %> -
+              Country: <%= messages.get(i).getCountry() %> -
               Time: <%= new Date(messages.get(i).getTimestamp()) %> -
               Sentiment Score: <%= messages.get(i).getSentimentScore() %>
             </div>

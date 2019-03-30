@@ -99,6 +99,7 @@ public class MessageServlet extends HttpServlet {
 
     Message message = new Message(user, textWithMedia, countryCode, sentimentScore);
     datastore.storeMessage(message);
+    System.err.println(message.getCountry());
 
     response.sendRedirect("/country/" + countryCode);
   }
