@@ -66,7 +66,7 @@ public class CountryServlet extends HttpServlet {
       return;
     }
 
-    List<Message> messages = datastore.getMessages(countryCode);
+    List<Message> messages = datastore.getCountryMessages(countryCode);
 
     request.setAttribute("code", countryCode);
     request.setAttribute("name", countryData.getName());
