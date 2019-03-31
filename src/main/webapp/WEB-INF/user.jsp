@@ -15,6 +15,7 @@
 <% boolean isViewingSelf = (boolean) request.getAttribute("isViewingSelf"); %>
 <% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService(); %>
 <% String uploadUrl = blobstoreService.createUploadUrl("/messages"); %>
+<% Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request); %>
 
 
 <!DOCTYPE html>
@@ -58,6 +59,9 @@
     <br/>
     Add an image to your message:
     <input type="file" name="image">
+    <% const messageForm = document.getElementById('message-form'); %>
+    <% messageForm.action = imageUploadUrl; %>
+    <% messageForm.classList.remove('hidden'); %>
     <br/>
     <input type="submit" value="Submit">
     </form>
