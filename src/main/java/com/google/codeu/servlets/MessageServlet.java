@@ -58,7 +58,7 @@ public class MessageServlet extends HttpServlet {
     response.setContentType("application/json");
     String countryCode = request.getParameter("countryCode");
 
-    if (countryCode == null || countryCode.equals("")) {
+    if (countryCode == null || countryCode.isEmpty()) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
@@ -82,14 +82,12 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    System.err.println(request.getRequestURI());
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
     String textWithMedia = getMediaEmbeddedText(text);
 
     String countryCode = request.getParameter("countryCode");
-    System.err.println("|" + countryCode + "|");
-    System.err.println("CountryData " + datastore.getCountry(countryCode));
+
     // Redirect to home on invalid country
     if (datastore.getCountry(countryCode) == null) {
       response.sendRedirect("/");
@@ -99,7 +97,6 @@ public class MessageServlet extends HttpServlet {
 
     Message message = new Message(user, textWithMedia, countryCode, sentimentScore);
     datastore.storeMessage(message);
-    System.err.println(message.getCountry());
 
     response.sendRedirect("/country/" + countryCode);
   }
