@@ -78,7 +78,7 @@ public class MessageServlet extends HttpServlet {
     // Only allow users to post messages if they are logged in
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/index.html");
+      response.sendRedirect("/");
       return;
     }
 
@@ -88,8 +88,7 @@ public class MessageServlet extends HttpServlet {
     String textWithMedia = getMediaEmbeddedText(text);
 
     String countryCode = request.getParameter("countryCode");
-    System.err.println("|" + countryCode + "|");
-    System.err.println("CountryData " + datastore.getCountry(countryCode));
+
     // Redirect to home on invalid country
     if (datastore.getCountry(countryCode) == null) {
       response.sendRedirect("/");
@@ -104,6 +103,26 @@ public class MessageServlet extends HttpServlet {
     response.sendRedirect("/country/" + countryCode);
   }
 
+  /** Deletes a {@link Message}. */
+  @Override
+  public void doDelete(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+    // Only allow users to delete messages if they are logged in
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      response.sendRedirect("/");
+      return;
+    }
+
+    String id = request.getParameter("messageID");
+
+    /*  if (message.getUser() != userService.getCurrentUser().getEmail()) {
+          response.sendRedirect("/");
+          return;
+        }
+    */
+    datastore.deleteMessage(message);
+  }
   /**
    * Takes a string (text) and analyzes the sentiment within it using Google Cloud's
    * LanguageServiceClient Returns this sentiment as a float

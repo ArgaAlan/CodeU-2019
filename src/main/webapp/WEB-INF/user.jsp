@@ -45,7 +45,7 @@
     <%  } else { %>
           <p>User has messages:</p>
     <%  }
-        for(int i = 0; i < messages.size(); i++) {
+        for (int i = 0; i < messages.size(); i++) {
     %>
           <div class="message-div">
             <div class="message-header">
@@ -56,6 +56,11 @@
             <div class="message-body">
               <%= messages.get(i).getText() %>
             </div>
+        <% if (user.isViewingSelf) { %>
+        <form action="/message?messageID=<%=messages.get(i).getID()%>" method="DELETE">
+        <button type="button" value="Delete">Delete</button>
+        </form>
+        <% } %>
           </div>
     <% }  %>
     </div>

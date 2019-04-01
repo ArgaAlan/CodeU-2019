@@ -47,6 +47,24 @@ public class Datastore {
     datastore.put(messageEntity);
   }
 
+  public void deleteMessage(String messageID) {
+    datastore.delete(messageID);
+  }
+  /** Stores the Message in Datastore. */
+  /*  public void deleteMessage(Message message) {
+
+      // have to convert message to entity before doing delete
+      Entity messageEntity = new Entity("Message", message.getId().toString());
+      messageEntity.setProperty("user", message.getUser());
+      messageEntity.setProperty("text", message.getText());
+      messageEntity.setProperty("timestamp", message.getTimestamp());
+      messageEntity.setProperty("country", message.getCountry());
+      messageEntity.setProperty("sentimentScore", message.getSentimentScore());
+
+      datastore.delete(messageEntity.getKey());
+    }
+  */
+
   /**
    * Gets messages posted to a specific country page.
    *
@@ -185,4 +203,25 @@ public class Datastore {
     Country country = new Country(countryCode, name, lat, lng);
     return country;
   }
+
+  /*  public Message getMessageWithID(String idString) {
+    UUID id = UUID.fromString(idString);
+
+    Query query =
+        new Query("Message").setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, ID));
+    PreparedQuery results = datastore.prepare(query);
+    Entity messageEntity = results.asSingleEntity();
+    if (messageEntity == null) {
+      return null;
+    }
+    String user = (String) messageEntity.getProperty("user");
+    String text = (String) messageEntity.getProperty("text");
+    long timestamp = (long) messageEntity.getProperty("timestamp");
+    String country = (String) messageEntity.getProperty("country");
+    float sentimentScore = (float) messageEntity.getProperty("sentimentScore");
+
+    Message message = new Message(id, user, text, timestamp, country, sentimentScore);
+
+    return message;
+  } */
 }
