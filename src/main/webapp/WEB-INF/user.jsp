@@ -2,7 +2,6 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
-<% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String user = (String) request.getAttribute("user"); %>
 <% boolean isViewingSelf = (boolean) request.getAttribute("isViewingSelf"); %>
@@ -28,7 +27,7 @@
     <div id="about-me-container"><%= (String) request.getAttribute("aboutMe") %></div>
     <br/>
 
-    <% if(isUserLoggedIn && isViewingSelf){ %>
+    <% if(isViewingSelf){ %>
     <form id="about-me-form" action="/about" method="POST" class>
       <br/>
       Update AboutMe:
@@ -38,16 +37,6 @@
       <input type="submit" value="Submit">
     </form>
     <hr/>
-    <% }  %>
-
-    <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?recipient=<%= user %>" method="POST" class>
-    Enter a new message:
-    <br/>
-    <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-    <br/>
-    <input type="submit" value="Submit">
-    </form>
     <% }  %>
 
     <div id="message-container">
@@ -60,7 +49,7 @@
     %>
           <div class="message-div">
             <div class="message-header">
-              User: <%= messages.get(i).getUser() %> -
+              Country: <%= messages.get(i).getCountry() %> -
               Time: <%= new Date(messages.get(i).getTimestamp()) %> -
               Sentiment Score: <%= messages.get(i).getSentimentScore() %>
             </div>

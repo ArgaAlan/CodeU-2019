@@ -53,10 +53,27 @@ public class Datastore {
    * @return a list of messages posted to country page, or empty list if no messages posted to
    *     country page. List is sorted by time descending.
    */
-  public List<Message> getMessages(String countryCode) {
+  public List<Message> getCountryMessages(String countryCode) {
     Query query =
         new Query("Message")
             .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode))
+            .addSort("timestamp", SortDirection.DESCENDING);
+
+    PreparedQuery results = datastore.prepare(query);
+
+    return convertEntitiesToMessages(results);
+  }
+
+  /**
+   * Gets messages posted by a specific user.
+   *
+   * @return a list of messages posted by user, or empty list if no messages posted to country page.
+   *     List is sorted by time descending.
+   */
+  public List<Message> getMessagesByUser(String user) {
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
             .addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);

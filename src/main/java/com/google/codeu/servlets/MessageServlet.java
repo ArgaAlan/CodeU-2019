@@ -56,15 +56,15 @@ public class MessageServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     response.setContentType("application/json");
-    String user = request.getParameter("user");
+    String countryCode = request.getParameter("countryCode");
 
-    if (user == null || user.equals("")) {
+    if (countryCode == null || countryCode.isEmpty()) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
     }
 
-    List<Message> messages = datastore.getMessages(user);
+    List<Message> messages = datastore.getCountryMessages(countryCode);
     Gson gson = new Gson();
     String json = gson.toJson(messages);
 
@@ -86,19 +86,19 @@ public class MessageServlet extends HttpServlet {
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
     String textWithMedia = getMediaEmbeddedText(text);
 
-    String country = request.getParameter("country");
+    String countryCode = request.getParameter("countryCode");
 
     // Redirect to home on invalid country
-    if (datastore.getCountry(country) == null) {
+    if (datastore.getCountry(countryCode) == null) {
       response.sendRedirect("/");
       return;
     }
     float sentimentScore = this.getSentimentScore(text);
 
-    Message message = new Message(user, textWithMedia, country, sentimentScore);
+    Message message = new Message(user, textWithMedia, countryCode, sentimentScore);
     datastore.storeMessage(message);
 
-    response.sendRedirect("/country/" + country);
+    response.sendRedirect("/country/" + countryCode);
   }
 
   /**

@@ -22,28 +22,6 @@ public class AboutMeServlet extends HttpServlet {
     datastore = new Datastore();
   }
 
-  /** Responds with "about me" section for the user */
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    response.setContentType("text/html");
-
-    String user = request.getParameter("user");
-    if (user == null || user.equals("")) {
-      System.err.println("Error from AboutMeServlet: User parameter invalid.");
-      response.sendRedirect("/");
-      return;
-    }
-
-    User userData = datastore.getUser(user);
-    if (userData == null || userData.getAboutMe() == null) {
-      response.getOutputStream().println("This \"About me\" page is empty :(");
-      return;
-    }
-
-    response.getOutputStream().println(userData.getAboutMe());
-  }
-
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
