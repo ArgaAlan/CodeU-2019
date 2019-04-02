@@ -67,7 +67,7 @@ public class CountryServlet extends HttpServlet {
     List<Message> messages = datastore.getCountryMessages(countryCode);
 
     boolean isUserLoggedIn = userService.isUserLoggedIn();
-    String currentUser = null;
+    String currentUser = "";
     if (isUserLoggedIn) currentUser = userService.getCurrentUser().getEmail();
     request.setAttribute("code", countryCode);
     request.setAttribute("name", countryData.getName());
