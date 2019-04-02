@@ -58,7 +58,7 @@ public class MessageServlet extends HttpServlet {
     response.setContentType("application/json");
     String countryCode = request.getParameter("countryCode");
 
-    if (countryCode == null || countryCode.equals("")) {
+    if (countryCode == null || countryCode.isEmpty()) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
