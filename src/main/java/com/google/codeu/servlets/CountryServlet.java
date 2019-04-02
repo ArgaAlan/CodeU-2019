@@ -13,6 +13,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.gson.JsonArray;
+import com.google.gson.Gson;
 
 @WebServlet("/country/*")
 public class CountryServlet extends HttpServlet {
@@ -37,7 +39,7 @@ public class CountryServlet extends HttpServlet {
       Country country = new Country(code, name, lat, lng);
       datastore.storeCountry(country);
     }
-    scanner.close();
+    scanner.close(); 
   }
 
   @Override
