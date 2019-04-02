@@ -53,5 +53,5 @@ public class MapServlet extends HttpServlet {
       this.lat = lat;
       this.lng = lng;
     }
-}
+  }
 }

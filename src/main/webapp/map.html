@@ -28,6 +28,7 @@
         fetch('/Countries').then(function(response) {
           return response.json();
         }).then((CountryMaps) => {
+          
           var prev_infowindow = false;
 
             map = new google.maps.Map(document.getElementById('map'), {
@@ -35,21 +36,24 @@
             zoom: 3
           });
           CountryMaps.forEach((CountryMap) => {
-            console.log(CountryMap.lat);
+            var countryUrl = 'http://localhost:8080/country/' + CountryMap.code + '';
+            //console.log(CountryMap.lat);
              const marker = new google.maps.Marker({
               position: {lat: CountryMap.lat, lng: CountryMap.lng},
               map: map
             });
-             var infoWindow = new google.maps.InfoWindow({
-              content: CountryMap.name
-             });
              marker.addListener('click', function() {
+              window.location.href = countryUrl;
               //prevents multiple infowindows from being open at the same time
               if (prev_infowindow) {
                 prev_infowindow.close();
               }
               prev_infowindow = infoWindow;
               infoWindow.open(map, marker);
+             });
+
+             var infoWindow = new google.maps.InfoWindow({
+              content: CountryMap.name
              });
           });
         });
