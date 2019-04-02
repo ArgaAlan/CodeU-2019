@@ -56,9 +56,12 @@
             <div class="message-body">
               <%= messages.get(i).getText() %>
             </div>
-        <% if (user.isViewingSelf) { %>
-        <form action="/message?messageID=<%=messages.get(i).getID()%>" method="DELETE">
-        <button type="button" value="Delete">Delete</button>
+        <% if (isViewingSelf) { %>
+        <form id="delete-form" action="/messages" method="POST">
+        <input type="hidden" name="action" value="delete"/>
+        <input type="hidden" name="callee" value="/users/<%=user%>"/>
+        <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+        <button type="submit" value="Submit">Delete</button>
         </form>
         <% } %>
           </div>
