@@ -45,13 +45,30 @@ public class CountryServlet extends HttpServlet {
       throws IOException, ServletException {
 
     UserService userService = UserServiceFactory.getUserService();
+    
     String requestUrl = request.getRequestURI();
     String countryCode = requestUrl.substring("/country/".length());
+    String category = null;
 
     // Confirm valid url format
     if (countryCode == null || countryCode.equals("")) {
       response.sendRedirect("/");
       return;
+    }
+    
+    // Redirect to categories servlet if requesting category
+    CharSequence catagoryURL = "/c";
+    if (countryCode.contains(catagoryURL)) {
+      String[] urlParts = countryCode.split("/c");
+      countryCode = urlParts[0];
+      category = urlParts[1];
+      if(urlParts.length > 2) {
+        System.err.println("Invalid path requested:");
+        System.err.println("\tpath " + request.getServletPath());
+        System.err.println("\turl " + request.getRequestURL());
+        response.sendRedirect("/invalid-category/");
+        return;
+      }
     }
 
     System.err.println("Country: " + countryCode);
@@ -72,6 +89,10 @@ public class CountryServlet extends HttpServlet {
     request.setAttribute("name", countryData.getName());
     request.setAttribute("messages", messages);
     request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
-    request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
+    if(category != null) {
+      request.getRequestDispatcher("/c").forward(request, response);
+    } else {
+      request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
+    }
   }
 }
