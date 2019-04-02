@@ -83,9 +83,10 @@ public class MessageServlet extends HttpServlet {
     }
     String user = userService.getCurrentUser().getEmail();
 
-    // Delete message if delete parameter is present and refresh callee page
+    // Delete message if delete parameter is present
+    // then refresh page
     if ("delete".equals(request.getParameter("action"))) {
-      deleteMessageWithID(request.getParameter("messageID"));
+      datastore.deleteMessageWithID(request.getParameter("messageID"));
       response.sendRedirect(request.getParameter("callee"));
 
       return;
@@ -109,16 +110,6 @@ public class MessageServlet extends HttpServlet {
     response.sendRedirect("/country/" + countryCode);
   }
 
-  /** Deletes a {@link Message}. */
-  public boolean deleteMessageWithID(String id) throws IOException {
-
-    /*  if (message.getUser() != userService.getCurrentUser().getEmail()) {
-          response.sendRedirect("/");
-          return;
-        }
-    */
-    return datastore.deleteMessageWithID(id);
-  }
   /**
    * Takes a string (text) and analyzes the sentiment within it using Google Cloud's
    * LanguageServiceClient Returns this sentiment as a float
