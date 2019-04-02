@@ -71,19 +71,26 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /** Stores a new {@link Message}. */
+  /** Edits a {@link Message}. Either creates and stores the message, or Deletes the message */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // Only allow users to post messages if they are logged in
+    // Only allow users to change messages if they are logged in
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
       response.sendRedirect("/");
       return;
     }
-
-    System.err.println(request.getRequestURI());
     String user = userService.getCurrentUser().getEmail();
+
+    // Delete message if delete parameter is present and refresh callee page
+    if ("delete".equals(request.getParameter("action"))) {
+      deleteMessageWithID(request.getParameter("messageID"));
+      response.sendRedirect(request.getParameter("callee"));
+
+      return;
+    }
+
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
     String textWithMedia = getMediaEmbeddedText(text);
 
@@ -98,30 +105,19 @@ public class MessageServlet extends HttpServlet {
 
     Message message = new Message(user, textWithMedia, countryCode, sentimentScore);
     datastore.storeMessage(message);
-    System.err.println(message.getCountry());
 
     response.sendRedirect("/country/" + countryCode);
   }
 
   /** Deletes a {@link Message}. */
-  @Override
-  public void doDelete(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
-    // Only allow users to delete messages if they are logged in
-    UserService userService = UserServiceFactory.getUserService();
-    if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/");
-      return;
-    }
-
-    String id = request.getParameter("messageID");
+  public boolean deleteMessageWithID(String id) throws IOException {
 
     /*  if (message.getUser() != userService.getCurrentUser().getEmail()) {
           response.sendRedirect("/");
           return;
         }
     */
-    datastore.deleteMessage(message);
+    return datastore.deleteMessageWithID(id);
   }
   /**
    * Takes a string (text) and analyzes the sentiment within it using Google Cloud's
