@@ -8,6 +8,8 @@ import com.google.codeu.data.Message;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,8 +30,13 @@ public class CategoryServlet extends HttpServlet {
       throws IOException, ServletException {
 	String category = (String) request.getAttribute("category");
 	String countryCode = (String) request.getAttribute("countryCode");
-	
-	if(!datastore.getCountry(countryCode).getCategories().contains(category)) {
+	System.err.println(countryCode);
+	System.err.println(category);
+	Country country = datastore.getCountry(countryCode);
+	Set<String> categories = country.getCategories();
+	System.err.println(!categories.contains(category));
+	System.err.println(categories);
+	if(!categories.contains(category)) {
       System.err.println("Invalid path requested:");
       System.err.println("\tpath " + request.getServletPath());
       System.err.println("\turl " + request.getRequestURL());

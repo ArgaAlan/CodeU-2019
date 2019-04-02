@@ -26,10 +26,10 @@
       </ul>
     </nav>
     <h1 id="page-title"><%= countryName %></h1>
-    <h2 id="category"><%= categoryName %></h2>
+    <h2 id="category"><%= category %></h2>
 
     <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?countryCode=<%= countryCode %>&categoryName=<%= categoryName %>" method="POST" class>
+    <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST" class>
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
@@ -43,8 +43,12 @@
           <p>No posts about this country yet.</p>
           <p><strong> Be the first to post </strong> </p>
     <%  }
+        System.err.println(messages.size());
         for(int i = 0; i < messages.size(); i++) {
-          if(messages.get(i).getCategory() == category) { 
+          System.err.println(category);
+          System.err.println(messages.get(i).getCategory());
+          if(messages.get(i).getCategory().equals(category)) { 
+            System.err.println("Print message");
     %>
           <div class="message-div">
             <div class="message-header">

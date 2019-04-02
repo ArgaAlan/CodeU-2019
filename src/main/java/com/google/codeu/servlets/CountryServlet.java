@@ -58,10 +58,12 @@ public class CountryServlet extends HttpServlet {
     
     // Redirect to categories servlet if requesting category
     CharSequence catagoryURL = "/c";
+    System.err.println(requestUrl);
     if (countryCode.contains(catagoryURL)) {
+      System.err.println("Has /c");
       String[] urlParts = countryCode.split("/c");
       countryCode = urlParts[0];
-      category = urlParts[1];
+      category = urlParts[1].substring("/".length());
       if(urlParts.length > 2) {
         System.err.println("Invalid path requested:");
         System.err.println("\tpath " + request.getServletPath());
@@ -88,6 +90,8 @@ public class CountryServlet extends HttpServlet {
     request.setAttribute("code", countryCode);
     request.setAttribute("name", countryData.getName());
     request.setAttribute("messages", messages);
+    request.setAttribute("countryCode", countryCode);
+    request.setAttribute("category", category);
     request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
     if(category != null) {
       request.getRequestDispatcher("/c").forward(request, response);

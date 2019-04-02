@@ -87,7 +87,7 @@ public class MessageServlet extends HttpServlet {
     String textWithMedia = getMediaEmbeddedText(text);
 
     String countryCode = request.getParameter("countryCode");
-    String category = request.getParameter("categoryName");
+    String category = request.getParameter("category");
 
     // Redirect to home on invalid country
     if (datastore.getCountry(countryCode) == null) {
@@ -105,7 +105,7 @@ public class MessageServlet extends HttpServlet {
     Message message = new Message(user, textWithMedia, countryCode, category, sentimentScore);
     datastore.storeMessage(message);
 
-    response.sendRedirect("/country/" + countryCode + "c/" + category);
+    response.sendRedirect("/country/" + countryCode + "/c/" + category);
   }
 
   /**
