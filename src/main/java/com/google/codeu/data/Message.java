@@ -36,8 +36,8 @@ public class Message {
     this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, sentimentScore);
   }
 
-  public Message(UUID id, String user, String text, long timestamp, String country,
-      float sentimentScore) {
+  public Message(
+      UUID id, String user, String text, long timestamp, String country, float sentimentScore) {
     this.id = id;
     this.user = user;
     this.text = text;
@@ -79,4 +79,3 @@ public class Message {
     imageUrl = newImageUrl;
   }
 }
-
