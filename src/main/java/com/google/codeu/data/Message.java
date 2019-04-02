@@ -52,6 +52,10 @@ public class Message {
   public String getCountry() {
     return country;
   }
+  
+  public String getCategory() {
+	return category;
+  }
 
   public UUID getId() {
     return id;

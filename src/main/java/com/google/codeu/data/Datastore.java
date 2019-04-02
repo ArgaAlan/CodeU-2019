@@ -42,6 +42,7 @@ public class Datastore {
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
     messageEntity.setProperty("country", message.getCountry());
+    messageEntity.setProperty("category", message.getCategory());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
 
     datastore.put(messageEntity);
@@ -80,6 +81,24 @@ public class Datastore {
 
     return convertEntitiesToMessages(results);
   }
+  
+  /**
+   * Gets messages posted by a specific user.
+   *
+   * @return a list of messages posted by user, or empty list if no messages posted to country page.
+   *     List is sorted by time descending.
+   */
+  public List<Message> getMessagesByCategory(String category){
+	Query query =
+	    new Query("Message")
+	        .setFilter(new Query.FilterPredicate("category", FilterOperator.EQUAL, category))
+	        .addSort("timestamp", SortDirection.DESCENDING);
+
+	PreparedQuery results = datastore.prepare(query);
+
+	return convertEntitiesToMessages(results);
+  }
+  
   /**
    * Gets messages posted by all users.
    *
@@ -109,12 +128,13 @@ public class Datastore {
         String user = (String) entity.getProperty("user");
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
-        String recipient = (String) entity.getProperty("recipient");
+        String country = (String) entity.getProperty("country");
+        String category = (String) entity.getProperty("category");
         float sentimentScore =
             entity.getProperty("sentimentScore") == null
                 ? (float) 0.0
                 : ((Double) entity.getProperty("sentimentScore")).floatValue();
-        Message message = new Message(id, user, text, timestamp, recipient, sentimentScore);
+        Message message = new Message(id, user, text, timestamp, country, category, sentimentScore);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
