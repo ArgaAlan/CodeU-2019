@@ -166,11 +166,7 @@ public class MessageServlet extends HttpServlet {
       text = text.replaceAll(regexVideo, replacementVideo);
     }
 
-    String regex = "(https?://\\S+\\.(png|jpg))";
-    String replacement = "<img src=\"$1\" />";
-    String mediaEmbeddedText = text.replaceAll(regex, replacement);
-
-    return mediaEmbeddedText;
+    return text;
   }
 
   // Validates if an URL posted is valid
