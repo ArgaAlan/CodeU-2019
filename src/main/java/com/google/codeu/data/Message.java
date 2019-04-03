@@ -32,19 +32,20 @@ public class Message {
    * content and {@code sentimentScore}. Generates a random ID and uses the current system time for
    * the creation time.
    */
-  public Message(String user, String text, String country, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, sentimentScore);
+  public Message(String user, String text, String country, float sentimentScore, String imageUrl) {
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, sentimentScore,
+        imageUrl);
   }
 
-  public Message(
-      UUID id, String user, String text, long timestamp, String country, float sentimentScore) {
+  public Message(UUID id, String user, String text, long timestamp, String country,
+      float sentimentScore, String imageUrl) {
     this.id = id;
     this.user = user;
     this.text = text;
     this.timestamp = timestamp;
     this.country = country;
     this.sentimentScore = sentimentScore;
-    this.imageUrl = null;
+    this.imageUrl = "";
   }
 
   public String getCountry() {
@@ -77,5 +78,13 @@ public class Message {
 
   public void setImageUrl(String newImageUrl) {
     imageUrl = newImageUrl;
+  }
+
+  public boolean hasAnImage() {
+    if (this.imageUrl.equals("")) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

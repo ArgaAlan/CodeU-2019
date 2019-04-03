@@ -2,8 +2,8 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
-<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
-<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
+<%@ page import="com.google.appengine.api.blobstore.*" %>
+<%@ page import="com.google.appengine.api.images.*" %>
 <%@ page import="java.io.IOException" %>
 <%@ page import="javax.servlet.annotation.WebServlet" %>
 <%@ page import="javax.servlet.http.HttpServlet" %>
@@ -15,8 +15,6 @@
 <% boolean isViewingSelf = (boolean) request.getAttribute("isViewingSelf"); %>
 <% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService(); %>
 <% String uploadUrl = blobstoreService.createUploadUrl("/messages"); %>
-<% Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request); %>
-
 
 <!DOCTYPE html>
 <html>
@@ -46,22 +44,19 @@
       <br/>
       <textarea name="about-me" placeholder="About me" id="about-me-input"></textarea>
       <br/>
-      <input type="submit" value="Submit">
+      <input type="submit" value="Submit" >
     </form>
     <hr/>
     <% }  %>
 
     <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?recipient=<%= user %>" method="POST" enctype="multipart/form-data" class>
+    <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     <br/>
     Add an image to your message:
     <input type="file" name="image">
-    <% const messageForm = document.getElementById('message-form'); %>
-    <% messageForm.action = imageUploadUrl; %>
-    <% messageForm.classList.remove('hidden'); %>
     <br/>
     <input type="submit" value="Submit">
     </form>

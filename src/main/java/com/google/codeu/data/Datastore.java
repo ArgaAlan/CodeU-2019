@@ -14,6 +14,9 @@
 
 package com.google.codeu.data;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -22,9 +25,6 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -54,13 +54,12 @@ public class Datastore {
    * Gets messages posted to a specific country page.
    *
    * @return a list of messages posted to country page, or empty list if no messages posted to
-   *     country page. List is sorted by time descending.
+   *         country page. List is sorted by time descending.
    */
   public List<Message> getMessages(String countryCode) {
-    Query query =
-        new Query("Message")
-            .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode))
-            .addSort("timestamp", SortDirection.DESCENDING);
+    Query query = new Query("Message")
+        .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode))
+        .addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
 
@@ -71,7 +70,7 @@ public class Datastore {
    * Gets messages posted by all users.
    *
    * @return a list of messages posted by all users, or empty list if no user has ever posted a
-   *     message. List is sorted by time descending.
+   *         message. List is sorted by time descending.
    */
   public List<Message> getAllMessages() {
 
@@ -97,11 +96,11 @@ public class Datastore {
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
         String recipient = (String) entity.getProperty("recipient");
-        float sentimentScore =
-            entity.getProperty("sentimentScore") == null
-                ? (float) 0.0
-                : ((Double) entity.getProperty("sentimentScore")).floatValue();
-        Message message = new Message(id, user, text, timestamp, recipient, sentimentScore);
+        String imageUrl = (String) entity.getProperty("imageUrl");
+        float sentimentScore = entity.getProperty("sentimentScore") == null ? (float) 0.0
+            : ((Double) entity.getProperty("sentimentScore")).floatValue();
+        Message message =
+            new Message(id, user, text, timestamp, recipient, sentimentScore, imageUrl);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -139,9 +138,8 @@ public class Datastore {
 
   /** Returns the User of email address with aboutMe, or null if no matching User was found. */
   public User getUser(String email) {
-    Query query =
-        new Query("User")
-            .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
+    Query query = new Query("User")
+        .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
     if (userEntity == null) {
@@ -158,9 +156,8 @@ public class Datastore {
    * found
    */
   public Country getCountry(String countryCode) {
-    Query query =
-        new Query("Country")
-            .setFilter(new Query.FilterPredicate("code", FilterOperator.EQUAL, countryCode));
+    Query query = new Query("Country")
+        .setFilter(new Query.FilterPredicate("code", FilterOperator.EQUAL, countryCode));
     PreparedQuery results = datastore.prepare(query);
     Entity countryEntity = results.asSingleEntity();
     if (countryEntity == null) {
