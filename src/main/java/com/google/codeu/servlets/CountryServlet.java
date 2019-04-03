@@ -56,11 +56,10 @@ public class CountryServlet extends HttpServlet {
       return;
     }
     
-    // Redirect to categories servlet if requesting category
+    // Redirect to category servlet if requesting category
     CharSequence catagoryURL = "/c";
     System.err.println(requestUrl);
     if (countryCode.contains(catagoryURL)) {
-      System.err.println("Has /c");
       String[] urlParts = countryCode.split("/c");
       countryCode = urlParts[0];
       category = urlParts[1].substring("/".length());
@@ -72,8 +71,6 @@ public class CountryServlet extends HttpServlet {
         return;
       }
     }
-
-    System.err.println("Country: " + countryCode);
 
     Country countryData = datastore.getCountry(countryCode);
     // Send to error page if country does not exist
@@ -90,10 +87,10 @@ public class CountryServlet extends HttpServlet {
     request.setAttribute("code", countryCode);
     request.setAttribute("name", countryData.getName());
     request.setAttribute("messages", messages);
-    request.setAttribute("countryCode", countryCode);
-    request.setAttribute("category", category);
     request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
-    if(category != null) {
+    if(category != null && !category.isEmpty()) {
+      request.setAttribute("category", category);
+      request.setAttribute("countryCode", countryCode);
       request.getRequestDispatcher("/c").forward(request, response);
     } else {
       request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);

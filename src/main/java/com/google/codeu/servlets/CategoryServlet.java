@@ -30,12 +30,11 @@ public class CategoryServlet extends HttpServlet {
       throws IOException, ServletException {
 	String category = (String) request.getAttribute("category");
 	String countryCode = (String) request.getAttribute("countryCode");
-	System.err.println(countryCode);
-	System.err.println(category);
+	
 	Country country = datastore.getCountry(countryCode);
 	Set<String> categories = country.getCategories();
-	System.err.println(!categories.contains(category));
-	System.err.println(categories);
+	
+	//redirect if category doesn't exist for the country
 	if(!categories.contains(category)) {
       System.err.println("Invalid path requested:");
       System.err.println("\tpath " + request.getServletPath());
@@ -43,10 +42,6 @@ public class CategoryServlet extends HttpServlet {
       response.sendRedirect("/invalid-category/");
       return;
 	}
-    
-    String requestUrl = request.getRequestURI();
-    System.err.println(requestUrl);
-    System.err.println("Category: " + request.getAttribute("category"));
 
     request.getRequestDispatcher("/WEB-INF/category.jsp").forward(request, response);
   }
