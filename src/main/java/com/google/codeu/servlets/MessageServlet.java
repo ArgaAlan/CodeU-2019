@@ -86,9 +86,8 @@ public class MessageServlet extends HttpServlet {
     // Delete message if delete parameter is present
     // then refresh page
     if ("delete".equals(request.getParameter("action"))) {
-      datastore.deleteMessageWithID(request.getParameter("messageID"));
+      datastore.deleteMessageWithID(request.getParameter("messageID"), user);
       response.sendRedirect(request.getParameter("callee"));
-
       return;
     }
 

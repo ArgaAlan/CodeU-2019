@@ -48,15 +48,24 @@ public class Datastore {
     datastore.put(messageEntity);
   }
 
-  public void deleteMessageWithID(String messageID) {
+  public void deleteMessageWithID(String messageID, String user) {
     Query query =
         new Query("Message")
             .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, messageID));
 
     PreparedQuery results = datastore.prepare(query);
     Entity messageEntity = results.asSingleEntity();
+
     if (messageEntity == null) {
       System.err.println("Invalid Message ID - " + messageID);
+      return;
+    }
+    if (!messageEntity.getProperty("user").equals(user)) {
+      System.err.println(
+          "Invalid Credentials: User "
+              + user
+              + " attempt to delete message by "
+              + messageEntity.getProperty("user"));
       return;
     }
     datastore.delete(messageEntity.getKey());
