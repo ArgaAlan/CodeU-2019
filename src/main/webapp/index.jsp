@@ -14,6 +14,9 @@
         <li><a href="/">Home</a></li>
         <li><a href="/map.html">Map</a></li>
         <li><a href="/feed.html">Public Feed</a></li>
+        <li><a href="/countries/MX">Mexico</a></li>
+        <li><a href="/countries/US">United States</a></li>
+        <li><a href="/countries/CA">Canada</a></li>
 
     <%
       if (isUserLoggedIn) {
