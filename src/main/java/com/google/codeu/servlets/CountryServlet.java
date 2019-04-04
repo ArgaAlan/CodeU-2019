@@ -1,10 +1,6 @@
+
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-import com.google.codeu.data.Country;
-import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Message;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -13,6 +9,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.codeu.data.Country;
+import com.google.codeu.data.Datastore;
+import com.google.codeu.data.Message;
 
 @WebServlet("/country/*")
 public class CountryServlet extends HttpServlet {
@@ -66,7 +67,7 @@ public class CountryServlet extends HttpServlet {
       return;
     }
 
-    List<Message> messages = datastore.getMessages(countryCode);
+    List<Message> messages = datastore.getCountryMessages(countryCode);
 
     request.setAttribute("code", countryCode);
     request.setAttribute("name", countryData.getName());

@@ -2,11 +2,14 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
-
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
 <% String countryCode = (String) request.getAttribute("code"); %>
 <% String countryName = (String) request.getAttribute("name"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
+<% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService(); %>
+<% String uploadUrl = blobstoreService.createUploadUrl("/messages?countryCode="+countryCode); %>
 
 <!DOCTYPE html>
 <html>
@@ -27,11 +30,14 @@
     <h1 id="page-title"><%= countryName %></h1>
 
     <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?countryCode=<%= countryCode %>" method="POST" class>
+    <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     <br/>
+    Add an image to your message:
+  <input type="file" name="image">
+  <br/>
     <input type="submit" value="Submit">
     </form>
     <% }  %>

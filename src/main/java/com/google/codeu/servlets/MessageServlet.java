@@ -19,7 +19,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.annotation.WebServlet;
@@ -28,12 +27,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.cloud.language.v1.Document;
@@ -63,15 +56,15 @@ public class MessageServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     response.setContentType("application/json");
-    String user = request.getParameter("user");
+    String countryCode = request.getParameter("countryCode");
 
-    if (user == null || user.equals("")) {
+    if (countryCode == null || countryCode.isEmpty()) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
     }
 
-    List<Message> messages = datastore.getMessages(user);
+    List<Message> messages = datastore.getCountryMessages(countryCode);
     Gson gson = new Gson();
     String json = gson.toJson(messages);
 
@@ -93,32 +86,19 @@ public class MessageServlet extends HttpServlet {
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
     String textWithMedia = getMediaEmbeddedText(text);
 
-    String country = request.getParameter("country");
-
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-    List<BlobKey> blobKeys = blobs.get("image");
+    String countryCode = request.getParameter("countryCode");
 
     // Redirect to home on invalid country
-    if (datastore.getCountry(country) == null) {
+    if (datastore.getCountry(countryCode) == null) {
       response.sendRedirect("/");
       return;
     }
     float sentimentScore = this.getSentimentScore(text);
 
-    Message message = new Message(user, textWithMedia, country, sentimentScore, "");
-
-    if (blobKeys != null && !blobKeys.isEmpty()) {
-      BlobKey blobKey = blobKeys.get(0);
-      ImagesService imagesService = ImagesServiceFactory.getImagesService();
-      ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-      String imageUrl = imagesService.getServingUrl(options);
-      message.setImageUrl(imageUrl);
-    }
-
+    Message message = new Message(user, textWithMedia, countryCode, sentimentScore, "");
     datastore.storeMessage(message);
 
-    response.sendRedirect("/country/" + country);
+    response.sendRedirect("/country/" + countryCode);
   }
 
   /**
@@ -166,7 +146,11 @@ public class MessageServlet extends HttpServlet {
       text = text.replaceAll(regexVideo, replacementVideo);
     }
 
-    return text;
+    String regex = "(https?://\\S+\\.(png|jpg))";
+    String replacement = "<img src=\"$1\" />";
+    String mediaEmbeddedText = text.replaceAll(regex, replacement);
+
+    return mediaEmbeddedText;
   }
 
   // Validates if an URL posted is valid

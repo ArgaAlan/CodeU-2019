@@ -43,9 +43,7 @@ public class Datastore {
     messageEntity.setProperty("timestamp", message.getTimestamp());
     messageEntity.setProperty("country", message.getCountry());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
-    if (message.getImageUrl() != null) {
-      messageEntity.setProperty("imageUrl", message.getImageUrl());
-    }
+    messageEntity.setProperty("image", message.getImageUrl());
 
     datastore.put(messageEntity);
   }
@@ -56,9 +54,25 @@ public class Datastore {
    * @return a list of messages posted to country page, or empty list if no messages posted to
    *         country page. List is sorted by time descending.
    */
-  public List<Message> getMessages(String countryCode) {
+  public List<Message> getCountryMessages(String countryCode) {
     Query query = new Query("Message")
         .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode))
+        .addSort("timestamp", SortDirection.DESCENDING);
+
+    PreparedQuery results = datastore.prepare(query);
+
+    return convertEntitiesToMessages(results);
+  }
+
+  /**
+   * Gets messages posted by a specific user.
+   *
+   * @return a list of messages posted by user, or empty list if no messages posted to country page.
+   *         List is sorted by time descending.
+   */
+  public List<Message> getMessagesByUser(String user) {
+    Query query = new Query("Message")
+        .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
         .addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
@@ -96,11 +110,10 @@ public class Datastore {
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
         String recipient = (String) entity.getProperty("recipient");
-        String imageUrl = (String) entity.getProperty("imageUrl");
         float sentimentScore = entity.getProperty("sentimentScore") == null ? (float) 0.0
             : ((Double) entity.getProperty("sentimentScore")).floatValue();
-        Message message =
-            new Message(id, user, text, timestamp, recipient, sentimentScore, imageUrl);
+
+        Message message = new Message(id, user, text, timestamp, recipient, sentimentScore, "");
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
