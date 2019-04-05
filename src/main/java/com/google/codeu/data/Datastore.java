@@ -22,6 +22,8 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -148,6 +150,31 @@ public class Datastore {
     countryEntity.setProperty("lat", country.getLat());
     countryEntity.setProperty("lng", country.getLng());
     datastore.put(countryEntity);
+  }
+
+  /** Returns the current user or null if not logged in */
+  public User getCurrentUser() {
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) return null;
+
+    String userEmail = userService.getCurrentUser().getEmail();
+    Query query =
+        new Query("User")
+            .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, userEmail));
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+
+    // User does not yet exist - make and return user
+    if (userEntity == null) {
+      User currentUser = new User(userEmail, "This \"About me\" page is empty :(");
+      storeUser(currentUser);
+      return currentUser;
+    }
+
+    // User exists - return user
+    String aboutMe = (String) userEntity.getProperty("aboutMe");
+    User currentUser = new User((String) userEntity.getProperty("email"), aboutMe);
+    return currentUser;
   }
 
   /** Returns the User of email address with aboutMe, or null if no matching User was found. */
