@@ -54,8 +54,6 @@ public class CountryServlet extends HttpServlet {
       return;
     }
 
-    System.err.println("Country: " + countryCode);
-
     Country countryData = datastore.getCountry(countryCode);
     // Send to error page if country does not exist
     if (countryData == null) {
