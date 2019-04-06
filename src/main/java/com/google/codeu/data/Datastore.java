@@ -112,8 +112,9 @@ public class Datastore {
         String recipient = (String) entity.getProperty("recipient");
         float sentimentScore = entity.getProperty("sentimentScore") == null ? (float) 0.0
             : ((Double) entity.getProperty("sentimentScore")).floatValue();
-
-        Message message = new Message(id, user, text, timestamp, recipient, sentimentScore, "");
+        String imageUrl = (String) entity.getProperty("imageUrl");
+        Message message = new Message(id, user, text, timestamp, recipient, sentimentScore);
+        message.setImageUrl(imageUrl);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");

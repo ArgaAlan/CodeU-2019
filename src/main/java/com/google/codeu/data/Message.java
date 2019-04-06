@@ -32,13 +32,12 @@ public class Message {
    * content and {@code sentimentScore}. Generates a random ID and uses the current system time for
    * the creation time.
    */
-  public Message(String user, String text, String country, float sentimentScore, String imageUrl) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, sentimentScore,
-        imageUrl);
+  public Message(String user, String text, String country, float sentimentScore) {
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, sentimentScore);
   }
 
   public Message(UUID id, String user, String text, long timestamp, String country,
-      float sentimentScore, String imageUrl) {
+      float sentimentScore) {
     this.id = id;
     this.user = user;
     this.text = text;
