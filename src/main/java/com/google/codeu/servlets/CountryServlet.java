@@ -97,9 +97,9 @@ public class CountryServlet extends HttpServlet {
       request.setAttribute("messages", messages);
       request.getRequestDispatcher("/c").forward(request, response);
     } else {
-      request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
       List<Message> messages = datastore.getCountryMessages(countryCode);
       request.setAttribute("messages", messages);
+      request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
     }
   }
 }

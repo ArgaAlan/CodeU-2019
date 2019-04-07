@@ -34,7 +34,7 @@
     <br/>
     <input type="submit" value="Submit">
     </form>
-    <% }  %>
+    <% }   %>
 
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
