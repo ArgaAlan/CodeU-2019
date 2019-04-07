@@ -14,14 +14,13 @@
 
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.Document.Type;
 import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.User;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -49,8 +48,8 @@ public class MessageServlet extends HttpServlet {
   }
 
   /**
-   * Responds with a JSON representation of {@link Message} data for a specific user. Responds with
-   * an empty array if the user is not provided.
+   * Responds with a JSON representation of {@link Message} data for a specific country. Responds
+   * with an empty array if the countryCode is not provided.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -75,18 +74,18 @@ public class MessageServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // Only allow users to change messages if they are logged in
-    UserService userService = UserServiceFactory.getUserService();
-    if (!userService.isUserLoggedIn()) {
+    User currentUser = datastore.getCurrentUser();
+
+    // redirect to home if user is not logged in
+    if (currentUser == null) {
       response.sendRedirect("/");
       return;
     }
-    String user = userService.getCurrentUser().getEmail();
 
     // Delete message if delete parameter is present
-    // then refresh page
     if ("delete".equals(request.getParameter("action"))) {
-      datastore.deleteMessageWithID(request.getParameter("messageID"), user);
+      // then refresh page
+      datastore.deleteMessageWithID(request.getParameter("messageID"));
       response.sendRedirect(request.getParameter("callee"));
       return;
     }
@@ -103,7 +102,8 @@ public class MessageServlet extends HttpServlet {
     }
     float sentimentScore = this.getSentimentScore(text);
 
-    Message message = new Message(user, textWithMedia, countryCode, sentimentScore);
+    Message message =
+        new Message(currentUser.getEmail(), textWithMedia, countryCode, sentimentScore);
     datastore.storeMessage(message);
 
     response.sendRedirect("/country/" + countryCode);

@@ -1,7 +1,7 @@
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
+import com.google.codeu.data.Datastore;
+import com.google.codeu.data.User;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,21 +12,27 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/")
 public class HomeServlet extends HttpServlet {
 
+  private Datastore datastore;
+
+  @Override
+  public void init() {
+    datastore = new Datastore();
+  }
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-    UserService userService = UserServiceFactory.getUserService();
+    User loggedInUser = datastore.getCurrentUser();
 
-    boolean isUserLoggedIn = userService.isUserLoggedIn();
-    request.setAttribute("isUserLoggedIn", isUserLoggedIn);
+    request.setAttribute("isUserLoggedIn", loggedInUser != null);
 
-    if (userService.isUserLoggedIn()) {
-      String username = userService.getCurrentUser().getEmail();
-      request.setAttribute("username", username);
+    if (loggedInUser != null) {
+      String userEmail = loggedInUser.getEmail();
+      request.setAttribute("userEmail", userEmail);
     }
 
-    // If page does not exist
+    // If not home page, we know page does not exist - send to error page
     if (request.getServletPath() != "/") {
       System.err.println("Invalid path requested:");
       System.err.println("\tpath " + request.getServletPath());
