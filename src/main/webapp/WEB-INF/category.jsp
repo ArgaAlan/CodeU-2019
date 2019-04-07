@@ -40,15 +40,11 @@
 
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
-          <p>No posts about this country yet.</p>
+          <p>No posts in this category yet.</p>
           <p><strong> Be the first to post </strong> </p>
     <%  }
-        System.err.println(messages.size());
         for(int i = 0; i < messages.size(); i++) {
-          System.err.println(category);
-          System.err.println(messages.get(i).getCategory());
           if(messages.get(i).getCategory().equals(category)) { 
-            System.err.println("Print message");
     %>
           <div class="message-div">
             <div class="message-header">

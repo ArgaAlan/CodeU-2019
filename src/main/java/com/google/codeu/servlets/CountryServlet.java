@@ -82,18 +82,20 @@ public class CountryServlet extends HttpServlet {
       return;
     }
 
-    List<Message> messages = datastore.getCountryMessages(countryCode);
-
     request.setAttribute("code", countryCode);
     request.setAttribute("name", countryData.getName());
-    request.setAttribute("messages", messages);
     request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
+    
     if(category != null && !category.isEmpty()) {
       request.setAttribute("category", category);
       request.setAttribute("countryCode", countryCode);
+      List<Message> messages = datastore.getMessagesByCategory(countryCode, category);
+      request.setAttribute("messages", messages);
       request.getRequestDispatcher("/c").forward(request, response);
     } else {
       request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
+      List<Message> messages = datastore.getCountryMessages(countryCode);
+      request.setAttribute("messages", messages);
     }
   }
 }

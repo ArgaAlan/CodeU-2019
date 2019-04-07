@@ -88,13 +88,19 @@ public class Datastore {
    * @return a list of messages posted by user, or empty list if no messages posted to country page.
    *     List is sorted by time descending.
    */
-  public List<Message> getMessagesByCategory(String category){
-	Query query =
-	    new Query("Message")
-	        .setFilter(new Query.FilterPredicate("category", FilterOperator.EQUAL, category))
-	        .addSort("timestamp", SortDirection.DESCENDING);
+  public List<Message> getMessagesByCategory(String countryCode, String category){
+	  
+	  Query.Filter countryFilter = new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode);
+	  Query.Filter categoryFilter = new Query.FilterPredicate("category", FilterOperator.EQUAL, category);
 
-	PreparedQuery results = datastore.prepare(query);
+	  Query.Filter combinedFilter = Query.CompositeFilterOperator.and(countryFilter, categoryFilter);
+
+	  Query query = 
+	         new Query("Message")
+	              .setFilter(combinedFilter)
+	              .addSort("timestamp", SortDirection.DESCENDING);
+	      PreparedQuery results = datastore.prepare(query);
+	      Entity userEntity = results.asSingleEntity();
 
 	return convertEntitiesToMessages(results);
   }
