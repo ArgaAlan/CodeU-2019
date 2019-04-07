@@ -28,21 +28,20 @@
         fetch('/Countries').then(function(response) {
           return response.json();
         }).then((CountryMaps) => {
-          
-          var prev_infowindow = false;
+            var prev_infowindow = null;
 
             map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 16.4774, lng: -24.97},
             zoom: 3
           });
           CountryMaps.forEach((CountryMap) => {
-            var countryUrl = 'http://localhost:8080/country/' + CountryMap.code + '';
-            //console.log(CountryMap.lat);
+             var countryUrl = '/country/' + CountryMap.code;
              const marker = new google.maps.Marker({
               position: {lat: CountryMap.lat, lng: CountryMap.lng},
               map: map
             });
              marker.addListener('click', function() {
+              content: CountryMap.name
               window.location.href = countryUrl;
               //prevents multiple infowindows from being open at the same time
               if (prev_infowindow) {
@@ -50,10 +49,6 @@
               }
               prev_infowindow = infoWindow;
               infoWindow.open(map, marker);
-             });
-
-             var infoWindow = new google.maps.InfoWindow({
-              content: CountryMap.name
              });
           });
         });
@@ -64,7 +59,7 @@
 
 <body onload="createCountriesMap();">
  <h1>Countries</h1>
- <h3>Click on a country to start chatting!</h3>
+ <h3>Click on a country to start chatting!!</h3>
  <div id="map"></div>
 </body>
 </html>
