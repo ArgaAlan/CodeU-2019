@@ -26,6 +26,7 @@ public class Message {
   private String text;
   private long timestamp;
   private String country;
+  private String category;
   private float sentimentScore;
 
   /**
@@ -33,22 +34,27 @@ public class Message {
    * content and {@code sentimentScore}. Generates a random ID and uses the current system time for
    * the creation time.
    */
-  public Message(String user, String text, String country, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, sentimentScore);
+  public Message(String user, String text, String country, String category, float sentimentScore) {
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, category, sentimentScore);
   }
 
   public Message(
-      UUID id, String user, String text, long timestamp, String country, float sentimentScore) {
+      UUID id, String user, String text, long timestamp, String country, String category, float sentimentScore) {
     this.id = id;
     this.user = user;
     this.text = text;
     this.timestamp = timestamp;
     this.country = country;
+    this.category = category;
     this.sentimentScore = sentimentScore;
   }
 
   public String getCountry() {
     return country;
+  }
+  
+  public String getCategory() {
+	return category;
   }
 
   public UUID getId() {

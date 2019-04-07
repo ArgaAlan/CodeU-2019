@@ -5,9 +5,9 @@
 
 <% String countryCode = (String) request.getAttribute("code"); %>
 <% String countryName = (String) request.getAttribute("name"); %>
+<% String category = (String) request.getAttribute("category"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
-<% String currentUser = (String) request.getAttribute("currentUser"); %>
 
 <!DOCTYPE html>
 <html>
@@ -26,23 +26,25 @@
       </ul>
     </nav>
     <h1 id="page-title"><%= countryName %></h1>
+    <h2 id="category"><%= category %></h2>
 
     <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?countryCode=<%= countryCode %>" method="POST">
+    <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST" class>
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     <br/>
     <input type="submit" value="Submit">
     </form>
-    <% }   %>
+    <% }  %>
 
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
-          <p>No posts about this country yet.</p>
+          <p>No posts in this category yet.</p>
           <p><strong> Be the first to post </strong> </p>
     <%  }
         for(int i = 0; i < messages.size(); i++) {
+          if(messages.get(i).getCategory().equals(category)) { 
     %>
           <div class="message-div">
             <div class="message-header">
@@ -53,17 +55,10 @@
             <div class="message-body">
               <%= messages.get(i).getText() %>
             </div>
-            <% if (currentUser.equals(messages.get(i).getUser())) { %>
-            <form id="delete-form" action="/messages" method="POST">
-            <input type="hidden" name="action" value="delete"/>
-            <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
-            <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-            <button type="submit" value="Submit">Delete</button>
-          </form>
-          <% } %>
-            </div>
-      <% }  %>
-      </div>
+          </div>
+    <%    }
+        }  %>
+    </div>
 
   </body>
 </html>

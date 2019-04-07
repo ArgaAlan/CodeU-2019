@@ -5,8 +5,8 @@
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/map.css">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgr6Zutm1Os7q9V5Fi9N_g2poKcDG2G0A">
-    </script> 
-    
+    </script>
+
     <script>
       var map;
       var markers = [];
@@ -50,6 +50,10 @@
               prev_infowindow = infoWindow;
               infoWindow.open(map, marker);
              });
+
+             var infoWindow = new google.maps.InfoWindow({
+              content: CountryMap.name
+             });
           });
         });
       }
@@ -63,5 +67,3 @@
  <div id="map"></div>
 </body>
 </html>
-
-

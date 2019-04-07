@@ -8,6 +8,9 @@ import com.google.codeu.data.Message;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -45,13 +48,32 @@ public class CountryServlet extends HttpServlet {
       throws IOException, ServletException {
 
     UserService userService = UserServiceFactory.getUserService();
+
     String requestUrl = request.getRequestURI();
     String countryCode = requestUrl.substring("/country/".length());
+    String category = null;
 
     // Confirm valid url format
     if (countryCode == null || countryCode.equals("")) {
       response.sendRedirect("/");
       return;
+    }
+
+    // Redirect to category servlet if requesting category
+    String regexURL = "/c/(.*)";
+    Pattern urlPattern = Pattern.compile(regexURL);
+    Matcher urlMatcher = urlPattern.matcher(requestUrl);
+    if (urlMatcher.find()) {
+      String[] urlParts = countryCode.split("/c");
+      countryCode = urlParts[0];
+      category = urlParts[1].substring("/".length());
+      if(urlParts.length > 2) {
+        System.err.println("Invalid path requested:");
+        System.err.println("\tpath " + request.getServletPath());
+        System.err.println("\turl " + request.getRequestURL());
+        response.sendRedirect("/invalid-category/");
+        return;
+      }
     }
 
     Country countryData = datastore.getCountry(countryCode);
@@ -64,6 +86,23 @@ public class CountryServlet extends HttpServlet {
       return;
     }
 
+<<<<<<< HEAD
+    request.setAttribute("code", countryCode);
+    request.setAttribute("name", countryData.getName());
+    request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
+
+    if(category != null && !category.isEmpty()) {
+      request.setAttribute("category", category);
+      request.setAttribute("countryCode", countryCode);
+      List<Message> messages = datastore.getMessagesByCategory(countryCode, category);
+      request.setAttribute("messages", messages);
+      request.getRequestDispatcher("/c").forward(request, response);
+    } else {
+      List<Message> messages = datastore.getCountryMessages(countryCode);
+      request.setAttribute("messages", messages);
+      request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
+    }
+=======
     List<Message> messages = datastore.getCountryMessages(countryCode);
 
     boolean isUserLoggedIn = userService.isUserLoggedIn();
@@ -75,5 +114,6 @@ public class CountryServlet extends HttpServlet {
     request.setAttribute("isUserLoggedIn", isUserLoggedIn);
     request.setAttribute("currentUser", currentUser);
     request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
+>>>>>>> master
   }
 }
