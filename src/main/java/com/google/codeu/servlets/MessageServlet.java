@@ -70,14 +70,10 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /** Stores a new {@link Message}. */
+  /** Edits a {@link Message}. Either creates and stores the message, or Deletes the message */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
-    String textWithMedia = getMediaEmbeddedText(text);
-
-    String countryCode = request.getParameter("countryCode");
     User currentUser = datastore.getCurrentUser();
 
     // redirect to home if user is not logged in
@@ -85,6 +81,20 @@ public class MessageServlet extends HttpServlet {
       response.sendRedirect("/");
       return;
     }
+
+    // Delete message if delete parameter is present
+    if ("delete".equals(request.getParameter("action"))) {
+      // then refresh page
+      datastore.deleteMessageWithID(request.getParameter("messageID"));
+      response.sendRedirect(request.getParameter("callee"));
+      return;
+    }
+
+    String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
+    String textWithMedia = getMediaEmbeddedText(text);
+
+    String countryCode = request.getParameter("countryCode");
+
     // Redirect to home on invalid country
     if (datastore.getCountry(countryCode) == null) {
       response.sendRedirect("/");
