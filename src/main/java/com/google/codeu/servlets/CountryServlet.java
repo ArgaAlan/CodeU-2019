@@ -8,6 +8,9 @@ import com.google.codeu.data.Message;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -57,9 +60,10 @@ public class CountryServlet extends HttpServlet {
     }
     
     // Redirect to category servlet if requesting category
-    CharSequence catagoryURL = "/c";
-    System.err.println(requestUrl);
-    if (countryCode.contains(catagoryURL)) {
+    String regexURL = "/c/(.*)";
+    Pattern urlPattern = Pattern.compile(regexURL);
+    Matcher urlMatcher = urlPattern.matcher(requestUrl);
+    if (urlMatcher.find()) {
       String[] urlParts = countryCode.split("/c");
       countryCode = urlParts[0];
       category = urlParts[1].substring("/".length());
