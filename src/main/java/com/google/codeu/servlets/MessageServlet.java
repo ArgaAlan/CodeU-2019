@@ -71,18 +71,26 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /** Stores a new {@link Message}. */
+  /** Edits a {@link Message}. Either creates and stores the message, or Deletes the message */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    // Only allow users to post messages if they are logged in
+    // Only allow users to change messages if they are logged in
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/index.html");
+      response.sendRedirect("/");
+      return;
+    }
+    String user = userService.getCurrentUser().getEmail();
+
+    // Delete message if delete parameter is present
+    // then refresh page
+    if ("delete".equals(request.getParameter("action"))) {
+      datastore.deleteMessageWithID(request.getParameter("messageID"), user);
+      response.sendRedirect(request.getParameter("callee"));
       return;
     }
 
-    String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
     String textWithMedia = getMediaEmbeddedText(text);
 

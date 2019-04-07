@@ -39,12 +39,36 @@ public class Datastore {
   public void storeMessage(Message message) {
     Entity messageEntity = new Entity("Message", message.getId().toString());
     messageEntity.setProperty("user", message.getUser());
+    messageEntity.setProperty("ID", message.getId().toString());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
     messageEntity.setProperty("country", message.getCountry());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
 
     datastore.put(messageEntity);
+  }
+
+  public void deleteMessageWithID(String messageID, String user) {
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, messageID));
+
+    PreparedQuery results = datastore.prepare(query);
+    Entity messageEntity = results.asSingleEntity();
+
+    if (messageEntity == null) {
+      System.err.println("Invalid Message ID - " + messageID);
+      return;
+    }
+    if (!messageEntity.getProperty("user").equals(user)) {
+      System.err.println(
+          "Invalid Credentials: User "
+              + user
+              + " attempt to delete message by "
+              + messageEntity.getProperty("user"));
+      return;
+    }
+    datastore.delete(messageEntity.getKey());
   }
 
   /**
@@ -109,12 +133,12 @@ public class Datastore {
         String user = (String) entity.getProperty("user");
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
-        String recipient = (String) entity.getProperty("recipient");
+        String country = (String) entity.getProperty("country");
         float sentimentScore =
             entity.getProperty("sentimentScore") == null
                 ? (float) 0.0
                 : ((Double) entity.getProperty("sentimentScore")).floatValue();
-        Message message = new Message(id, user, text, timestamp, recipient, sentimentScore);
+        Message message = new Message(id, user, text, timestamp, country, sentimentScore);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
