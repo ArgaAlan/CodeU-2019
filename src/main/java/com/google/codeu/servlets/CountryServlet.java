@@ -85,7 +85,7 @@ public class CountryServlet extends HttpServlet {
       response.sendRedirect("/invalid-country/" + countryCode);
       return;
     }
-    
+
     request.setAttribute("code", countryCode);
     request.setAttribute("name", countryData.getName());
     request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
@@ -101,5 +101,6 @@ public class CountryServlet extends HttpServlet {
       request.setAttribute("messages", messages);
       request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
     }
+>>>>>>> master
   }
 }
