@@ -48,7 +48,7 @@ public class CountryServlet extends HttpServlet {
       throws IOException, ServletException {
 
     UserService userService = UserServiceFactory.getUserService();
-    
+
     String requestUrl = request.getRequestURI();
     String countryCode = requestUrl.substring("/country/".length());
     String category = null;
@@ -58,7 +58,7 @@ public class CountryServlet extends HttpServlet {
       response.sendRedirect("/");
       return;
     }
-    
+
     // Redirect to category servlet if requesting category
     String regexURL = "/c/(.*)";
     Pattern urlPattern = Pattern.compile(regexURL);
@@ -86,10 +86,11 @@ public class CountryServlet extends HttpServlet {
       return;
     }
 
+<<<<<<< HEAD
     request.setAttribute("code", countryCode);
     request.setAttribute("name", countryData.getName());
     request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
-    
+
     if(category != null && !category.isEmpty()) {
       request.setAttribute("category", category);
       request.setAttribute("countryCode", countryCode);
@@ -101,5 +102,18 @@ public class CountryServlet extends HttpServlet {
       request.setAttribute("messages", messages);
       request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
     }
+=======
+    List<Message> messages = datastore.getCountryMessages(countryCode);
+
+    boolean isUserLoggedIn = userService.isUserLoggedIn();
+    String currentUser = "";
+    if (isUserLoggedIn) currentUser = userService.getCurrentUser().getEmail();
+    request.setAttribute("code", countryCode);
+    request.setAttribute("name", countryData.getName());
+    request.setAttribute("messages", messages);
+    request.setAttribute("isUserLoggedIn", isUserLoggedIn);
+    request.setAttribute("currentUser", currentUser);
+    request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
+>>>>>>> master
   }
 }

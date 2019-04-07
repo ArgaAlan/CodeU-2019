@@ -7,6 +7,7 @@
 <% String countryName = (String) request.getAttribute("name"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
+<% String currentUser = (String) request.getAttribute("currentUser"); %>
 
 <!DOCTYPE html>
 <html>
@@ -27,7 +28,7 @@
     <h1 id="page-title"><%= countryName %></h1>
 
     <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?countryCode=<%= countryCode %>" method="POST" class>
+    <form id="message-form" action="/messages?countryCode=<%= countryCode %>" method="POST">
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
@@ -52,9 +53,17 @@
             <div class="message-body">
               <%= messages.get(i).getText() %>
             </div>
-          </div>
-    <% }  %>
-    </div>
+            <% if (currentUser.equals(messages.get(i).getUser())) { %>
+            <form id="delete-form" action="/messages" method="POST">
+            <input type="hidden" name="action" value="delete"/>
+            <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
+            <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+            <button type="submit" value="Submit">Delete</button>
+          </form>
+          <% } %>
+            </div>
+      <% }  %>
+      </div>
 
   </body>
 </html>
