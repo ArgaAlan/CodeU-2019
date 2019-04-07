@@ -10,26 +10,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Returns Restaurant data as a JSON array, e.g. [{"lat": 38.4404675, "lng": -122.7144313}] */
-@WebServlet("/Restaurants")
+@WebServlet("/Countries")
 public class MapServlet extends HttpServlet {
 
-  JsonArray restaurantsArray;
+  JsonArray countriesArray;
 
   @Override
   public void init() {
-    restaurantsArray = new JsonArray();
+    countriesArray = new JsonArray();
     Gson gson = new Gson();
     Scanner scanner =
-        new Scanner(getServletContext().getResourceAsStream("/WEB-INF/Restaurants.csv"));
+        new Scanner(getServletContext().getResourceAsStream("/WEB-INF/countries.csv"));
     while (scanner.hasNextLine()) {
       String line = scanner.nextLine();
       String[] cells = line.split(",");
 
-      String state = cells[0];
-      double lat = Double.parseDouble(cells[1]);
-      double lng = Double.parseDouble(cells[2]);
+      String code = cells[0];
+      String name = cells[1];
+      double lat = Double.parseDouble(cells[2]);
+      double lng = Double.parseDouble(cells[3]);
 
-      restaurantsArray.add(gson.toJsonTree(new FamousRestaurant(state, lat, lng)));
+      countriesArray.add(gson.toJsonTree(new CountryMap(code, name, lat, lng)));
     }
     scanner.close();
   }
@@ -37,16 +38,18 @@ public class MapServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
-    response.getOutputStream().println(restaurantsArray.toString());
+    response.getOutputStream().println(countriesArray.toString());
   }
 
-  private static class FamousRestaurant {
-    String state;
+  private static class CountryMap {
+    String code;
+    String name;
     double lat;
     double lng;
 
-    private FamousRestaurant(String state, double lat, double lng) {
-      this.state = state;
+    private CountryMap(String code, String name, double lat, double lng) {
+      this.code = code;
+      this.name = name;
       this.lat = lat;
       this.lng = lng;
     }
