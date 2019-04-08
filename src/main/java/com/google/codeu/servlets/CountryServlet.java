@@ -86,7 +86,6 @@ public class CountryServlet extends HttpServlet {
       return;
     }
 
-<<<<<<< HEAD
     request.setAttribute("code", countryCode);
     request.setAttribute("name", countryData.getName());
     request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
@@ -102,18 +101,5 @@ public class CountryServlet extends HttpServlet {
       request.setAttribute("messages", messages);
       request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
     }
-=======
-    List<Message> messages = datastore.getCountryMessages(countryCode);
-
-    boolean isUserLoggedIn = userService.isUserLoggedIn();
-    String currentUser = "";
-    if (isUserLoggedIn) currentUser = userService.getCurrentUser().getEmail();
-    request.setAttribute("code", countryCode);
-    request.setAttribute("name", countryData.getName());
-    request.setAttribute("messages", messages);
-    request.setAttribute("isUserLoggedIn", isUserLoggedIn);
-    request.setAttribute("currentUser", currentUser);
-    request.getRequestDispatcher("/WEB-INF/country.jsp").forward(request, response);
->>>>>>> master
   }
 }
