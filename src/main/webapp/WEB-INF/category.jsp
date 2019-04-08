@@ -7,7 +7,7 @@
 <% String countryName = (String) request.getAttribute("name"); %>
 <% String category = (String) request.getAttribute("category"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
-<% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
+<% String currentUser = (String) request.getAttribute("currentUser"); %>
 
 <!DOCTYPE html>
 <html>
@@ -28,7 +28,7 @@
     <h1 id="page-title"><%= countryName %></h1>
     <h2 id="category"><%= category %></h2>
 
-    <% if(isUserLoggedIn){ %>
+    <% if(currentUser != null){ %>
     <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST" class>
     Enter a new message:
     <br/>
@@ -44,7 +44,7 @@
           <p><strong> Be the first to post </strong> </p>
     <%  }
         for(int i = 0; i < messages.size(); i++) {
-          if(messages.get(i).getCategory().equals(category)) { 
+          if(messages.get(i).getCategory().equals(category)) {
     %>
           <div class="message-div">
             <div class="message-header">
