@@ -1,16 +1,14 @@
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Country;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.User;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-
+import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -47,8 +45,6 @@ public class CountryServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-    UserService userService = UserServiceFactory.getUserService();
-
     String requestUrl = request.getRequestURI();
     String countryCode = requestUrl.substring("/country/".length());
     String category = null;
@@ -67,7 +63,7 @@ public class CountryServlet extends HttpServlet {
       String[] urlParts = countryCode.split("/c");
       countryCode = urlParts[0];
       category = urlParts[1].substring("/".length());
-      if(urlParts.length > 2) {
+      if (urlParts.length > 2) {
         System.err.println("Invalid path requested:");
         System.err.println("\tpath " + request.getServletPath());
         System.err.println("\turl " + request.getRequestURL());
@@ -86,11 +82,14 @@ public class CountryServlet extends HttpServlet {
       return;
     }
 
+    User currentUser = datastore.getCurrentUser();
+    if (currentUser == null) request.setAttribute("currentUser", null);
+    else request.setAttribute("currentUser", currentUser.getEmail());
+
     request.setAttribute("code", countryCode);
     request.setAttribute("name", countryData.getName());
-    request.setAttribute("isUserLoggedIn", userService.isUserLoggedIn());
 
-    if(category != null && !category.isEmpty()) {
+    if (category != null && !category.isEmpty()) {
       request.setAttribute("category", category);
       request.setAttribute("countryCode", countryCode);
       List<Message> messages = datastore.getMessagesByCategory(countryCode, category);
