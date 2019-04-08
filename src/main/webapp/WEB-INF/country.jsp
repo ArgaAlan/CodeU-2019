@@ -2,11 +2,14 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
+<%@ page import="com.google.codeu.data.Country" %>
 
 <% String countryCode = (String) request.getAttribute("code"); %>
 <% String countryName = (String) request.getAttribute("name"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
+<% Country countryData = (Country) request.getAttribute("countryData"); %>
+<% String category = "General"; %>      <!--Default category is General is if User doesn't select one-->
 
 <!DOCTYPE html>
 <html>
@@ -15,6 +18,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
+    <link rel="stylesheet" href="/css/country.css">
     <script src="/js/message-loader.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
   </head>
@@ -34,6 +38,25 @@
     </nav>
     <h1 id="page-title"><%= countryName %></h1>
 
+    <% if (currentUser != null) { %>
+    <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST" class>
+    Enter a new message:
+    <br/>
+    <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+    </form>
+    <div class="dropdown">
+      <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+      <div id="myDropdown" class="dropdown-content">
+        <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+      <% for (int i = 0; i < countryData.getCategories().size(); i++) {   %>
+        <a href="#"><%= countryData.getCategories().get(i) %></a>
+      <% }  %>
+      </div>
+    </div>
+    <% }  %>
+    <br/>
+    <input type="submit" value="Submit">
+    <br/>
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts about this country yet.</p>
@@ -62,6 +85,29 @@
             </div>
       <% }  %>
       </div>
+    <script>
+    /* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+      function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+      }
+
+      function filterFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("myDropdown");
+        a = div.getElementsByTagName("a");
+        for (i = 0; i < a.length; i++) {
+          txtValue = a[i].textContent || a[i].innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+          } else {
+            a[i].style.display = "none";
+          }
+        }
+      }
+    </script>    
 
   </body>
 </html>
