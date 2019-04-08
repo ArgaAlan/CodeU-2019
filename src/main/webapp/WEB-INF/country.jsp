@@ -27,13 +27,13 @@
         <% } else { %>
           <li><a href="/login">Login</a></li>
         <% } %>
-        <li><a href="/country/<%=currentUser%>/c/Food">Food</a></li>
-        <li><a href="/country/<%=currentUser%>/c/Attractions">Attractions</a></li>
-        <li><a href="/country/<%=currentUser%>/c/Culture">Culture</a></li>
+        <li><a href="/country/<%=countryCode%>/c/Food">Food</a></li>
+        <li><a href="/country/<%=countryCode%>/c/Attractions">Attractions</a></li>
+        <li><a href="/country/<%=countryCode%>/c/Culture">Culture</a></li>
       </ul>
     </nav>
     <h1 id="page-title"><%= countryName %></h1>
-    
+
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts about this country yet.</p>
