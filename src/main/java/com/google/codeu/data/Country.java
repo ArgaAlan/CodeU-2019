@@ -1,5 +1,6 @@
 package com.google.codeu.data;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,7 +9,7 @@ public class Country {
   private String name;
   private double lat;
   private double lng;
-  Set<String> categories = new HashSet<String>();
+  ArrayList<String> categories = new ArrayList<String>();
 
   public Country(String code, String name, double lat, double lng) {
     this.code = code;
@@ -35,7 +36,7 @@ public class Country {
   public double getLng() {
     return lng;
   }
-  public Set<String> getCategories(){
+  public ArrayList<String> getCategories(){
 	return categories;
   }
 }
