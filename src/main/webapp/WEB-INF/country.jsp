@@ -6,7 +6,6 @@
 <% String countryCode = (String) request.getAttribute("code"); %>
 <% String countryName = (String) request.getAttribute("name"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
-<% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
 
 <!DOCTYPE html>
@@ -23,25 +22,24 @@
     <nav>
       <ul id="navigation">
         <li><a href="/">Home</a></li>
+        <% if (currentUser != null) { %>
+          <li><a href="/users/<%=currentUser%>">Your Page</a></li>
+        <% } else { %>
+          <li><a href="/login">Login</a></li>
+        <% } %>
+        <li><a href="/country/<%=currentUser%>/c/Food">Food</a></li>
+        <li><a href="/country/<%=currentUser%>/c/Attractions">Attractions</a></li>
+        <li><a href="/country/<%=currentUser%>/c/Culture">Culture</a></li>
       </ul>
     </nav>
     <h1 id="page-title"><%= countryName %></h1>
-
-    <% if(isUserLoggedIn){ %>
-    <form id="message-form" action="/messages?countryCode=<%= countryCode %>" method="POST">
-    Enter a new message:
-    <br/>
-    <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-    <br/>
-    <input type="submit" value="Submit">
-    </form>
-    <% }   %>
-
+    
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts about this country yet.</p>
           <p><strong> Be the first to post </strong> </p>
     <%  }
+
         for(int i = 0; i < messages.size(); i++) {
     %>
           <div class="message-div">
@@ -53,7 +51,7 @@
             <div class="message-body">
               <%= messages.get(i).getText() %>
             </div>
-            <% if (currentUser.equals(messages.get(i).getUser())) { %>
+            <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
             <form id="delete-form" action="/messages" method="POST">
             <input type="hidden" name="action" value="delete"/>
             <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>

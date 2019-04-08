@@ -110,7 +110,7 @@ public class MessageServlet extends HttpServlet {
     float sentimentScore = this.getSentimentScore(text);
 
     Message message =
-        new Message(currentUser.getEmail(), textWithMedia, countryCode, sentimentScore);
+        new Message(currentUser.getEmail(), textWithMedia, countryCode, category, sentimentScore);
     datastore.storeMessage(message);
 
     response.sendRedirect("/country/" + countryCode + "/c/" + category);
