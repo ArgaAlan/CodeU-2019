@@ -3,6 +3,7 @@ package com.google.codeu.servlets;
 import com.google.codeu.data.Country;
 import com.google.codeu.data.Datastore;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,7 +27,7 @@ public class CategoryServlet extends HttpServlet {
     String countryCode = (String) request.getAttribute("countryCode");
 
     Country country = datastore.getCountry(countryCode);
-    Set<String> categories = country.getCategories();
+    ArrayList<String> categories = country.getCategories();
 
     // redirect if category doesn't exist for the country
     if (!categories.contains(category)) {

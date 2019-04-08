@@ -44,15 +44,16 @@
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     </form>
-    <div class="dropdown">
-      <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-      <div id="myDropdown" class="dropdown-content">
-        <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
-      <% for (int i = 0; i < countryData.getCategories().size(); i++) {   %>
-        <a href="#"><%= countryData.getCategories().get(i) %></a>
-      <% }  %>
-      </div>
-    </div>
+    <form  method="get">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+      <input list="browsers" name="browser" placeholder="Select a Category">
+      <datalist id="browsers">
+        <% for (int i = 0; i < countryData.getCategories().size(); i++) {   %>
+          <option><%= countryData.getCategories().get(i) %></option>
+        <% }  %>
+      </datalist>
+      <input type="submit" name="categorySelect" value="Select">
+    </form>
     <% }  %>
     <br/>
     <input type="submit" value="Submit">
@@ -107,7 +108,8 @@
           }
         }
       }
-    </script>    
+
+    </script>
 
   </body>
 </html>
