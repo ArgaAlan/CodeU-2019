@@ -3,10 +3,11 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
 
-<% String countryCode = (String) request.getAttribute("code"); %>
+<% String countryCode = (String) request.getAttribute("countryCode"); %>
 <% String countryName = (String) request.getAttribute("name"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
+<% Set<String> categories = (HashSet) request.getAttribute("categories"); %>
 
 <!DOCTYPE html>
 <html>
@@ -19,19 +20,26 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
   </head>
   <body onload="buildUI()">
-    <nav>
-      <ul id="navigation">
-        <li><a href="/">Home</a></li>
-        <% if (currentUser != null) { %>
-          <li><a href="/users/<%=currentUser%>">Your Page</a></li>
-        <% } else { %>
-          <li><a href="/login">Login</a></li>
-        <% } %>
-        <li><a href="/country/<%=countryCode%>/c/Food">Food</a></li>
-        <li><a href="/country/<%=countryCode%>/c/Attractions">Attractions</a></li>
-        <li><a href="/country/<%=countryCode%>/c/Culture">Culture</a></li>
-      </ul>
-    </nav>
+    <div class="navbar">
+      <a href="/">Home</a>
+    <% if (currentUser != null) { %>
+      <a href="/users/<%=currentUser%>">Your Page</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+    <% } %>
+      <div class="dropdown">
+        <button class="dropbtn">Categories 
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+    <%  Iterator iter = categories.iterator();
+        while (iter.hasNext()) {    
+          String category = (String) iter.next();    %>
+          <a href="/country/<%= countryCode %>/c/<%= category %>"><%= category %></a>
+    <%  }   %>
+        </div>
+      </div> 
+    </div>
     <h1 id="page-title"><%= countryName %></h1>
 
     <div id="message-container">
