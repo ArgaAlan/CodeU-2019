@@ -4,6 +4,7 @@
 <%@ page import="com.google.codeu.data.Message" %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String user = (String) request.getAttribute("user"); %>
+<% boolean isLoggedIn = (boolean) request.getAttribute("isLoggedIn"); %>
 <% boolean isViewingSelf = (boolean) request.getAttribute("isViewingSelf"); %>
 
 <!DOCTYPE html>
@@ -17,11 +18,14 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
   </head>
   <body onload="buildUI()">
-    <nav>
-      <ul id="navigation">
-        <li><a href="/">Home</a></li>
-      </ul>
-    </nav>
+    <div class="navbar">
+      <a href="/">Home</a>
+    <% if (isLoggedIn) { %>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+    <% } %>
+    </div>
     <h1 id="page-title"><%= user %></h1>
     <b>About Me: </b>
     <div id="about-me-container"><%= (String) request.getAttribute("aboutMe") %></div>

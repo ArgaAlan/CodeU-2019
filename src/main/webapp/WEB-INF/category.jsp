@@ -3,7 +3,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
 
-<% String countryCode = (String) request.getAttribute("code"); %>
+<% String countryCode = (String) request.getAttribute("countryCode"); %>
 <% String countryName = (String) request.getAttribute("name"); %>
 <% String category = (String) request.getAttribute("category"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
@@ -20,11 +20,14 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
   </head>
   <body onload="buildUI()">
-    <nav>
-      <ul id="navigation">
-        <li><a href="/">Home</a></li>
-      </ul>
-    </nav>
+    <div class="navbar">
+      <a href="/">Home</a>
+    <% if (currentUser != null) { %>
+      <a href="/users/<%=currentUser%>">Your Page</a>
+    <% } else { %>
+      <a href="/login">Login</a>
+    <% } %>
+    </div>
     <h1 id="page-title"><%= countryName %></h1>
     <h2 id="category"><%= category %></h2>
 
