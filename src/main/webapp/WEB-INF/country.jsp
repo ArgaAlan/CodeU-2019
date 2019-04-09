@@ -38,8 +38,8 @@
         <div class="dropdown-content">
     <%  Iterator iter = categories.iterator();
         while (iter.hasNext()) {
-          String category = (String) iter.next();    %>
-          <a href="/country/<%= countryCode %>/c/<%= category %>"><%= category %></a>
+          String categoryList = (String) iter.next();    %>
+          <a href="/country/<%= countryCode %>/c/<%= categoryList %>"><%= categoryList %></a>
     <%  }   %>
         </div>
       </div>
@@ -47,24 +47,23 @@
     <h1 id="page-title"><%= countryName %></h1>
 
     <% if (currentUser != null) { %>
-    <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST" class>
+    <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=" method="POST" class>
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     </form>
-    <form  method="get">
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- <form  method="get">
       <input list="browsers" name="browser" placeholder="Select a Category">
       <datalist id="browsers">
-        <% for (int i = 0; i < countryData.getCategories().size(); i++) {   %>
-          <option><%= countryData.getCategories().get(i) %></option>
+    <%  Iterator iter1 = categories.iterator();
+        while (iter1.hasNext()) {   
+        String categoryList = (String) iter1.next();  %>
+        <option onclick=""><%= categoryList %></option>
         <% }  %>
       </datalist>
-      <input type="submit" name="categorySelect" value="Select">
-    </form>
+      <input type="submit" value="Submit">
+    </form> -->
     <% }  %>
-    <br/>
-    <input type="submit" value="Submit">
     <br/>
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
@@ -115,6 +114,11 @@
             a[i].style.display = "none";
           }
         }
+      }
+
+      function updateMessageCategory() {
+          var url;
+          url = document.getElementById("message-form").action;
       }
 
     </script>
