@@ -2,13 +2,11 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
-<%@ page import="com.google.codeu.data.Country" %>
 
 <% String countryCode = (String) request.getAttribute("countryCode"); %>
 <% String countryName = (String) request.getAttribute("name"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
-<% Country countryData = (Country) request.getAttribute("countryData"); %>
 <% String category = "General"; %>      <!--Default category is General is if User doesn't select one-->
 <% Set<String> categories = (HashSet) request.getAttribute("categories"); %>
 
@@ -19,7 +17,6 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
-    <link rel="stylesheet" href="/css/country.css">
     <script src="/js/message-loader.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
   </head>
@@ -52,9 +49,10 @@
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     </form>
-    <!-- <form  method="get">
+    <form  method="get">
       <input list="browsers" name="browser" placeholder="Select a Category">
       <datalist id="browsers">
+        <!-- <option value="" selected disabled hidden>Select Category</option> -->
     <%  Iterator iter1 = categories.iterator();
         while (iter1.hasNext()) {   
         String categoryList = (String) iter1.next();  %>
@@ -62,7 +60,7 @@
         <% }  %>
       </datalist>
       <input type="submit" value="Submit">
-    </form> -->
+    </form> 
     <% }  %>
     <br/>
     <div id="message-container">
@@ -93,7 +91,7 @@
             </div>
       <% }  %>
       </div>
-    <script>
+      <script>
     /* When the user clicks on the button,
         toggle between hiding and showing the dropdown content */
       function myFunction() {
