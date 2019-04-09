@@ -71,9 +71,9 @@ public class CountryServlet extends HttpServlet {
         return;
       }
     }
-    
+
     Country countryData = datastore.getCountry(countryCode);
-    
+
     // Send to error page if country does not exist
     if (countryData == null) {
       System.err.println("Invalid path requested:");
@@ -87,13 +87,14 @@ public class CountryServlet extends HttpServlet {
     if (currentUser == null) request.setAttribute("currentUser", null);
     else request.setAttribute("currentUser", currentUser.getEmail());
 
-    request.setAttribute("code", countryCode);
+    request.setAttribute("countryCode", countryCode);
     request.setAttribute("name", countryData.getName());
     request.setAttribute("countryData", countryData);
 
+    request.setAttribute("categories", countryData.getCategories());
+
     if (category != null && !category.isEmpty()) {
       request.setAttribute("category", category);
-      request.setAttribute("countryCode", countryCode);
       List<Message> messages = datastore.getMessagesByCategory(countryCode, category);
       request.setAttribute("messages", messages);
       request.getRequestDispatcher("/c").forward(request, response);

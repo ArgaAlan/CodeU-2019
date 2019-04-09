@@ -9,27 +9,23 @@
     <link rel="stylesheet" href="/css/main.css">
   </head>
   <body>
-    <nav>
-      <ul id="navigation">
-        <li><a href="/">Home</a></li>
-        <li><a href="/map.html">Map</a></li>
-        <li><a href="/feed.html">Public Feed</a></li>
-        <li><a href="/country/MX">Mexico</a></li>
-        <li><a href="/country/US">United States</a></li>
-        <li><a href="/country/CA">Canada</a></li>
-
+    <div class="navbar">
+      <a href="/">Home</a>
+      <a href="/map.html">Map</a>
+      <a href="/feed.html">Public Feed</a>
+      <a href="/country/MX">Mexico</a>
+      <a href="/country/US">United States</a>
+      <a href="/country/CA">Canada</a>
     <%
       if (isUserLoggedIn) {
         String userEmail = (String) request.getAttribute("userEmail");
     %>
-        <li><a href="/users/<%= userEmail %>">Your Page</a></li>
-        <li><a href="/logout">Logout</a></li>
+      <a href="/users/<%= userEmail %>">Your Page</a>
+      <a href="/logout">Logout</a>
     <% } else {   %>
-        <li><a href="/login">Login</a></li>
+      <a href="/login">Login</a>
     <% } %>
-
-      </ul>
-    </nav>
+    </div>
 
     <center>
     <font color="#4c008e">

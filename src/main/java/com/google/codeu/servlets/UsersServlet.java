@@ -50,11 +50,13 @@ public class UsersServlet extends HttpServlet {
     // Fetch user messages
     List<Message> messages = datastore.getMessagesByUser(userPageEmail);
     String aboutMe = viewedUser.getAboutMe();
-    boolean isViewingSelf = loggedInUser != null && userPageEmail.equals(loggedInUser.getEmail());
+    boolean isLoggedIn = loggedInUser != null;
+    boolean isViewingSelf = isLoggedIn && userPageEmail.equals(loggedInUser.getEmail());
 
     request.setAttribute("user", userPageEmail);
     request.setAttribute("messages", messages);
     request.setAttribute("aboutMe", aboutMe);
+    request.setAttribute("isLoggedIn", isLoggedIn);
     request.setAttribute("isViewingSelf", isViewingSelf);
     request.getRequestDispatcher("/WEB-INF/user.jsp").forward(request, response);
   }
