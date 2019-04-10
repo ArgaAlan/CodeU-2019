@@ -45,6 +45,7 @@ public class MessageServlet extends HttpServlet {
   @Override
   public void init() {
     datastore = new Datastore();
+    datastore.addIDAllMessages();
   }
 
   /**
