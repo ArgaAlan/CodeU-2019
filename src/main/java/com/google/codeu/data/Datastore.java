@@ -135,7 +135,6 @@ public class Datastore {
             .setFilter(combinedFilter)
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
-    Entity userEntity = results.asSingleEntity();
 
     return convertEntitiesToMessages(results);
   }
@@ -161,12 +160,11 @@ public class Datastore {
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
       try {
-        if (entity.getProperty("ID") == null) {
+        if (entity.getProperty("ID") == null || ((String) entity.getProperty("ID")).isEmpty()) {
           String idString = entity.getKey().getName();
           entity.setProperty("ID", idString);
           datastore.put(entity);
         }
-
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
