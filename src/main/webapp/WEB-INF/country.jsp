@@ -32,11 +32,13 @@
           <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
+          <div>
     <%  Iterator iter = categories.iterator();
         while (iter.hasNext()) {
           String category = (String) iter.next();    %>
           <a href="/country/<%= countryCode %>/c/<%= category %>"><%= category %></a>
     <%  }   %>
+  </div>
         </div>
       </div>
     </div>

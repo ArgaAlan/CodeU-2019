@@ -96,13 +96,15 @@ p {
 
 /* Dropdown button */
 .dropdown .dropbtn {
+  text-align: center;
   font-size: 16px;
   border: none;
   outline: #5EBFF9;
   color: #FFF9F4;
   padding: 14px 16px;
   background-color: #46494C;
-  font-family: inherit; /* Important for vertical align on mobile phones */
+  font-family: inherit;
+  display: inline-block;
   margin: 0; /* Important for vertical align on mobile phones */
 }
 
@@ -114,8 +116,9 @@ p {
 /* Dropdown content (hidden by default) */
 .dropdown-content {
   display: none;
-  position: absolute;
-  background-color: #f9f9f9;
+  position: static;
+  text-align: center;
+  background-color: #7D8E9F;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
@@ -128,7 +131,7 @@ p {
   padding: 12px 16px;
   text-decoration: none;
   display: block;
-  text-align: left;
+  text-align: center;
 }
 
 /* Add a grey background color to dropdown links on hover */
