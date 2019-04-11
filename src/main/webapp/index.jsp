@@ -80,7 +80,7 @@
     </div>
 
     <h1>Welcome!</h1>
-    <h3>Click on a country to start chatting!!</h3>
+    <h3>Click on a country to start chatting!</h3>
     <div id="map"></div>
 
     <font color = "#544610">
