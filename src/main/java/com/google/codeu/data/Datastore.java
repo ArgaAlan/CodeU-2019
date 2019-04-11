@@ -121,21 +121,22 @@ public class Datastore {
    * @return a list of messages posted by user, or empty list if no messages posted to country page.
    *     List is sorted by time descending.
    */
-  public List<Message> getMessagesByCategory(String countryCode, String category){
+  public List<Message> getMessagesByCategory(String countryCode, String category) {
 
-	  Query.Filter countryFilter = new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode);
-	  Query.Filter categoryFilter = new Query.FilterPredicate("category", FilterOperator.EQUAL, category);
+    Query.Filter countryFilter =
+        new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode);
+    Query.Filter categoryFilter =
+        new Query.FilterPredicate("category", FilterOperator.EQUAL, category);
 
-	  Query.Filter combinedFilter = Query.CompositeFilterOperator.and(countryFilter, categoryFilter);
+    Query.Filter combinedFilter = Query.CompositeFilterOperator.and(countryFilter, categoryFilter);
 
-	  Query query =
-	         new Query("Message")
-	              .setFilter(combinedFilter)
-	              .addSort("timestamp", SortDirection.DESCENDING);
-	      PreparedQuery results = datastore.prepare(query);
-	      Entity userEntity = results.asSingleEntity();
+    Query query =
+        new Query("Message")
+            .setFilter(combinedFilter)
+            .addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
 
-	return convertEntitiesToMessages(results);
+    return convertEntitiesToMessages(results);
   }
 
   /**
@@ -152,6 +153,25 @@ public class Datastore {
     return convertEntitiesToMessages(results);
   }
 
+  /** Gets all messages and adds the "ID" property if it does not exist */
+  public void addIDAllMessages() {
+
+    Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+    for (Entity entity : results.asIterable()) {
+      try {
+        if (entity.getProperty("ID") == null || ((String) entity.getProperty("ID")).isEmpty()) {
+          String idString = entity.getKey().getName();
+          entity.setProperty("ID", idString);
+          datastore.put(entity);
+        }
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+  }
   /**
    * Gets messages of all users specified by s/users/users/
    *
