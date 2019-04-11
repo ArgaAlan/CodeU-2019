@@ -7,15 +7,67 @@
     <meta charset="UTF-8">
     <title>CodeU Starter Project</title>
     <link rel="stylesheet" href="/css/main.css">
+      <link rel="stylesheet" href="/css/map.css">
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgr6Zutm1Os7q9V5Fi9N_g2poKcDG2G0A">
+        </script>
+
+        <script>
+          var map;
+          var markers = [];
+          var count = 0;
+
+          //uses window.setTimeout() to drop markers consecutively
+          function addMarkerWithTimeout(position, timeout) {
+            window.setTimeout(function() {
+              markers.push(new google.maps.Marker({
+                position: position,
+                map: map,
+                animation: google.maps.Animation.DROP
+              }));
+            }, timeout);
+          }
+
+          //initializes the map with specified center and zoom
+          function createCountriesMap(){
+            fetch('/Countries').then(function(response) {
+              return response.json();
+            }).then((CountryMaps) => {
+                var prev_infowindow = null;
+
+                map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 16.4774, lng: -24.97},
+                zoom: 3
+              });
+              CountryMaps.forEach((CountryMap) => {
+                 var countryUrl = '/country/' + CountryMap.code;
+                 const marker = new google.maps.Marker({
+                  position: {lat: CountryMap.lat, lng: CountryMap.lng},
+                  map: map
+                });
+                 marker.addListener('click', function() {
+                  content: CountryMap.name
+                  window.location.href = countryUrl;
+                  //prevents multiple infowindows from being open at the same time
+                  if (prev_infowindow) {
+                    prev_infowindow.close();
+                  }
+                  prev_infowindow = infoWindow;
+                  infoWindow.open(map, marker);
+                 });
+
+                 var infoWindow = new google.maps.InfoWindow({
+                  content: CountryMap.name
+                 });
+              });
+            });
+          }
+
+        </script>
   </head>
-  <body>
+  <body onload="createCountriesMap()">
     <div class="navbar">
       <a href="/">Home</a>
-      <a href="/map.html">Map</a>
       <a href="/feed.html">Public Feed</a>
-      <a href="/country/MX">Mexico</a>
-      <a href="/country/US">United States</a>
-      <a href="/country/CA">Canada</a>
     <%
       if (isUserLoggedIn) {
         String userEmail = (String) request.getAttribute("userEmail");
@@ -27,66 +79,70 @@
     <% } %>
     </div>
 
-    <center>
-    <font color="#4c008e">
-      <h1>ABOUT THE TEAM</h1>
-      <p>Welcome to CodeU 2019 Team 6!</p>
-    </font>
+    <h1>Welcome!</h1>
+    <h3>Click on a country to start chatting!</h3>
+    <div id="map"></div>
 
-      <p>We are composed of four student members, one Project Advisor, and
-        one Cohort Lead</p> </center>
-      <font color = "#544610">
-      <center><p><b>STUDENTS</b></center>
-        <li> <b> Alan González: </b>
-          Second-year student in Tecnologico de Monterrey Campus Guadalajara. Living in Guadalajara but born in Tepic, Nayarit.
-          Passion for CS and main hobbie Videogames.
-          <br /> &emsp;&emsp;
-          Fun Fact: First time turning on a car, first time the car crashed.
-          <br><br>
-        </li>
-        <li> <b> Drew Bernard: </b>
-          Drew is a third-year student studying computer science at UT Austin.
-          He enjoys working out, basketball, traveling, and recreational ping-pong.
-          <br /> &emsp;&emsp;
-          Fun Fact: Drew has an unheatlhy sweet tooth; will probably have some type
-          of chocolate snack or sweet on him at any given moment.
-        </li>
-        <br>
-        <li> <b> Grace Chong: </b>
+    <font color = "#544610">
+    <h1>
+      About Team JADANG
+    </h1>
+    <center><p>
+      <b>Jess Torres, <i> Cohort Lead </i></b>
+      <br />
+      Jess is on the main CodeU team, so she works on CodeU all year round,
+      and seems to have done a fantastic job so far. She's from the Central
+      Valley of California, and went to school at U.C. Santa Barbara.
+      <br />
+      Fun Fact: Jess loves traveling, is terrified of frogs, and had a pet calf
+      when she was young.
+    </p>
+    <p>
+      <b>Aaron Colwell, <i> Project Advisor </i></b>
+      <br />
+      Aaron works at Google in Seattle, and has been at Google for
+      8.5 years. He's worked on Google Chrome, Google Clips, and Daydream VR.
+      He forgot to intruduce himself with a fun fact, so Nicole decided to make
+      one up.
+      <br />
+      Fun Fact: Alongside his time at Google, Aaron has also led a very successful
+      career in part-time professional yodeling. It has been rumored that, on
+      a clear day, his yodels can be heard over five miles away.
+    </p>
+    <p>
+      <b> Drew Bernard, <i> Student </i> </b>
+      <br />
+        Drew is a third-year student studying computer science at UT Austin.
+        He enjoys working out, basketball, traveling, and recreational ping-pong.
+        <br />
+        Fun Fact: Drew has an unheatlhy sweet tooth; will probably have some type
+        of chocolate snack or sweet on him at any given moment.
+      </p>
+      <p>
+        <b> Alan González, <i> Student </i> </b>
+        <br />
+        Second-year student in Tecnologico de Monterrey Campus Guadalajara. Living in Guadalajara but born in Tepic, Nayarit.
+        Passion for CS and main hobbie Videogames.
+        <br />
+        Fun Fact: First time turning on a car, first time the car crashed.
+      </p>
+      <p>
+       <b> Nicole Baldy, <i> Student </i> </b>
+       <br />
+        Nicole is a second-year student at the University of Akron, studying
+        Computer Engineering. She loves hiking, board games, rollar blading, and
+        fiction writing.
+        <br />
+        Fun Fact: Nicole accidentally took her cat camping once
+      </p>
+      <p>
+        <b> Grace Chong, <i> Student </i> </b>
+        <br />
           Grace is a second year student at the University of Pennsylvania studying computer science and cognitive science. She is passionate about technology for social impact, design, and playing the ukelele.
-        <br /> &emsp;&emsp;
+        <br />
           Fun Fact: Grace loves driving and traveling to new places - during this summer, she drove 8 hours to Montreal, Canada with her friends!
-        </li>
-        <br>
-        <li> <b> Nicole Baldy:</b>
-          Nicole is a second-year student at the University of Akron, studying
-          Computer Engineering. She loves hiking, board games, rollar blading, and
-          the Lord of The Rings.
-          <br /> &emsp;&emsp;
-          Fun Fact: Nicole accidentally took her cat camping once
-        </li>
       </p>
-      <center><p><b> PROJECT ADVISOR</b><br /></p></center>
-        <b>Aaron Colwell: </b>
-        Aaron works at Google in Seattle, and has been at Google for
-        8.5 years. He's worked on Google Chrome, Google Clips, and Daydream VR.
-        He forgot to intruduce himself with a fun fact, so Nicole decided to make
-        one up.
-        <br />
-        Fun Fact: Alongside his time at Google, Aaron has also led a very successful
-        career in part-time professional yodeling. It has been rumored that, on
-        a clear day, his yodels can be heard over five miles away.
-      </p>
-
-      <center><p><b> COHORT LEAD </b><br /></center>
-        <b>Jess Torres: </b>
-        Jess is on the main CodeU team, so she works on CodeU all year round,
-        and seems to have done a fantastic job so far. She's from the Central
-        Valley of California, and went to school at U.C. Santa Barbara.
-        <br />
-        Fun Fact: Jess loves traveling, is terrified of frogs, and had a pet calf
-        when she was young.
-      </p>
+    </center>
     </font>
     </body>
 </html>

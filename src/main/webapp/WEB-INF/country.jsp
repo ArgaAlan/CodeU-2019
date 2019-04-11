@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>User Page</title>
+    <title><%=countryName%></title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
@@ -28,17 +28,19 @@
       <a href="/login">Login</a>
     <% } %>
       <div class="dropdown">
-        <button class="dropbtn">Categories 
+        <button class="dropbtn">Categories
           <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
+          <div>
     <%  Iterator iter = categories.iterator();
-        while (iter.hasNext()) {    
+        while (iter.hasNext()) {
           String category = (String) iter.next();    %>
           <a href="/country/<%= countryCode %>/c/<%= category %>"><%= category %></a>
     <%  }   %>
+  </div>
         </div>
-      </div> 
+      </div>
     </div>
     <h1 id="page-title"><%= countryName %></h1>
 

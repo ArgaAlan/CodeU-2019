@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>User Page</title>
+    <title><%=countryCode%> <%=category%></title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
@@ -22,6 +22,7 @@
   <body onload="buildUI()">
     <div class="navbar">
       <a href="/">Home</a>
+      <a href="/country/<%=countryCode%>"><%=countryName%></a>
     <% if (currentUser != null) { %>
       <a href="/users/<%=currentUser%>">Your Page</a>
     <% } else { %>
