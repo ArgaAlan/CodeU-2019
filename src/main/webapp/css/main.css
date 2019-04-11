@@ -70,7 +70,7 @@ h2 {
 
 /* The dropdown container */
 .dropdown {
-  float: left;
+  float: center;
   overflow: hidden;
 }
 
