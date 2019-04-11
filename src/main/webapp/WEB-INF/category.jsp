@@ -22,6 +22,7 @@
   <body onload="buildUI()">
     <div class="navbar">
       <a href="/">Home</a>
+      <a href="/country/<%=countryCode%>"><%=countryName%></a>
     <% if (currentUser != null) { %>
       <a href="/users/<%=currentUser%>">Your Page</a>
     <% } else { %>
