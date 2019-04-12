@@ -1,17 +1,17 @@
 package com.google.codeu.servlets;
 
+import com.google.codeu.data.Country;
 import com.google.codeu.data.Datastore;
-import com.google.codeu.data.User;
 import java.io.IOException;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/")
-public class HomeServlet extends HttpServlet {
-
+@WebServlet("/c")
+public class CategoryServlet extends HttpServlet {
   private Datastore datastore;
 
   @Override
@@ -22,25 +22,21 @@ public class HomeServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+    String category = (String) request.getAttribute("category");
+    String countryCode = (String) request.getAttribute("countryCode");
 
-    User loggedInUser = datastore.getCurrentUser();
+    Country country = datastore.getCountry(countryCode);
+    Set<String> categories = country.getCategories();
 
-    request.setAttribute("isUserLoggedIn", loggedInUser != null);
-
-    if (loggedInUser != null) {
-      String userEmail = loggedInUser.getEmail();
-      request.setAttribute("userEmail", userEmail);
-    }
-
-    // If not home page, we know page does not exist - send to error page
-    if (request.getServletPath() != "/") {
+    // redirect if category doesn't exist for the country
+    if (!categories.contains(category)) {
       System.err.println("Invalid path requested:");
       System.err.println("\tpath " + request.getServletPath());
       System.err.println("\turl " + request.getRequestURL());
-      request.getRequestDispatcher("/WEB-INF/error.jsp").forward(request, response);
+      response.sendRedirect("/invalid-category/");
       return;
     }
 
-    request.getRequestDispatcher("/index.jsp").forward(request, response);
+    request.getRequestDispatcher("/WEB-INF/category.jsp").forward(request, response);
   }
 }

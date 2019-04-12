@@ -18,7 +18,7 @@
         <li><a href="/">Home</a></li>
     <%
       if (isUserLoggedIn) {
-        String username = (String) request.getAttribute("username");
+        String username = (String) request.getAttribute("userEmail");
     %>
         <a href="/users/<%= username %>">Your Page</a>
     <% } %>

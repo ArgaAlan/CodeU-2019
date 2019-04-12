@@ -1,7 +1,5 @@
 package com.google.codeu.servlets;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.User;
 import java.io.IOException;
@@ -22,44 +20,20 @@ public class AboutMeServlet extends HttpServlet {
     datastore = new Datastore();
   }
 
-  /** Responds with "about me" section for the user */
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-    response.setContentType("text/html");
-
-    String user = request.getParameter("user");
-    if (user == null || user.equals("")) {
-      System.err.println("Error from AboutMeServlet: User parameter invalid.");
-      response.sendRedirect("/");
-      return;
-    }
-
-    User userData = datastore.getUser(user);
-    if (userData == null || userData.getAboutMe() == null) {
-      response.getOutputStream().println("This \"About me\" page is empty :(");
-      return;
-    }
-
-    response.getOutputStream().println(userData.getAboutMe());
-  }
-
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-    UserService userService = UserServiceFactory.getUserService();
-
-    if (!userService.isUserLoggedIn()) {
+    User currentUser = datastore.getCurrentUser();
+    if (currentUser == null) {
       response.sendRedirect("/");
       return;
     }
 
-    String userEmail = userService.getCurrentUser().getEmail();
     String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.relaxed());
 
-    User user = new User(userEmail, aboutMe);
-    datastore.storeUser(user);
+    User userNewAboutMe = new User(currentUser.getEmail(), aboutMe);
+    datastore.storeUser(userNewAboutMe);
 
-    response.sendRedirect("/users/" + userEmail);
+    response.sendRedirect("/users/" + currentUser.getEmail());
   }
 }
