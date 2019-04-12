@@ -37,7 +37,7 @@
     <div id="about-me-container"><%= (String) request.getAttribute("aboutMe") %></div>
     <br/>
 
-    <% if(isUserLoggedIn && isViewingSelf){ %>
+    <% if(isViewingSelf){ %>
     <form id="about-me-form" action="/about" method="POST" class>
       <br/>
       Update AboutMe:
@@ -48,7 +48,6 @@
     </form>
     <hr/>
     <% }  %>
-
     <% if(isUserLoggedIn){ %>
     <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
     Enter a new message:
@@ -61,7 +60,6 @@
     <input type="submit" value="Submit">
     </form>
     <% }  %>
-
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>This user has no posts yet.</p>
@@ -72,7 +70,7 @@
     %>
           <div class="message-div">
             <div class="message-header">
-              User: <%= messages.get(i).getUser() %> -
+              Country: <%= messages.get(i).getCountry() %> -
               Time: <%= new Date(messages.get(i).getTimestamp()) %> -
               Sentiment Score: <%= messages.get(i).getSentimentScore() %>
             </div>
