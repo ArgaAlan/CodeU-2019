@@ -191,6 +191,7 @@ public class Datastore {
 
         long timestamp = (long) entity.getProperty("timestamp");
         String country = (String) entity.getProperty("country");
+        String category = (String) entity.getProperty("category");
         float sentimentScore =
             entity.getProperty("sentimentScore") == null
                 ? (float) 0.0

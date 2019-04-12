@@ -52,6 +52,7 @@ public class Message {
       String country,
       String category,
       float sentimentScore) {
+
     this.id = id;
     this.user = user;
     this.text = text;
@@ -64,6 +65,10 @@ public class Message {
 
   public String getCountry() {
     return country;
+  }
+
+  public String getCategory() {
+    return category;
   }
 
   public String getCategory() {
