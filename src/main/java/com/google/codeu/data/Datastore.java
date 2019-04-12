@@ -25,6 +25,11 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -39,13 +44,45 @@ public class Datastore {
   public void storeMessage(Message message) {
     Entity messageEntity = new Entity("Message", message.getId().toString());
     messageEntity.setProperty("user", message.getUser());
+    messageEntity.setProperty("ID", message.getId().toString());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("timestamp", message.getTimestamp());
     messageEntity.setProperty("country", message.getCountry());
+    messageEntity.setProperty("category", message.getCategory());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
     messageEntity.setProperty("image", message.getImageUrl());
 
     datastore.put(messageEntity);
+  }
+
+  public void deleteMessageWithID(String messageID) {
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, messageID));
+
+    PreparedQuery results = datastore.prepare(query);
+    Entity messageEntity = results.asSingleEntity();
+
+    if (messageEntity == null) {
+      System.err.println("Invalid Message ID - " + messageID);
+      return;
+    }
+    // Ensure that message poster is the same as deleter
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      System.err.println("Invalid Credentials: attempt to delete message while not logged in");
+      return;
+    }
+    String userEmail = userService.getCurrentUser().getEmail();
+    if (!messageEntity.getProperty("user").equals(userEmail)) {
+      System.err.println(
+          "Invalid Credentials: User "
+              + userEmail
+              + " attempt to delete message by "
+              + messageEntity.getProperty("user"));
+      return;
+    }
+    datastore.delete(messageEntity.getKey());
   }
 
   /**
@@ -79,7 +116,29 @@ public class Datastore {
 
     return convertEntitiesToMessages(results);
   }
+  /**
+   * Gets messages posted by a specific user.
+   *
+   * @return a list of messages posted by user, or empty list if no messages posted to country page.
+   *     List is sorted by time descending.
+   */
+  public List<Message> getMessagesByCategory(String countryCode, String category) {
 
+    Query.Filter countryFilter =
+        new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode);
+    Query.Filter categoryFilter =
+        new Query.FilterPredicate("category", FilterOperator.EQUAL, category);
+
+    Query.Filter combinedFilter = Query.CompositeFilterOperator.and(countryFilter, categoryFilter);
+
+    Query query =
+        new Query("Message")
+            .setFilter(combinedFilter)
+            .addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    return convertEntitiesToMessages(results);
+  }
   /**
    * Gets messages posted by all users.
    *
@@ -94,6 +153,25 @@ public class Datastore {
     return convertEntitiesToMessages(results);
   }
 
+  /** Gets all messages and adds the "ID" property if it does not exist */
+  public void addIDAllMessages() {
+
+    Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+    for (Entity entity : results.asIterable()) {
+      try {
+        if (entity.getProperty("ID") == null || ((String) entity.getProperty("ID")).isEmpty()) {
+          String idString = entity.getKey().getName();
+          entity.setProperty("ID", idString);
+          datastore.put(entity);
+        }
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+  }
   /**
    * Gets messages of all users specified by s/users/users/
    *
@@ -109,11 +187,14 @@ public class Datastore {
         String user = (String) entity.getProperty("user");
         String text = (String) entity.getProperty("text");
         long timestamp = (long) entity.getProperty("timestamp");
-        String recipient = (String) entity.getProperty("recipient");
-        float sentimentScore = entity.getProperty("sentimentScore") == null ? (float) 0.0
-            : ((Double) entity.getProperty("sentimentScore")).floatValue();
+        String country = (String) entity.getProperty("country");
+        String category = (String) entity.getProperty("category");
+        float sentimentScore =
+            entity.getProperty("sentimentScore") == null
+                ? (float) 0.0
+                : ((Double) entity.getProperty("sentimentScore")).floatValue();
         String imageUrl = (String) entity.getProperty("imageUrl");
-        Message message = new Message(id, user, text, timestamp, recipient, sentimentScore);
+        Message message = new Message(id, user, text, timestamp, country, category, sentimentScore);
         message.setImageUrl(imageUrl);
         messages.add(message);
       } catch (Exception e) {
@@ -148,6 +229,31 @@ public class Datastore {
     countryEntity.setProperty("lat", country.getLat());
     countryEntity.setProperty("lng", country.getLng());
     datastore.put(countryEntity);
+  }
+
+  /** Returns the current user or null if not logged in */
+  public User getCurrentUser() {
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) return null;
+
+    String userEmail = userService.getCurrentUser().getEmail();
+    Query query =
+        new Query("User")
+            .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, userEmail));
+    PreparedQuery results = datastore.prepare(query);
+    Entity userEntity = results.asSingleEntity();
+
+    // User does not yet exist - make and return user
+    if (userEntity == null) {
+      User currentUser = new User(userEmail, "This \"About me\" page is empty :(");
+      storeUser(currentUser);
+      return currentUser;
+    }
+
+    // User exists - return user
+    String aboutMe = (String) userEntity.getProperty("aboutMe");
+    User currentUser = new User((String) userEntity.getProperty("email"), aboutMe);
+    return currentUser;
   }
 
   /** Returns the User of email address with aboutMe, or null if no matching User was found. */

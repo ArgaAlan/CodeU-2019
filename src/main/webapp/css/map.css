@@ -1,8 +1,8 @@
 
 /* Formats map size and position */
 #map {
-	width: 900px;
-	height: 700px;
+	width: 100%;
+	height: 900px;
 	border: thin solid black;
 	margin-top: 20px;
 	position:relative;

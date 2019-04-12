@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC|Righteous');
 /*
  * Copyright 2019 Google Inc.
  *
@@ -20,8 +21,9 @@ body {
   margin: 10%;
   text-align:center;
   display:inline-block;
-  font-family: sans-serif;
-  background-color: #BADFFB;
+  font-family: 'Noto Sans TC', sans-serif;
+  background-color: #171D1C;
+  color : #7D8E9F;
 }
 
 
@@ -38,7 +40,7 @@ nav li {
 }
 
 h2 {
-  text-align:left;
+  text-align:center;
 }
 
 /* Gives a good visual to the image */
@@ -46,4 +48,98 @@ h2 {
   display: block;
   margin-top: 25px;
   max-width: 75%;
+}
+
+/* Navbar container */
+.navbar {
+  overflow: hidden;
+  background-color: #1985A1;
+  font-family: Arial;
+}
+
+/* Links inside the navbar */
+.navbar a {
+  float: center;
+  font-family: 'Righteous', sans-serif;
+  font-size: 16px;
+  color: #FFF9F4;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* The dropdown container */
+.dropdown {
+  float: center;
+  overflow: hidden;
+}
+
+h1 {
+  color: #DCDCDD;
+  font-size: 40px;
+}
+
+h2 {
+  color: #C5C3C6;
+  font-size: 30px;
+}
+
+h3 {
+  color: #7D8E9F;
+  font-size: 20px;
+}
+
+p {
+  color: #7D8E9F;
+  font-size: 16px;
+}
+
+/* Dropdown button */
+.dropdown .dropbtn {
+  text-align: center;
+  font-size: 16px;
+  border: none;
+  outline: #5EBFF9;
+  color: #FFF9F4;
+  padding: 14px 16px;
+  background-color: #46494C;
+  font-family: inherit;
+  display: inline-block;
+  margin: 0; /* Important for vertical align on mobile phones */
+}
+
+/* Add a blue-grey background color to navbar links on hover */
+.navbar a:hover, .dropdown:hover .dropbtn {
+  background-color: #4C5C68;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: static;
+  text-align: center;
+  background-color: #7D8E9F;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  float: none;
+  color: #FFF9F4;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+/* Add a grey background color to dropdown links on hover */
+.dropdown-content a:hover {
+  background-color: grey;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
 }
