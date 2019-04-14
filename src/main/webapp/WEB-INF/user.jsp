@@ -55,7 +55,6 @@
             <div class="message-header">
               Country: <%= messages.get(i).getCountry() %> -
               Time: <%= new Date(messages.get(i).getTimestamp()) %> -
-              Sentiment Score: <%= messages.get(i).getSentimentScore() %>
             </div>
             <div class="message-body">
               <%= messages.get(i).getText() %>

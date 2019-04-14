@@ -54,7 +54,6 @@
             <div class="message-header">
               User: <%= messages.get(i).getUser() %> -
               Time: <%= new Date(messages.get(i).getTimestamp()) %> -
-              Sentiment Score: <%= messages.get(i).getSentimentScore() %>
             </div>
             <div class="message-body">
               <%= messages.get(i).getText() %>
