@@ -18,7 +18,7 @@
 /* Prevent the page from becoming too wide. */
 body {
   width: 80%;
-  margin: 10%;
+  margin: 5%;
   text-align:center;
   display:inline-block;
   font-family: 'Noto Sans TC', sans-serif;
@@ -30,7 +30,8 @@ body {
 /* Remove bullet points from navigation bar. */
 nav ul {
   list-style-type: none;
-  padding-left: 0;
+  /*padding-left: 0;*/
+  padding: 8px 16px;
 }
 
 /* Keep navigation menu on one line. */
@@ -55,16 +56,18 @@ h2 {
   overflow: hidden;
   background-color: #1985A1;
   font-family: Arial;
+  float: center;
+  padding: 20px 24px;
 }
 
 /* Links inside the navbar */
 .navbar a {
   float: center;
   font-family: 'Righteous', sans-serif;
-  font-size: 16px;
+  font-size: 20px;
   color: #FFF9F4;
   text-align: center;
-  padding: 14px 16px;
+  padding: 20px 24px;
   text-decoration: none;
 }
 
@@ -104,6 +107,7 @@ p {
   padding: 14px 16px;
   background-color: #46494C;
   font-family: inherit;
+  font-family: 'Righteous', sans-serif;;
   display: inline-block;
   margin: 0; /* Important for vertical align on mobile phones */
 }
@@ -142,4 +146,20 @@ p {
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+/* Formatting for delete button */
+button {
+  font-family: 'Righteous', sans-serif;
+  color:grey;
+  background-color: black;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #1985A1;
+}
+
+/* Hover over delete button */
+button:hover {
+  background-color:#1985A1;
+  color:white;
 }
