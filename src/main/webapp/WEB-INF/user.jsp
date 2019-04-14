@@ -54,7 +54,7 @@
           <div class="message-div">
             <div class="message-header">
               Country: <%= messages.get(i).getCountry() %> -
-              Time: <%= new Date(messages.get(i).getTimestamp()) %> -
+              Time: <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
               <%= messages.get(i).getText() %>
