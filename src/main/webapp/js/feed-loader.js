@@ -45,8 +45,7 @@ function fetchMessages(){
    headerDiv.appendChild(document.createTextNode(
    "User: " + message.user + ' - ' +
    "Country: " + message.country + ' - ' +
-   new Date(message.timestamp)+ ' - ' +
-   "Sentiment Score: " + message.sentimentScore));
+   new Date(message.timestamp)+ ' - '));
 
    const bodyDiv = document.createElement('div');
    bodyDiv.classList.add('message-body');

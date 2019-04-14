@@ -14,10 +14,6 @@
 
 package com.google.codeu.servlets;
 
-import com.google.cloud.language.v1.Document;
-import com.google.cloud.language.v1.Document.Type;
-import com.google.cloud.language.v1.LanguageServiceClient;
-import com.google.cloud.language.v1.Sentiment;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.codeu.data.User;
@@ -108,34 +104,10 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    float sentimentScore = this.getSentimentScore(text);
-
-    Message message =
-        new Message(currentUser.getEmail(), textWithMedia, countryCode, category, sentimentScore);
+    Message message = new Message(currentUser.getEmail(), textWithMedia, countryCode, category);
     datastore.storeMessage(message);
 
     response.sendRedirect("/country/" + countryCode + "/c/" + category);
-  }
-
-  /**
-   * Takes a string (text) and analyzes the sentiment within it using Google Cloud's
-   * LanguageServiceClient Returns this sentiment as a float
-   */
-  private float getSentimentScore(String text) throws IOException {
-    float score = 0.0f;
-    try {
-      Document doc = Document.newBuilder().setContent(text).setType(Type.PLAIN_TEXT).build();
-
-      LanguageServiceClient languageService = LanguageServiceClient.create();
-      Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
-      languageService.close();
-
-      score = sentiment.getScore();
-    } catch (Exception e) {
-      e.printStackTrace(System.err);
-    }
-
-    return score;
   }
 
   private String getMediaEmbeddedText(String text) {

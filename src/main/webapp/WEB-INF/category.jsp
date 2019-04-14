@@ -53,8 +53,7 @@
           <div class="message-div">
             <div class="message-header">
               User: <%= messages.get(i).getUser() %> -
-              Time: <%= new Date(messages.get(i).getTimestamp()) %> -
-              Sentiment Score: <%= messages.get(i).getSentimentScore() %>
+              Time: <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
               <%= messages.get(i).getText() %>
@@ -62,7 +61,7 @@
             <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
             <form id="delete-form" action="/messages" method="POST">
               <input type="hidden" name="action" value="delete"/>
-              <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
+              <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
               <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
               <button type="submit" value="Submit">Delete</button>
             </form>
