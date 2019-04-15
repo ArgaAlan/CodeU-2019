@@ -16,7 +16,6 @@ function getLocation() {
       infoWindow.setContent('Location found.');
       infoWindow.open(map);
       map.setCenter(pos);
-      console.log(pos);
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });

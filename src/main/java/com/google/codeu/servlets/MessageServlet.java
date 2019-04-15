@@ -14,10 +14,6 @@
 
 package com.google.codeu.servlets;
 
-import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Message;
-import com.google.codeu.data.User;
-import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -31,6 +27,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import com.google.codeu.data.Datastore;
+import com.google.codeu.data.Message;
+import com.google.codeu.data.User;
+import com.google.gson.Gson;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -93,6 +93,9 @@ public class MessageServlet extends HttpServlet {
     String countryCode = request.getParameter("countryCode");
     String category = request.getParameter("category");
 
+    String lat = request.getParameter("lat");
+    String lng = request.getParameter("lng");
+
     // Redirect to home on invalid country
     if (datastore.getCountry(countryCode) == null) {
       response.sendRedirect("/");
@@ -104,7 +107,8 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    Message message = new Message(currentUser.getEmail(), textWithMedia, countryCode, category);
+    Message message =
+        new Message(currentUser.getEmail(), textWithMedia, countryCode, category, lat, lng);
     datastore.storeMessage(message);
 
     response.sendRedirect("/country/" + countryCode + "/c/" + category);
