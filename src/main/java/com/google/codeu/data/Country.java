@@ -35,7 +35,8 @@ public class Country {
   public double getLng() {
     return lng;
   }
-  public Set<String> getCategories(){
-	return categories;
+
+  public Set<String> getCategories() {
+    return categories;
   }
 }
