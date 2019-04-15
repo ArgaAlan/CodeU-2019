@@ -14,6 +14,10 @@
 
 package com.google.codeu.servlets;
 
+import com.google.codeu.data.Datastore;
+import com.google.codeu.data.Message;
+import com.google.codeu.data.User;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -27,10 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
-import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Message;
-import com.google.codeu.data.User;
-import com.google.gson.Gson;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")

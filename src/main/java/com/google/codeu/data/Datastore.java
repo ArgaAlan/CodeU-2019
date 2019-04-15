@@ -14,9 +14,6 @@
 
 package com.google.codeu.data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -27,6 +24,9 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -52,8 +52,9 @@ public class Datastore {
   }
 
   public void deleteMessageWithID(String messageID) {
-    Query query = new Query("Message")
-        .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, messageID));
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, messageID));
 
     PreparedQuery results = datastore.prepare(query);
     Entity messageEntity = results.asSingleEntity();
@@ -70,8 +71,11 @@ public class Datastore {
     }
     String userEmail = userService.getCurrentUser().getEmail();
     if (!messageEntity.getProperty("user").equals(userEmail)) {
-      System.err.println("Invalid Credentials: User " + userEmail + " attempt to delete message by "
-          + messageEntity.getProperty("user"));
+      System.err.println(
+          "Invalid Credentials: User "
+              + userEmail
+              + " attempt to delete message by "
+              + messageEntity.getProperty("user"));
       return;
     }
     datastore.delete(messageEntity.getKey());
@@ -81,12 +85,13 @@ public class Datastore {
    * Gets messages posted to a specific country page.
    *
    * @return a list of messages posted to country page, or empty list if no messages posted to
-   *         country page. List is sorted by time descending.
+   *     country page. List is sorted by time descending.
    */
   public List<Message> getCountryMessages(String countryCode) {
-    Query query = new Query("Message")
-        .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode))
-        .addSort("timestamp", SortDirection.DESCENDING);
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode))
+            .addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
 
@@ -97,12 +102,13 @@ public class Datastore {
    * Gets messages posted by a specific user.
    *
    * @return a list of messages posted by user, or empty list if no messages posted to country page.
-   *         List is sorted by time descending.
+   *     List is sorted by time descending.
    */
   public List<Message> getMessagesByUser(String user) {
-    Query query = new Query("Message")
-        .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
-        .addSort("timestamp", SortDirection.DESCENDING);
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+            .addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
 
@@ -113,7 +119,7 @@ public class Datastore {
    * Gets messages posted by a specific user.
    *
    * @return a list of messages posted by user, or empty list if no messages posted to country page.
-   *         List is sorted by time descending.
+   *     List is sorted by time descending.
    */
   public List<Message> getMessagesByCategory(String countryCode, String category) {
 
@@ -124,8 +130,10 @@ public class Datastore {
 
     Query.Filter combinedFilter = Query.CompositeFilterOperator.and(countryFilter, categoryFilter);
 
-    Query query = new Query("Message").setFilter(combinedFilter).addSort("timestamp",
-        SortDirection.DESCENDING);
+    Query query =
+        new Query("Message")
+            .setFilter(combinedFilter)
+            .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     return convertEntitiesToMessages(results);
@@ -135,7 +143,7 @@ public class Datastore {
    * Gets messages posted by all users.
    *
    * @return a list of messages posted by all users, or empty list if no user has ever posted a
-   *         message. List is sorted by time descending.
+   *     message. List is sorted by time descending.
    */
   public List<Message> getAllMessages() {
 
@@ -223,12 +231,12 @@ public class Datastore {
   /** Returns the current user or null if not logged in */
   public User getCurrentUser() {
     UserService userService = UserServiceFactory.getUserService();
-    if (!userService.isUserLoggedIn())
-      return null;
+    if (!userService.isUserLoggedIn()) return null;
 
     String userEmail = userService.getCurrentUser().getEmail();
-    Query query = new Query("User")
-        .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, userEmail));
+    Query query =
+        new Query("User")
+            .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, userEmail));
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
 
@@ -247,8 +255,9 @@ public class Datastore {
 
   /** Returns the User of email address with aboutMe, or null if no matching User was found. */
   public User getUser(String email) {
-    Query query = new Query("User")
-        .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
+    Query query =
+        new Query("User")
+            .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
     PreparedQuery results = datastore.prepare(query);
     Entity userEntity = results.asSingleEntity();
     if (userEntity == null) {
@@ -265,8 +274,9 @@ public class Datastore {
    * found
    */
   public Country getCountry(String countryCode) {
-    Query query = new Query("Country")
-        .setFilter(new Query.FilterPredicate("code", FilterOperator.EQUAL, countryCode));
+    Query query =
+        new Query("Country")
+            .setFilter(new Query.FilterPredicate("code", FilterOperator.EQUAL, countryCode));
     PreparedQuery results = datastore.prepare(query);
     Entity countryEntity = results.asSingleEntity();
     if (countryEntity == null) {
