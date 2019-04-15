@@ -96,6 +96,9 @@ public class MessageServlet extends HttpServlet {
     String lat = request.getParameter("lat");
     String lng = request.getParameter("lng");
 
+    System.out.println(lat);
+    System.out.println(lng);
+
     // Redirect to home on invalid country
     if (datastore.getCountry(countryCode) == null) {
       response.sendRedirect("/");

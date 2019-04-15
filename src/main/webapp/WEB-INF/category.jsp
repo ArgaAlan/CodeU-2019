@@ -52,8 +52,9 @@
     </form>
     <button onclick="getLocation()">Add your location</button>
     <div id="map"></div>
+    <input type="hidden" name="lat" value="" id="lat">
+    <input type="hidden" name="lng" value="" id="lng">
     <% }  %>
-
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts in this category yet.</p>

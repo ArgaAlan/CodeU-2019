@@ -16,6 +16,8 @@ function getLocation() {
       infoWindow.setContent('Location found.');
       infoWindow.open(map);
       map.setCenter(pos);
+      document.getElementById("lat").value = position.coords.latitude;
+      document.getElementById("lng").value = position.coords.longitude;
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
     });
