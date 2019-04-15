@@ -22,10 +22,10 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
     <style>
       #map {
-        height: 100%;
+        height: 75px;
       }
       html, body {
-        height: 100%;
+        height: 75px;
       }
     </style>
   </head>
@@ -50,6 +50,8 @@
     <br/>
     <input type="submit" value="Submit">
     </form>
+    <button onclick="getLocation()">Add your location</button>
+    <div id="map"></div>
     <% }  %>
 
     <div id="message-container">
@@ -80,8 +82,6 @@
     <%    }
         }  %>
     </div>
-    <button onclick="getLocation()">Add your location</button>
-    <div id="map"></div>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0&callback=initMap">
     </script>
   </body>
