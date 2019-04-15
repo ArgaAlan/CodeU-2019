@@ -48,12 +48,12 @@
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     <br/>
+    <input type="hidden" name="lat" value="" id="lat">
+    <input type="hidden" name="lng" value="" id="lng">
     <input type="submit" value="Submit">
     </form>
     <button onclick="getLocation()">Add your location</button>
     <div id="map"></div>
-    <input type="hidden" name="lat" value="" id="lat">
-    <input type="hidden" name="lng" value="" id="lng">
     <% }  %>
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
