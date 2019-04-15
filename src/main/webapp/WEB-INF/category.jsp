@@ -38,7 +38,8 @@
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     <br/>
-    <input type="submit" value="Submit">
+    <button type="submit" value="Submit"> SUBMIT </button>
+    <br/>
     </form>
     <% }  %>
 
@@ -63,7 +64,7 @@
               <input type="hidden" name="action" value="delete"/>
               <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
               <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-              <button type="submit" value="Submit">Delete</button>
+              <button type="submit" value="Submit">DELETE</button>
             </form>
             <% } %>
           </div>

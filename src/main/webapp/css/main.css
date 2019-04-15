@@ -150,7 +150,7 @@ p {
 
 /* Formatting for delete button */
 button {
-  font-family: 'Righteous', sans-serif;
+  font-family: 'Noto Sans TC', sans-serif;
   color:grey;
   background-color: black;
   margin-bottom: 10px;
