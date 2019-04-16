@@ -38,6 +38,9 @@
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     <br/>
+     Add an image to your message:
+    <input type="file" name="image">
+    <br/>
     <input type="submit" value="Submit">
     </form>
     <% }  %>
