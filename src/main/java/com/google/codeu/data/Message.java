@@ -71,10 +71,6 @@ public class Message {
     return category;
   }
 
-  public String getCategory() {
-    return category;
-  }
-
   public UUID getId() {
     return id;
   }
