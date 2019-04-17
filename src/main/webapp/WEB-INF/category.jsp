@@ -9,7 +9,7 @@
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
 <% String editText = (String) request.getAttribute("editText"); %>
-
+<% System.err.println(editText);%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -34,7 +34,7 @@
     <h2 id="category"><%= category %></h2>
 
     <% if(currentUser != null){ %>
-      <% if (editText == null) { %>
+      <% if (editText == null) { System.err.println("No edit");%>
         <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST">
         Enter a new message:
         <br/>
@@ -42,7 +42,7 @@
         <br/>
         <input type="submit" value="Submit">
         </form>
-      <% } else {%>
+      <% } else { System.err.println("edit with "+editText);%>
       <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST">
         Edit your message:
         <br/>

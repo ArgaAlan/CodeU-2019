@@ -94,9 +94,9 @@ public class MessageServlet extends HttpServlet {
       String messageText = datastore.getMessageTextByID(messageID);
       request.setAttribute("editText", messageText);
       request.setAttribute("editID", messageID);
+      System.err.println(messageText + "\n" + messageID);
       // Reload page with message information in form
-      response.sendRedirect(request.getParameter("callee"));
-      return;
+      request.getRequestDispatcher(request.getParameter("callee")).forward(request, response);
     }
 
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
