@@ -5,7 +5,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>CodeU Starter Project</title>
+    <title>Team JADANG</title>
     <link rel="stylesheet" href="/css/main.css">
       <link rel="stylesheet" href="/css/map.css">
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCgr6Zutm1Os7q9V5Fi9N_g2poKcDG2G0A">
