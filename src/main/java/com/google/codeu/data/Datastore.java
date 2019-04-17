@@ -46,6 +46,8 @@ public class Datastore {
     messageEntity.setProperty("timestamp", message.getTimestamp());
     messageEntity.setProperty("country", message.getCountry());
     messageEntity.setProperty("category", message.getCategory());
+    messageEntity.setProperty("latitude", message.getLat());
+    messageEntity.setProperty("longitude", message.getLng());
     datastore.put(messageEntity);
   }
 
@@ -170,6 +172,7 @@ public class Datastore {
       }
     }
   }
+
   /**
    * Gets messages of all users specified by s/users/users/
    *
@@ -187,7 +190,9 @@ public class Datastore {
         long timestamp = (long) entity.getProperty("timestamp");
         String country = (String) entity.getProperty("country");
         String category = (String) entity.getProperty("category");
-        Message message = new Message(id, user, text, timestamp, country, category);
+        String lat = (String) entity.getProperty("lat");
+        String lng = (String) entity.getProperty("lng");
+        Message message = new Message(id, user, text, timestamp, country, category, lat, lng);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -263,6 +268,7 @@ public class Datastore {
     User user = new User((String) userEntity.getProperty("email"), aboutMe);
     return user;
   }
+
   /**
    * Returns the country entity associated with the country code, or null if no matching Country was
    * found

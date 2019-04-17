@@ -93,6 +93,9 @@ public class MessageServlet extends HttpServlet {
     String countryCode = request.getParameter("countryCode");
     String category = request.getParameter("category");
 
+    String lat = request.getParameter("lat");
+    String lng = request.getParameter("lng");
+
     // Redirect to home on invalid country
     if (datastore.getCountry(countryCode) == null) {
       response.sendRedirect("/");
@@ -104,7 +107,8 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    Message message = new Message(currentUser.getEmail(), textWithMedia, countryCode, category);
+    Message message =
+        new Message(currentUser.getEmail(), textWithMedia, countryCode, category, lat, lng);
     datastore.storeMessage(message);
 
     response.sendRedirect("/country/" + countryCode + "/c/" + category);

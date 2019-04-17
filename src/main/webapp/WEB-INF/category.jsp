@@ -17,7 +17,13 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/message-loader.js"></script>
+    <script src="/js/location.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+    <style>
+      #map {
+        height: 75px;
+      }
+    </style>
   </head>
   <body onload="buildUI()">
     <div class="navbar">
@@ -38,11 +44,14 @@
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     <br/>
+    <input type="hidden" name="lat" value="" id="lat">
+    <input type="hidden" name="lng" value="" id="lng">
     <button type="submit" value="Submit"> SUBMIT </button>
     <br/>
     </form>
+    <button onclick="getLocation()">Add your location</button>
+    <div id="map"></div>
     <% }  %>
-
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts in this category yet.</p>
@@ -71,6 +80,7 @@
     <%    }
         }  %>
     </div>
-
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
+    </script>
   </body>
 </html>
