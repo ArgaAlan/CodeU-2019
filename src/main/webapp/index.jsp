@@ -15,7 +15,6 @@
           var map;
           var markers = [];
           var count = 0;
-
           //uses window.setTimeout() to drop markers consecutively
           function addMarkerWithTimeout(position, timeout) {
             window.setTimeout(function() {
@@ -26,14 +25,12 @@
               }));
             }, timeout);
           }
-
           //initializes the map with specified center and zoom
           function createCountriesMap(){
             fetch('/Countries').then(function(response) {
               return response.json();
             }).then((CountryMaps) => {
                 var prev_infowindow = null;
-
                 map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: 16.4774, lng: -24.97},
                 zoom: 3
@@ -54,14 +51,12 @@
                   prev_infowindow = infoWindow;
                   infoWindow.open(map, marker);
                  });
-
                  var infoWindow = new google.maps.InfoWindow({
                   content: CountryMap.name
                  });
               });
             });
           }
-
         </script>
   </head>
   <body onload="createCountriesMap()">
@@ -145,4 +140,3 @@
     </center>
     </font>
     </body>
-</html>
