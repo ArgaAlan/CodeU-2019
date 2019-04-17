@@ -14,7 +14,6 @@
   <head>
     <title><%=countryCode%> <%=category%></title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1.0">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/message-loader.js"></script>
@@ -22,9 +21,6 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
     <style>
       #map {
-        height: 75px;
-      }
-      html, body {
         height: 75px;
       }
     </style>
@@ -83,7 +79,7 @@
     <%    }
         }  %>
     </div>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0&callback=initMap">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
     </script>
   </body>
 </html>
