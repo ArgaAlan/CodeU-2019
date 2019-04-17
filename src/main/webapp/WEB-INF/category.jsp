@@ -8,6 +8,7 @@
 <% String category = (String) request.getAttribute("category"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
+<% String editText = (String) request.getAttribute("editText"); %>
 
 <!DOCTYPE html>
 <html>
@@ -33,13 +34,24 @@
     <h2 id="category"><%= category %></h2>
 
     <% if(currentUser != null){ %>
-    <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST" class>
-    Enter a new message:
-    <br/>
-    <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-    <br/>
-    <input type="submit" value="Submit">
-    </form>
+      <% if (editText == null) { %>
+        <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST">
+        Enter a new message:
+        <br/>
+        <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+        <br/>
+        <input type="submit" value="Submit">
+        </form>
+      <% } else {%>
+      <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST">
+        Edit your message:
+        <br/>
+        <textarea name="text" value="<%=editText%>" id="message-input"></textarea>
+        <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
+        <input type="hidden" name="messageID" value="<%=(String) request.getAttribute("editID")%>"/>
+        <button type="submit" value="Submit">Submit</button>
+      </form>
+      <% } %>
     <% }  %>
 
     <div id="message-container">
@@ -64,6 +76,12 @@
               <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
               <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
               <button type="submit" value="Submit">Delete</button>
+            </form>
+            <form id="edit-form" action="/messages" method="POST">
+              <input type="hidden" name="action" value="edit"/>
+              <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
+              <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+              <button type="submit" value="Submit">Edit</button>
             </form>
             <% } %>
           </div>

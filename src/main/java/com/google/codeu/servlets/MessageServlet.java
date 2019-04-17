@@ -67,7 +67,9 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /** Edits a {@link Message}. Either creates and stores the message, or Deletes the message */
+  /**
+   * Edits a {@link Message}. Either creates/edits and stores the message, or Deletes the message
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -79,10 +81,20 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    // Delete message if delete parameter is present
+    // Delete message if delete parameter is present and refresh
     if ("delete".equals(request.getParameter("action"))) {
-      // then refresh page
       datastore.deleteMessageWithID(request.getParameter("messageID"));
+      response.sendRedirect(request.getParameter("callee"));
+      return;
+    }
+
+    // Edit message if edit parameter is present
+    if ("edit".equals(request.getParameter("action"))) {
+      String messageID = request.getParameter("messageID");
+      String messageText = datastore.getMessageTextByID(messageID);
+      request.setAttribute("editText", messageText);
+      request.setAttribute("editID", messageID);
+      // Reload page with message information in form
       response.sendRedirect(request.getParameter("callee"));
       return;
     }
@@ -104,7 +116,20 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    Message message = new Message(currentUser.getEmail(), textWithMedia, countryCode, category);
+    Message message;
+    if (request.getParameter("messageID") == null)
+      message = new Message(currentUser.getEmail(), textWithMedia, countryCode, category);
+    else {
+      // message being edited - already has ID
+      message =
+          new Message(
+              request.getParameter("messageID"),
+              currentUser.getEmail(),
+              textWithMedia,
+              countryCode,
+              category);
+    }
+
     datastore.storeMessage(message);
 
     response.sendRedirect("/country/" + countryCode + "/c/" + category);

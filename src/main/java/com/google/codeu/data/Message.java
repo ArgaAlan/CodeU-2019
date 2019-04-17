@@ -36,6 +36,11 @@ public class Message {
     this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, category);
   }
 
+  // Constructor for edited messages which already have an ID, update timestamp
+  public Message(String idStr, String user, String text, String country, String category) {
+    this(UUID.fromString(idStr), user, text, System.currentTimeMillis(), country, category);
+  }
+
   public Message(
       UUID id, String user, String text, long timestamp, String country, String category) {
     this.id = id;
