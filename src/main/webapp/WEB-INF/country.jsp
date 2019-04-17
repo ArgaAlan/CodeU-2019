@@ -65,7 +65,7 @@
               <input type="hidden" name="action" value="delete"/>
               <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
               <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-              <button type="submit" value="Submit">Delete</button>
+              <button type="submit" value="Submit">DELETE</button>
             </form>
           <% } %>
             </div>

@@ -46,7 +46,8 @@
     <br/>
     <input type="hidden" name="lat" value="" id="lat">
     <input type="hidden" name="lng" value="" id="lng">
-    <input type="submit" value="Submit">
+    <button type="submit" value="Submit"> SUBMIT </button>
+    <br/>
     </form>
     <button onclick="getLocation()">Add your location</button>
     <div id="map"></div>
@@ -72,7 +73,7 @@
               <input type="hidden" name="action" value="delete"/>
               <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
               <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-              <button type="submit" value="Submit">Delete</button>
+              <button type="submit" value="Submit">DELETE</button>
             </form>
             <% } %>
           </div>
