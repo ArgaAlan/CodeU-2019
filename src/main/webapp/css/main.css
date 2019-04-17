@@ -30,7 +30,6 @@ body {
 /* Remove bullet points from navigation bar. */
 nav ul {
   list-style-type: none;
-  /*padding-left: 0;*/
   padding: 8px 16px;
 }
 
@@ -106,7 +105,6 @@ p {
   color: #FFF9F4;
   padding: 14px 16px;
   background-color: #46494C;
-  font-family: inherit;
   font-family: 'Righteous', sans-serif;;
   display: inline-block;
   margin: 0; /* Important for vertical align on mobile phones */
