@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Page Not Found</title>
     <link rel="stylesheet" href="/css/main.css">
   </head>
 
