@@ -50,21 +50,37 @@ public class MessageServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // check if request for message edit information
+    if ("getEditable".equals(request.getParameter("action"))) {
+      String messageID = request.getParameter("messageID");
+      String messageText = datastore.getMessageTextByID(messageID);
+      request.setAttribute("editText", messageText);
+      request.setAttribute("editID", messageID);
 
-    response.setContentType("application/json");
-    String countryCode = request.getParameter("countryCode");
+      try {
+        // Reload page with message information in form
+        request.getRequestDispatcher(request.getParameter("callee")).forward(request, response);
+        return;
+      } catch (Exception e) {
+        System.err.println("Error in edit message - requestDispatcher failed");
+        e.printStackTrace();
+      }
 
-    if (countryCode == null || countryCode.isEmpty()) {
-      // Request is invalid, return empty array
-      response.getWriter().println("[]");
-      return;
+      response.setContentType("application/json");
+      String countryCode = request.getParameter("countryCode");
+
+      if (countryCode == null || countryCode.isEmpty()) {
+        // Request is invalid, return empty array
+        response.getWriter().println("[]");
+        return;
+      }
+
+      List<Message> messages = datastore.getCountryMessages(countryCode);
+      Gson gson = new Gson();
+      String json = gson.toJson(messages);
+
+      response.getWriter().println(json);
     }
-
-    List<Message> messages = datastore.getCountryMessages(countryCode);
-    Gson gson = new Gson();
-    String json = gson.toJson(messages);
-
-    response.getWriter().println(json);
   }
 
   /**
@@ -86,17 +102,6 @@ public class MessageServlet extends HttpServlet {
       datastore.deleteMessageWithID(request.getParameter("messageID"));
       response.sendRedirect(request.getParameter("callee"));
       return;
-    }
-
-    // Edit message if edit parameter is present
-    if ("edit".equals(request.getParameter("action"))) {
-      String messageID = request.getParameter("messageID");
-      String messageText = datastore.getMessageTextByID(messageID);
-      request.setAttribute("editText", messageText);
-      request.setAttribute("editID", messageID);
-      System.err.println(messageText + "\n" + messageID);
-      // Reload page with message information in form
-      request.getRequestDispatcher(request.getParameter("callee")).forward(request, response);
     }
 
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
@@ -121,6 +126,7 @@ public class MessageServlet extends HttpServlet {
       message = new Message(currentUser.getEmail(), textWithMedia, countryCode, category);
     else {
       // message being edited - already has ID
+      System.err.println("Edit Message");
       message =
           new Message(
               request.getParameter("messageID"),

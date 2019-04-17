@@ -46,6 +46,7 @@ public class CountryServlet extends HttpServlet {
       throws IOException, ServletException {
 
     String requestUrl = request.getRequestURI();
+
     String countryCode = requestUrl.substring("/country/".length());
     String category = null;
 
@@ -89,7 +90,7 @@ public class CountryServlet extends HttpServlet {
     request.setAttribute("countryCode", countryCode);
     request.setAttribute("name", countryData.getName());
     request.setAttribute("categories", countryData.getCategories());
-    
+
     if (category != null && !category.isEmpty()) {
       request.setAttribute("category", category);
       List<Message> messages = datastore.getMessagesByCategory(countryCode, category);
