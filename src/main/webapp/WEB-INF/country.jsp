@@ -44,9 +44,14 @@
         console.log(withCategoryURL);
       }
 
+      function onLoad(){
+        buildUI();
+        updateMessageCategory();
+      }
+
     </script>
   </head>
-  <body onload="buildUI()">
+  <body onload="onLoad()">
     <div class="navbar">
       <a href="/">Home</a>
     <% if (currentUser != null) { %>
@@ -70,18 +75,16 @@
     <h1 id="page-title"><%= countryName %></h1>
 
     <% if (currentUser != null) { %>
-    <form id="message-form" action="withCategoryURL" method="POST" class>
+    <form id="message-form" action="" method="POST" class>
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-    </form>
-    <form  method="get">
       <select id="browsers" onchange="updateMessageCategory()">
         <!-- <option value="" selected disabled hidden>Select Category</option> -->
     <%  Iterator iter1 = categories.iterator();
         while (iter1.hasNext()) {   
         String categoryList = (String) iter1.next();  %>
-        <option onclick="updateMessageCategory()"><%= categoryList %></option>
+        <option><%= categoryList %></option>
         <% }  %>
       </select>
       <input type="submit" value="Submit">
