@@ -72,9 +72,11 @@
           <input type="hidden" name="action" value="getEditable"/>
           <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
           <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
+          <input type="hidden" name="lat" value="<%=messages.get(i).getLat()%>"/>
+          <input type="hidden" name="lng" value="<%=messages.get(i).getLng()%>"/>
           <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
           <button type="submit">Edit</button>
-        </form>
+
         <% } %>
           </div>
     <% }  %>
