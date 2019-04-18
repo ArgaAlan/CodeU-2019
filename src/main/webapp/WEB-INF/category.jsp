@@ -81,7 +81,8 @@
 
             <form id="edit-form" action="/messages" method="GET">
               <input type="hidden" name="action" value="getEditable"/>
-              <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
+              <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
+              <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
               <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
               <button type="submit">Edit</button>
             </form>

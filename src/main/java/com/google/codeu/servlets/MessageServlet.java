@@ -58,8 +58,13 @@ public class MessageServlet extends HttpServlet {
       request.setAttribute("editID", messageID);
 
       try {
+        String editURL =
+            "/country/"
+                + request.getParameter("country")
+                + "/c/"
+                + request.getParameter("category");
         // Reload page with message information in form
-        request.getRequestDispatcher(request.getParameter("callee")).forward(request, response);
+        request.getRequestDispatcher(editURL).forward(request, response);
         return;
       } catch (Exception e) {
         System.err.println("Error in edit message - requestDispatcher failed");
@@ -126,7 +131,6 @@ public class MessageServlet extends HttpServlet {
       message = new Message(currentUser.getEmail(), textWithMedia, countryCode, category);
     else {
       // message being edited - already has ID
-      System.err.println("Edit Message");
       message =
           new Message(
               request.getParameter("messageID"),
