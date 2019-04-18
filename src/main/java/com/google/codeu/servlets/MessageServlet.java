@@ -141,7 +141,7 @@ public class MessageServlet extends HttpServlet {
     String regexImage = "(https?://\\S+\\.(png|jpg|gif))";
     String replacementImage = "<img src=\"$1\" />";
     String regexVideo = "(https?://www.youtube.com/\\S+)";
-    String replacementVideo = "<iframe width=\"420\" height=\"345\" src=\"$1\">" + "</iframe>";
+    String replacementVideo = "<iframe width=\"960\" height=\"690\" src=\"$1\">" + "</iframe>";
 
     // Validation of URL
     Pattern patternImg = Pattern.compile(regexImage);
