@@ -2,6 +2,8 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
 
 <% String countryCode = (String) request.getAttribute("countryCode"); %>
 <% String countryName = (String) request.getAttribute("name"); %>
@@ -9,6 +11,8 @@
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
 <% String editText = (String) request.getAttribute("editText"); %>
+<% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService(); %>
+<% String uploadUrl = blobstoreService.createUploadUrl("/messages?countryCode="+countryCode + "&category="+category); %>
 
 <!DOCTYPE html>
 <html>
@@ -49,7 +53,9 @@
             <input type="hidden" name="lat" value="" id="lat">
             <input type="hidden" name="lng" value="" id="lng">
             <button type="submit" value="Submit"> SUBMIT </button>
-            <br/>
+              Add an image to your message:
+              <input type="file" name="image">
+              <br/>
           </form>
           <button onclick="getLocation()">Add your location</button>
           <div id="map"></div>
@@ -63,10 +69,13 @@
           <input type="hidden" name="messageID" value="<%=(String) request.getAttribute("editID")%>"/>
           <input type="hidden" name="lat" value="<%=(String) request.getAttribute("lat") %>" />
           <input type="hidden" name="lng" value="<%=(String) request.getAttribute("lng") %>" />
-          <% String lng = (String) request.getAttribute("lng"); %>
-
-          <button type="submit" value="Submit">Submit</button>
+          <button type="submit" value="Submit"> SUBMIT </button>
+            Add an image to your message:
+            <input type="file" name="image">
+              <br/>
         </form>
+        <button onclick="getLocation()">Add your location</button>
+        <div id="map"></div>
         <% } %>
     <% }  %>
     <div id="message-container">

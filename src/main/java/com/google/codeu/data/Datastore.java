@@ -64,6 +64,8 @@ public class Datastore {
     messageEntity.setProperty("category", message.getCategory());
     messageEntity.setProperty("lat", message.getLat());
     messageEntity.setProperty("lng", message.getLng());
+    messageEntity.setProperty("image", message.getImageUrl());
+
     datastore.put(messageEntity);
   }
 
@@ -224,7 +226,9 @@ public class Datastore {
         String category = (String) entity.getProperty("category");
         String lat = (String) entity.getProperty("lat");
         String lng = (String) entity.getProperty("lng");
+        String imageUrl = (String) entity.getProperty("imageUrl");
         Message message = new Message(id, user, text, timestamp, country, category, lat, lng);
+        message.setImageUrl(imageUrl);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
