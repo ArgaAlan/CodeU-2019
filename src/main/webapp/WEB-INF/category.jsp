@@ -12,16 +12,23 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>User Page</title>
+    <title><%=countryCode%> <%=category%></title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/message-loader.js"></script>
+    <script src="/js/location.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+    <style>
+      #map {
+        height: 75px;
+      }
+    </style>
   </head>
   <body onload="buildUI()">
     <div class="navbar">
       <a href="/">Home</a>
+      <a href="/country/<%=countryCode%>"><%=countryName%></a>
     <% if (currentUser != null) { %>
       <a href="/users/<%=currentUser%>">Your Page</a>
     <% } else { %>
@@ -37,10 +44,14 @@
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     <br/>
-    <input type="submit" value="Submit">
+    <input type="hidden" name="lat" value="" id="lat">
+    <input type="hidden" name="lng" value="" id="lng">
+    <button type="submit" value="Submit"> SUBMIT </button>
+    <br/>
     </form>
+    <button onclick="getLocation()">Add your location</button>
+    <div id="map"></div>
     <% }  %>
-
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts in this category yet.</p>
@@ -52,16 +63,24 @@
           <div class="message-div">
             <div class="message-header">
               User: <%= messages.get(i).getUser() %> -
-              Time: <%= new Date(messages.get(i).getTimestamp()) %> -
-              Sentiment Score: <%= messages.get(i).getSentimentScore() %>
+              Time: <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
               <%= messages.get(i).getText() %>
             </div>
+            <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
+            <form id="delete-form" action="/messages" method="POST">
+              <input type="hidden" name="action" value="delete"/>
+              <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
+              <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+              <button type="submit" value="Submit">DELETE</button>
+            </form>
+            <% } %>
           </div>
     <%    }
         }  %>
     </div>
-
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
+    </script>
   </body>
 </html>

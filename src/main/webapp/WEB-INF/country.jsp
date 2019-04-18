@@ -12,7 +12,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>User Page</title>
+    <title><%=countryName%></title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
@@ -64,11 +64,13 @@
           <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown-content">
+          <div>
     <%  Iterator iter = categories.iterator();
         while (iter.hasNext()) {
           String categoryList = (String) iter.next();    %>
           <a href="/country/<%= countryCode %>/c/<%= categoryList %>"><%= categoryList %></a>
     <%  }   %>
+  </div>
         </div>
       </div>
     </div>
@@ -82,13 +84,13 @@
       <select id="browsers" onchange="updateMessageCategory()">
         <!-- <option value="" selected disabled hidden>Select Category</option> -->
     <%  Iterator iter1 = categories.iterator();
-        while (iter1.hasNext()) {   
+        while (iter1.hasNext()) {
         String categoryList = (String) iter1.next();  %>
         <option><%= categoryList %></option>
         <% }  %>
       </select>
       <input type="submit" value="Submit">
-    </form> 
+    </form>
     <% }  %>
     <br/>
     <div id="message-container">
@@ -102,19 +104,18 @@
           <div class="message-div">
             <div class="message-header">
               User: <%= messages.get(i).getUser() %> -
-              Time: <%= new Date(messages.get(i).getTimestamp()) %> -
-              Sentiment Score: <%= messages.get(i).getSentimentScore() %>
+              Time: <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
               <%= messages.get(i).getText() %>
             </div>
             <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
             <form id="delete-form" action="/messages" method="POST">
-            <input type="hidden" name="action" value="delete"/>
-            <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
-            <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-            <button type="submit" value="Submit">Delete</button>
-          </form>
+              <input type="hidden" name="action" value="delete"/>
+              <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
+              <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+              <button type="submit" value="Submit">DELETE</button>
+            </form>
           <% } %>
           </div>
       <% }  %>

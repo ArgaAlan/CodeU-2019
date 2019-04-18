@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>User Page</title>
+    <title><%=user%></title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
@@ -38,7 +38,8 @@
       <br/>
       <textarea name="about-me" placeholder="About me" id="about-me-input"></textarea>
       <br/>
-      <input type="submit" value="Submit">
+      <!--<input type="submit" value="Submit">-->
+      <button type="submit" value="Submit"> SUBMIT </button>
     </form>
     <hr/>
     <% }  %>
@@ -54,8 +55,7 @@
           <div class="message-div">
             <div class="message-header">
               Country: <%= messages.get(i).getCountry() %> -
-              Time: <%= new Date(messages.get(i).getTimestamp()) %> -
-              Sentiment Score: <%= messages.get(i).getSentimentScore() %>
+              Time: <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
               <%= messages.get(i).getText() %>

@@ -46,8 +46,8 @@ public class Datastore {
     messageEntity.setProperty("timestamp", message.getTimestamp());
     messageEntity.setProperty("country", message.getCountry());
     messageEntity.setProperty("category", message.getCategory());
-    messageEntity.setProperty("sentimentScore", message.getSentimentScore());
-
+    messageEntity.setProperty("latitude", message.getLat());
+    messageEntity.setProperty("longitude", message.getLng());
     datastore.put(messageEntity);
   }
 
@@ -121,21 +121,22 @@ public class Datastore {
    * @return a list of messages posted by user, or empty list if no messages posted to country page.
    *     List is sorted by time descending.
    */
-  public List<Message> getMessagesByCategory(String countryCode, String category){
+  public List<Message> getMessagesByCategory(String countryCode, String category) {
 
-	  Query.Filter countryFilter = new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode);
-	  Query.Filter categoryFilter = new Query.FilterPredicate("category", FilterOperator.EQUAL, category);
+    Query.Filter countryFilter =
+        new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode);
+    Query.Filter categoryFilter =
+        new Query.FilterPredicate("category", FilterOperator.EQUAL, category);
 
-	  Query.Filter combinedFilter = Query.CompositeFilterOperator.and(countryFilter, categoryFilter);
+    Query.Filter combinedFilter = Query.CompositeFilterOperator.and(countryFilter, categoryFilter);
 
-	  Query query =
-	         new Query("Message")
-	              .setFilter(combinedFilter)
-	              .addSort("timestamp", SortDirection.DESCENDING);
-	      PreparedQuery results = datastore.prepare(query);
-	      Entity userEntity = results.asSingleEntity();
+    Query query =
+        new Query("Message")
+            .setFilter(combinedFilter)
+            .addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
 
-	return convertEntitiesToMessages(results);
+    return convertEntitiesToMessages(results);
   }
 
   /**
@@ -150,6 +151,26 @@ public class Datastore {
     PreparedQuery results = datastore.prepare(query);
 
     return convertEntitiesToMessages(results);
+  }
+
+  /** Gets all messages and adds the "ID" property if it does not exist */
+  public void addIDAllMessages() {
+
+    Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+    for (Entity entity : results.asIterable()) {
+      try {
+        if (entity.getProperty("ID") == null || ((String) entity.getProperty("ID")).isEmpty()) {
+          String idString = entity.getKey().getName();
+          entity.setProperty("ID", idString);
+          datastore.put(entity);
+        }
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
   }
 
   /**
@@ -169,11 +190,9 @@ public class Datastore {
         long timestamp = (long) entity.getProperty("timestamp");
         String country = (String) entity.getProperty("country");
         String category = (String) entity.getProperty("category");
-        float sentimentScore =
-            entity.getProperty("sentimentScore") == null
-                ? (float) 0.0
-                : ((Double) entity.getProperty("sentimentScore")).floatValue();
-        Message message = new Message(id, user, text, timestamp, country, category, sentimentScore);
+        String lat = (String) entity.getProperty("lat");
+        String lng = (String) entity.getProperty("lng");
+        Message message = new Message(id, user, text, timestamp, country, category, lat, lng);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -249,6 +268,7 @@ public class Datastore {
     User user = new User((String) userEntity.getProperty("email"), aboutMe);
     return user;
   }
+
   /**
    * Returns the country entity associated with the country code, or null if no matching Country was
    * found

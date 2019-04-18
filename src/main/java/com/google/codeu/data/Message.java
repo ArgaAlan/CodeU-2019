@@ -27,34 +27,43 @@ public class Message {
   private long timestamp;
   private String country;
   private String category;
-  private float sentimentScore;
+  private String lat;
+  private String lng;
 
   /**
-   * Constructs a new {@link Message} posted by {@code user} to {@code recipient} with {@code text}
-   * content and {@code sentimentScore}. Generates a random ID and uses the current system time for
-   * the creation time.
+   * Constructs a new {@link Message} posted by {@code user} to {@code country} with {@code text}
+   * content. Generates a random ID and uses the current system time for the creation time.
    */
-  public Message(String user, String text, String country, String category, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, category, sentimentScore);
+  public Message(
+      String user, String text, String country, String category, String lat, String lng) {
+    this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, category, lat, lng);
   }
 
   public Message(
-      UUID id, String user, String text, long timestamp, String country, String category, float sentimentScore) {
+      UUID id,
+      String user,
+      String text,
+      long timestamp,
+      String country,
+      String category,
+      String lat,
+      String lng) {
     this.id = id;
     this.user = user;
     this.text = text;
     this.timestamp = timestamp;
     this.country = country;
     this.category = category;
-    this.sentimentScore = sentimentScore;
+    this.lat = lat;
+    this.lng = lng;
   }
 
   public String getCountry() {
     return country;
   }
-  
+
   public String getCategory() {
-	return category;
+    return category;
   }
 
   public UUID getId() {
@@ -73,7 +82,11 @@ public class Message {
     return timestamp;
   }
 
-  public float getSentimentScore() {
-    return sentimentScore;
+  public String getLat() {
+    return lat;
+  }
+
+  public String getLng() {
+    return lng;
   }
 }

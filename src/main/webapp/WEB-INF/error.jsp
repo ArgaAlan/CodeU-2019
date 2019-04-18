@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Page Not Found</title>
     <link rel="stylesheet" href="/css/main.css">
   </head>
 
@@ -18,12 +19,12 @@
         <li><a href="/">Home</a></li>
     <%
       if (isUserLoggedIn) {
-        String username = (String) request.getAttribute("username");
+        String username = (String) request.getAttribute("userEmail");
     %>
         <a href="/users/<%= username %>">Your Page</a>
     <% } %>
 
       </ul>
     </nav>
-  </center
+  </center>
   </body>
