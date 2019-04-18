@@ -11,7 +11,7 @@
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
 <% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService(); %>
-<% String uploadUrl = blobstoreService.createUploadUrl("/messages?countryCode="+countryCode); %>
+<% String uploadUrl = blobstoreService.createUploadUrl("/messages?countryCode="+countryCode + "&category="+category); %>
 
 <!DOCTYPE html>
 <html>
@@ -43,7 +43,7 @@
     <h2 id="category"><%= category %></h2>
 
     <% if(currentUser != null){ %>
-    <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>&<%= uploadUrl %>" method="POST" class>
+    <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>

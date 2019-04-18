@@ -95,8 +95,13 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
+    String text = Jsoup.clean(request.getParameter("text"),
+        Whitelist.relaxed().addTags("figure", "oembed").addAttributes("oembed", "url"));
     String textWithMedia = getMediaEmbeddedText(text);
+
+    System.out.println(request.getParameter("text"));
+    System.out.println(text);
+    System.out.println(textWithMedia);
 
     String countryCode = request.getParameter("countryCode");
     String category = request.getParameter("category");
