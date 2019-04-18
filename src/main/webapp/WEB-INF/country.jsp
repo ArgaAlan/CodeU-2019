@@ -46,7 +46,7 @@
 
      <!--<div class = "button2"><a href = "https://www.google.com/">Learn more about Food! </a></div>-->
 
-     <button class="limitPosts" onclick="myFunction()">Click to see top 5 posts</button>
+     <!--<button class="limitPosts" onclick="myFunction()">Click to see top 5 posts</button>-->
 
      <script>
       var limit;
@@ -59,7 +59,7 @@
       }
      </script>
 
-     <h3 id = "food-div">Food Posts </h3>
+     <h4 id = "food-div">Food Thread</h4>
 
     <div class="message-container">
     <%  if (messages.isEmpty()) { %>
@@ -99,8 +99,9 @@
        }  %>
       </div>
 
+      <a href="/country/<%= countryCode %>/c/Food"><button class="limitPosts">Click to see full thread</button></a>
 
-      <h3 id = "food-div">Culture Posts </h3>
+      <h4 id = "food-div">Culture Thread</h4>
       <div class="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts about this country yet.</p>
@@ -139,8 +140,10 @@
        }  %>
       </div>
 
+      <a href="/country/<%= countryCode %>/c/Culture"><button class="limitPosts">Click to see full thread</button></a>
 
-      <h3 id = "food-div">Attractions Posts </h3>
+
+      <h4 id = "food-div">Attractions Thread</h4>
       <div class="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts about this country yet.</p>
@@ -178,6 +181,8 @@
       <%    }
        }  %>
       </div>
+
+      <a href="/country/<%= countryCode %>/c/Attractions"><button class="limitPosts">Click to see full thread</button></a>
 
   </body>
 </html>

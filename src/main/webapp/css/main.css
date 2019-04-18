@@ -91,6 +91,12 @@ h3 {
   font-size: 20px;
 }
 
+h4 {
+  color: white;
+  font-size: 30px;
+
+}
+
 p {
   color: #7D8E9F;
   font-size: 16px;
@@ -163,11 +169,12 @@ p {
   border-width: 1px;
 }
 
-/*.message-container {
-  background-color: white;
-  border-width:2px;
+.message-container {
+  /*background-color: white;*/
+  border-width: 3px;
   border-color: red;
-}*/
+  padding:10px 10px;
+}
 
 /*.button2:link, .button2:visited {
   background-color: #f44336;
