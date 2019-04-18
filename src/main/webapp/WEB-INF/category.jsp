@@ -18,7 +18,13 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/message-loader.js"></script>
+    <script src="/js/location.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+    <style>
+      #map {
+        height: 75px;
+      }
+    </style>
   </head>
   <body onload="buildUI()">
     <div class="navbar">
@@ -35,26 +41,30 @@
 
     <% if(currentUser != null){ %>
       <% if (editText == null) { %>
-        <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST">
         Enter a new message:
-        <br/>
-        <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-        <br/>
-        <input type="submit" value="Submit">
-        </form>
+          <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST" class>
+            <br/>
+            <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+            <br/>
+            <input type="hidden" name="lat" value="" id="lat">
+            <input type="hidden" name="lng" value="" id="lng">
+            <button type="submit" value="Submit"> SUBMIT </button>
+            <br/>
+          </form>
+          <button onclick="getLocation()">Add your location</button>
+          <div id="map"></div>
       <% } else { %>
-      <form id="edit-message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST">
-        Edit your message:
-        <br/>
-        <textarea name="text" id="edit-message-input">
-        <%=editText%>
-        </textarea>
-        <input type="hidden" name="messageID" value="<%=(String) request.getAttribute("editID")%>"/>
-        <button type="submit" value="Submit">Submit</button>
-      </form>
-      <% } %>
+        <form id="edit-message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST">
+          Edit your message:
+          <br/>
+          <textarea name="text" id="edit-message-input">
+          <%=editText%>
+          </textarea>
+          <input type="hidden" name="messageID" value="<%=(String) request.getAttribute("editID")%>"/>
+          <button type="submit" value="Submit">Submit</button>
+        </form>
+        <% } %>
     <% }  %>
-
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts in this category yet.</p>
@@ -76,7 +86,7 @@
               <input type="hidden" name="action" value="delete"/>
               <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
               <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-              <button type="submit" value="Submit">Delete</button>
+              <button type="submit" value="Submit">DELETE</button>
             </form>
 
             <form id="edit-form" action="/messages" method="GET">
@@ -91,6 +101,7 @@
     <%    }
         }  %>
     </div>
-
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
+    </script>
   </body>
 </html>

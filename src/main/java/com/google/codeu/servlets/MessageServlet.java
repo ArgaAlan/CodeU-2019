@@ -115,6 +115,9 @@ public class MessageServlet extends HttpServlet {
     String countryCode = request.getParameter("countryCode");
     String category = request.getParameter("category");
 
+    String lat = request.getParameter("lat");
+    String lng = request.getParameter("lng");
+
     // Redirect to home on invalid country
     if (datastore.getCountry(countryCode) == null) {
       response.sendRedirect("/");
@@ -128,7 +131,7 @@ public class MessageServlet extends HttpServlet {
 
     Message message;
     if (request.getParameter("messageID") == null)
-      message = new Message(currentUser.getEmail(), textWithMedia, countryCode, category);
+      message = new Message(currentUser.getEmail(), textWithMedia, countryCode, category, lat, lng);
     else {
       // message being edited - already has ID
       message =
@@ -137,7 +140,9 @@ public class MessageServlet extends HttpServlet {
               currentUser.getEmail(),
               textWithMedia,
               countryCode,
-              category);
+              category,
+              lat,
+              lng);
     }
 
     datastore.storeMessage(message);

@@ -26,5 +26,5 @@
 
       </ul>
     </nav>
-  </center
+  </center>
   </body>
