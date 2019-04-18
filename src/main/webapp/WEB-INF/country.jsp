@@ -7,7 +7,6 @@
 <% String countryName = (String) request.getAttribute("name"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
-<% String category = "General"; %>      <!--Default category is General is if User doesn't select one-->
 <% Set<String> categories = (HashSet) request.getAttribute("categories"); %>
 
 <!DOCTYPE html>
@@ -19,6 +18,33 @@
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/message-loader.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+    <script>
+
+      var selectedCategory = "General";
+      var withoutCategoryURL = "/messages?countryCode=<%= countryCode %>&category="
+      var withCategoryURL = "/messages?countryCode=<%= countryCode %>&category=" + selectedCategory;
+
+      /* When the user clicks on the button,
+          toggle between hiding and showing the dropdown content */
+      function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+      }
+
+      // function updateMessageCategory() {
+      //     var url;
+      //     url = document.getElementById("message-form").action;
+      // }
+
+      function updateMessageCategory() {
+        console.log("Category Updated");
+        var e = document.getElementById("browsers");
+        selectedCategory = e.options[e.selectedIndex].value;
+        withCategoryURL = withoutCategoryURL + selectedCategory;
+        document.getElementById("message-form").action = withCategoryURL;
+        console.log(withCategoryURL);
+      }
+
+    </script>
   </head>
   <body onload="buildUI()">
     <div class="navbar">
@@ -44,21 +70,20 @@
     <h1 id="page-title"><%= countryName %></h1>
 
     <% if (currentUser != null) { %>
-    <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=" method="POST" class>
+    <form id="message-form" action="withCategoryURL" method="POST" class>
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
     </form>
     <form  method="get">
-      <input list="browsers" name="browser" placeholder="Select a Category">
-      <datalist id="browsers">
+      <select id="browsers" onchange="updateMessageCategory()">
         <!-- <option value="" selected disabled hidden>Select Category</option> -->
     <%  Iterator iter1 = categories.iterator();
         while (iter1.hasNext()) {   
         String categoryList = (String) iter1.next();  %>
-        <option onclick=""><%= categoryList %></option>
+        <option onclick="updateMessageCategory()"><%= categoryList %></option>
         <% }  %>
-      </datalist>
+      </select>
       <input type="submit" value="Submit">
     </form> 
     <% }  %>
@@ -88,38 +113,8 @@
             <button type="submit" value="Submit">Delete</button>
           </form>
           <% } %>
-            </div>
+          </div>
       <% }  %>
-      </div>
-      <script>
-    /* When the user clicks on the button,
-        toggle between hiding and showing the dropdown content */
-      function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-      }
-
-      function filterFunction() {
-        var input, filter, ul, li, a, i;
-        input = document.getElementById("myInput");
-        filter = input.value.toUpperCase();
-        div = document.getElementById("myDropdown");
-        a = div.getElementsByTagName("a");
-        for (i = 0; i < a.length; i++) {
-          txtValue = a[i].textContent || a[i].innerText;
-          if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            a[i].style.display = "";
-          } else {
-            a[i].style.display = "none";
-          }
-        }
-      }
-
-      function updateMessageCategory() {
-          var url;
-          url = document.getElementById("message-form").action;
-      }
-
-    </script>
-
+    </div>
   </body>
 </html>

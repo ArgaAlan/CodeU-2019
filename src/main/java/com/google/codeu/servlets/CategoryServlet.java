@@ -27,7 +27,7 @@ public class CategoryServlet extends HttpServlet {
     String countryCode = (String) request.getAttribute("countryCode");
 
     Country country = datastore.getCountry(countryCode);
-    ArrayList<String> categories = country.getCategories();
+    Set<String> categories = country.getCategories();
 
     // redirect if category doesn't exist for the country
     if (!categories.contains(category)) {
