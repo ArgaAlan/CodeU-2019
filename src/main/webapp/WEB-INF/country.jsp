@@ -26,22 +26,11 @@
 
       /* When the user clicks on the button,
           toggle between hiding and showing the dropdown content */
-      function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-      }
-
-      // function updateMessageCategory() {
-      //     var url;
-      //     url = document.getElementById("message-form").action;
-      // }
-
       function updateMessageCategory() {
-        console.log("Category Updated");
-        var e = document.getElementById("browsers");
+        var e = document.getElementById("myDropdown");
         selectedCategory = e.options[e.selectedIndex].value;
         withCategoryURL = withoutCategoryURL + selectedCategory;
         document.getElementById("message-form").action = withCategoryURL;
-        console.log(withCategoryURL);
       }
 
       function onLoad(){
@@ -81,7 +70,7 @@
     Enter a new message:
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-      <select id="browsers" onchange="updateMessageCategory()">
+      <select id="myDropdown" onchange="updateMessageCategory()">
         <!-- <option value="" selected disabled hidden>Select Category</option> -->
     <%  Iterator iter1 = categories.iterator();
         while (iter1.hasNext()) {
