@@ -193,7 +193,7 @@ public class Datastore {
         String category = (String) entity.getProperty("category");
         String lat = (String) entity.getProperty("lat");
         String lng = (String) entity.getProperty("lng");
-        String imageUrl = (String) entity.getProperty("imageUrl");
+        String imageUrl = (String) entity.getProperty("image");
         Message message = new Message(id, user, text, timestamp, country, category, lat, lng);
         message.setImageUrl(imageUrl);
         messages.add(message);
