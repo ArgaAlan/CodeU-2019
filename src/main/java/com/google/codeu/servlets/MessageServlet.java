@@ -97,7 +97,7 @@ public class MessageServlet extends HttpServlet {
     String text =
         Jsoup.clean(
             request.getParameter("text"),
-            Whitelist.relaxed().addTags("figure", "oembed").addAttributes("oembed", "url"));
+            Whitelist.relaxed().addTags("oembed").addAttributes("oembed", "url"));
     String textWithMedia = getMediaEmbeddedText(text);
 
     String countryCode = request.getParameter("countryCode");
@@ -141,7 +141,7 @@ public class MessageServlet extends HttpServlet {
     String regexImage = "(https?://\\S+\\.(png|jpg|gif))";
     String replacementImage = "<img src=\"$1\" />";
     String regexVideo = "(https?://www.youtube.com/\\S+)";
-    String replacementVideo = "<iframe width=\"420\" height=\"345\" src=\"$1\">" + "</iframe>";
+    String replacementVideo = "<iframe width=\"960\" height=\"690\" src=\"$1\">" + "</iframe>";
 
     // Validation of URL
     Pattern patternImg = Pattern.compile(regexImage);
@@ -154,9 +154,12 @@ public class MessageServlet extends HttpServlet {
       text = text.replaceAll(regexImage, replacementImage);
     }
 
+    // && urlValidator(matcherVid.group())
     // Checks if the URL is valid and if it´s then it changes to insert the video
-    if (matcherVid.find() && urlValidator(matcherVid.group())) {
+    if (matcherVid.find()) {
       // Change the format of the normal Youtube URL to an embed one
+      text = text.replace("<oembed url=\"", "");
+      text = text.replace("\"></oembed>", "");
       text = text.replace("watch?v=", "embed/");
       text = text.replaceAll(regexVideo, replacementVideo);
     }
