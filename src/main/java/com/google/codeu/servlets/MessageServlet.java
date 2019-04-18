@@ -14,6 +14,16 @@
 
 package com.google.codeu.servlets;
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.codeu.data.Datastore;
+import com.google.codeu.data.Message;
+import com.google.codeu.data.User;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -28,16 +38,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
-import com.google.appengine.api.blobstore.BlobKey;
-import com.google.appengine.api.blobstore.BlobstoreService;
-import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
-import com.google.appengine.api.images.ImagesService;
-import com.google.appengine.api.images.ImagesServiceFactory;
-import com.google.appengine.api.images.ServingUrlOptions;
-import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Message;
-import com.google.codeu.data.User;
-import com.google.gson.Gson;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -94,13 +94,11 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    String text = Jsoup.clean(request.getParameter("text"),
-        Whitelist.relaxed().addTags("oembed").addAttributes("oembed", "url"));
+    String text =
+        Jsoup.clean(
+            request.getParameter("text"),
+            Whitelist.relaxed().addTags("oembed").addAttributes("oembed", "url"));
     String textWithMedia = getMediaEmbeddedText(text);
-
-    System.out.println(request.getParameter("text"));
-    System.out.println(text);
-    System.out.println(textWithMedia);
 
     String countryCode = request.getParameter("countryCode");
     String category = request.getParameter("category");
