@@ -53,9 +53,10 @@
             <input type="hidden" name="lat" value="" id="lat">
             <input type="hidden" name="lng" value="" id="lng">
             <button type="submit" value="Submit"> SUBMIT </button>
-              Add an image to your message:
-              <input type="file" name="image">
-              <br/>
+            <br/>
+            Add an image to your message:
+            <input type="file" name="image">
+            <br/>
           </form>
           <button onclick="getLocation()">Add your location</button>
           <div id="map"></div>
@@ -70,9 +71,10 @@
           <input type="hidden" name="lat" value="<%=(String) request.getAttribute("lat") %>" />
           <input type="hidden" name="lng" value="<%=(String) request.getAttribute("lng") %>" />
           <button type="submit" value="Submit"> SUBMIT </button>
-            Add an image to your message:
-            <input type="file" name="image">
-              <br/>
+          <br/>
+          Add an image to your message:
+          <input type="file" name="image">
+          <br/>
         </form>
         <button onclick="getLocation()">Add your location</button>
         <div id="map"></div>
