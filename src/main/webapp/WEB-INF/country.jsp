@@ -69,10 +69,11 @@
         
         int limit = 5;
         for(int i = 0; i < messages.size(); i++) {
-          if (i >= limit) {
+          if (limit == 0) {
             break;
           }
           if (messages.get(i).getCategory().equals("Food")) {
+            limit--;
 
     %>
 
@@ -108,10 +109,11 @@
         
         int limit1 = 5;
         for(int i = 0; i < messages.size(); i++) {
-          if (i >= limit1) {
+          if (limit1 == 0) {
             break;
           }
           if (messages.get(i).getCategory().equals("Culture")) {
+            limit1--;
 
     %>
 
@@ -147,10 +149,11 @@
         
         int limit2 = 5;
         for(int i = 0; i < messages.size(); i++) {
-          if (i >= limit2) {
+          if (limit2 == 0) {
             break;
           }
           if (messages.get(i).getCategory().equals("Attractions")) {
+            limit2--;
 
     %>
 
