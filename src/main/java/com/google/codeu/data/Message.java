@@ -29,6 +29,7 @@ public class Message {
   private String category;
   private String lat;
   private String lng;
+  private String imageUrl;
 
   /**
    * Constructs a new {@link Message} posted by {@code user} to {@code country} with {@code text}
@@ -56,6 +57,7 @@ public class Message {
     this.category = category;
     this.lat = lat;
     this.lng = lng;
+    this.imageUrl = "";
   }
 
   public String getCountry() {
@@ -88,5 +90,21 @@ public class Message {
 
   public String getLng() {
     return lng;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String newImageUrl) {
+    imageUrl = newImageUrl;
+  }
+
+  public boolean hasAnImage() {
+    if (this.imageUrl.equals("")) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }
