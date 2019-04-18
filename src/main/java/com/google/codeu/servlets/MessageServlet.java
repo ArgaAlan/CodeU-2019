@@ -56,7 +56,8 @@ public class MessageServlet extends HttpServlet {
       String messageText = datastore.getMessageTextByID(messageID);
       request.setAttribute("editText", messageText);
       request.setAttribute("editID", messageID);
-
+      request.setAttribute("lat", request.getParameter("lat"));
+      request.setAttribute("lng", request.getParameter("lng"));
       try {
         String editURL =
             "/country/"

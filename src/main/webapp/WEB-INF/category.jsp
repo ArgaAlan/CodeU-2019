@@ -61,6 +61,10 @@
           <%=editText%>
           </textarea>
           <input type="hidden" name="messageID" value="<%=(String) request.getAttribute("editID")%>"/>
+          <input type="hidden" name="lat" value="<%=(String) request.getAttribute("lat") %>" />
+          <input type="hidden" name="lng" value="<%=(String) request.getAttribute("lng") %>" />
+          <% String lng = (String) request.getAttribute("lng"); %>
+
           <button type="submit" value="Submit">Submit</button>
         </form>
         <% } %>
