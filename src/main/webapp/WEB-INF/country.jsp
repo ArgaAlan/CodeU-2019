@@ -44,18 +44,43 @@
     </div>
     <h1 id="page-title"><%= countryName %></h1>
 
-    <div id="message-container">
+     <!--<div class = "button2"><a href = "https://www.google.com/">Learn more about Food! </a></div>-->
+
+     <button class="limitPosts" onclick="myFunction()">Click to see top 5 posts</button>
+
+     <script>
+      var limit;
+      function myFunction() {
+        var choice = prompt("Limit number of posts to", "5"); 
+
+      }
+      function choose(choice) {
+        limit = choice;
+      }
+     </script>
+
+     <h3 id = "food-div">Food Posts </h3>
+
+    <div class="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts about this country yet.</p>
           <p><strong> Be the first to post </strong> </p>
     <%  }
-
+        
+        int limit = 5;
         for(int i = 0; i < messages.size(); i++) {
+          if (i >= limit) {
+            break;
+          }
+          if (messages.get(i).getCategory().equals("Food")) {
+
     %>
+
           <div class="message-div">
             <div class="message-header">
-              User: <%= messages.get(i).getUser() %> -
-              Time: <%= new Date(messages.get(i).getTimestamp()) %>
+              User: <%= messages.get(i).getUser() %> |
+              Time: <%= new Date(messages.get(i).getTimestamp()) %> |
+              Category: <%= messages.get(i).getCategory() %>
             </div>
             <div class="message-body">
               <%= messages.get(i).getText() %>
@@ -69,7 +94,86 @@
             </form>
           <% } %>
             </div>
-      <% }  %>
+      <%    }
+       }  %>
+      </div>
+
+
+      <h3 id = "food-div">Culture Posts </h3>
+      <div class="message-container">
+    <%  if (messages.isEmpty()) { %>
+          <p>No posts about this country yet.</p>
+          <p><strong> Be the first to post </strong> </p>
+    <%  }
+        
+        int limit1 = 5;
+        for(int i = 0; i < messages.size(); i++) {
+          if (i >= limit1) {
+            break;
+          }
+          if (messages.get(i).getCategory().equals("Culture")) {
+
+    %>
+
+          <div class="message-div">
+            <div class="message-header">
+              User: <%= messages.get(i).getUser() %> |
+              Time: <%= new Date(messages.get(i).getTimestamp()) %> |
+              Category: <%= messages.get(i).getCategory() %>
+            </div>
+            <div class="message-body">
+              <%= messages.get(i).getText() %>
+            </div>
+            <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
+            <form id="delete-form" action="/messages" method="POST">
+              <input type="hidden" name="action" value="delete"/>
+              <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
+              <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+              <button type="submit" value="Submit">DELETE</button>
+            </form>
+          <% } %>
+            </div>
+      <%    }
+       }  %>
+      </div>
+
+
+      <h3 id = "food-div">Attractions Posts </h3>
+      <div class="message-container">
+    <%  if (messages.isEmpty()) { %>
+          <p>No posts about this country yet.</p>
+          <p><strong> Be the first to post </strong> </p>
+    <%  }
+        
+        int limit2 = 5;
+        for(int i = 0; i < messages.size(); i++) {
+          if (i >= limit2) {
+            break;
+          }
+          if (messages.get(i).getCategory().equals("Attractions")) {
+
+    %>
+
+          <div class="message-div">
+            <div class="message-header">
+              User: <%= messages.get(i).getUser() %> |
+              Time: <%= new Date(messages.get(i).getTimestamp()) %> |
+              Category: <%= messages.get(i).getCategory() %>
+            </div>
+            <div class="message-body">
+              <%= messages.get(i).getText() %>
+            </div>
+            <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
+            <form id="delete-form" action="/messages" method="POST">
+              <input type="hidden" name="action" value="delete"/>
+              <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
+              <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+              <button type="submit" value="Submit">DELETE</button>
+            </form>
+          <% } %>
+            </div>
+      <%    }
+       }  %>
       </div>
 
   </body>

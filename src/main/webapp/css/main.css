@@ -146,6 +146,42 @@ p {
   display: block;
 }
 
+.button2 {
+  font-size: 10px;
+  padding: 20px 20px;
+  background-color: white;
+  font-family: 'Noto Sans TC', sans-serif;
+  margin-bottom: 20px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #1985A1;
+  text-decoration: none;
+}
+
+.limitPosts {
+  font-size: 20px;
+  border-width: 1px;
+}
+
+/*.message-container {
+  background-color: white;
+  border-width:2px;
+  border-color: red;
+}*/
+
+/*.button2:link, .button2:visited {
+  background-color: #f44336;
+  color: white;
+  padding: 14px 25px;
+  text-align:center;
+  text-decoration: none;
+  display:inline-block;
+}
+.button2:hover, .button2:active {
+  background-color: red;
+}*/
+
+
 /* Formatting for delete button */
 button {
   font-family: 'Noto Sans TC', sans-serif;
