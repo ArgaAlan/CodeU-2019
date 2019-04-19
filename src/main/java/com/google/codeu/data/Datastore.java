@@ -46,8 +46,8 @@ public class Datastore {
     messageEntity.setProperty("timestamp", message.getTimestamp());
     messageEntity.setProperty("country", message.getCountry());
     messageEntity.setProperty("category", message.getCategory());
-    messageEntity.setProperty("latitude", message.getLat());
-    messageEntity.setProperty("longitude", message.getLng());
+    messageEntity.setProperty("lat", message.getLat());
+    messageEntity.setProperty("lng", message.getLng());
     messageEntity.setProperty("image", message.getImageUrl());
     datastore.put(messageEntity);
   }
