@@ -27,7 +27,7 @@ public class Reply {
   private String text;
 
   public Reply(String parentID, String user, String text) {
-    this(UUID.randomUUID(), UUID.toString(parentID), user, text, System.currentTimeMillis());
+    this(UUID.randomUUID(), UUID.fromString(parentID), user, text, System.currentTimeMillis());
   }
 
   public Reply(UUID replyID, UUID parentID, String user, String text, long timestamp) {
@@ -38,11 +38,11 @@ public class Reply {
     this.timestamp = timestamp;
   }
 
-  public String getParentID() {
+  public String getParentId() {
     return parentID.toString();
   }
 
-  public String getID() {
+  public String getId() {
     return replyID.toString();
   }
 

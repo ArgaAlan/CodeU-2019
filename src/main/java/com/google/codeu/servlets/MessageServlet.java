@@ -96,14 +96,6 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    // Go to reply page
-    if ("reply".equals(request.getParameter("action"))) {
-      // then refresh page
-      datastore.deleteMessageWithID(request.getParameter("messageID"));
-      response.sendRedirect(request.getParameter("callee"));
-      return;
-    }
-
     String text =
         Jsoup.clean(
             request.getParameter("text"),

@@ -115,11 +115,8 @@
               <% } %>
             </div>
             <% if (currentUser != null) { %>
-              <form id="reply-form" action="/messages" method="POST">
-                <input type="hidden" name="action" value="reply"/>
-                <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
-                <input type="hidden" name="parentID" value="<%=messages.get(i).getId()%>"/>
-                <button type="submit" value="Submit">DELETE</button>
+              <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>">
+                <button type="submit" value="Submit">See Thread and Reply</button>
               </form>
               <% if (currentUser.equals(messages.get(i).getUser())) { %>
               <form id="delete-form" action="/messages" method="POST">
@@ -128,7 +125,10 @@
                 <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
                 <button type="submit" value="Submit">DELETE</button>
               </form>
-          <% } %>
+          <%
+             }
+            }
+          %>
           </div>
       <% }  %>
     </div>

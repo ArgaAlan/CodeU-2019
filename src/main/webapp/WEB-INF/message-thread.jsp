@@ -2,19 +2,20 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
+<%@ page import="com.google.codeu.data.Reply" %>
 <%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
 <%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
 
 
 <% Message parent = (Message) request.getAttribute("parent"); %>
 <% List<Reply> replies = (List<Reply>) request.getAttribute("replies"); %>
-<% boolean isUserLoggedIn = (boolean) request.getAttribute("isLoggedIn"); %>
+<% String currentUser = (String) request.getAttribute("currentUser"); %>
 
 
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%=countryCode%> <%=category%></title>
+    <title>Message Thread</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
@@ -32,8 +33,8 @@
     </div>
     <h1 id="page-title"> Message Thread </h1>
 
-    <% if(isUserLoggedIn){ %>
-      <form id="reply-form" action="reply/<%= parent.getId() %>" method="POST">
+    <% if(currentUser != null){ %>
+      <form id="reply-form" action="/reply?parentID=<%= parent.getId() %>" method="POST">
         Add a reply:
         <br/>
         <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
@@ -47,10 +48,14 @@
           User: <%= parent.getUser() %> --
           Time: <%= new Date(parent.getTimestamp()) %> --
           Country: <%= parent.getCountry() %> --
-          Category: <%= new Date(parent.getCategory()) %>
+          Category: <%= parent.getCategory() %>
         </div>
         <div class="message-body">
+        <% if(parent.hasAnImage()){ %>
+          <%= parent.getText() + "<br/>" + "<img src=\"" + parent.getImageUrl() + "\"/>"%>
+        <% } else { %>
           <%= parent.getText() %>
+        <% } %>
         </div>
       </div>
       <% for(int i = 0; i < replies.size(); i++) { %>
@@ -60,11 +65,10 @@
               Time: <%= new Date(replies.get(i).getTimestamp()) %>
             </div>
             <div class="reply-body">
-              <%= messages.get(i).getText() %>
+              <%= replies.get(i).getText() %>
             </div>
           </div>
-    <%    }
-        }  %>
+      <% } %>
     </div>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
     </script>

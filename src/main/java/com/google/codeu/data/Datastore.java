@@ -70,12 +70,12 @@ public class Datastore {
               + reply.getUser());
       return;
     }
-    Entity replyEntity = new Entity("Reply", reply.getId().toString());
+    Entity replyEntity = new Entity("Reply", reply.getId());
     replyEntity.setProperty("user", reply.getUser());
     replyEntity.setProperty("ID", reply.getId());
     replyEntity.setProperty("text", reply.getText());
     replyEntity.setProperty("timestamp", reply.getTimestamp());
-    replyEntity.setProperty("parentID", reply.getParentID());
+    replyEntity.setProperty("parentID", reply.getParentId());
     datastore.put(replyEntity);
   }
 
@@ -141,10 +141,10 @@ public class Datastore {
     Entity messageEntity = results.asSingleEntity();
     if (messageEntity == null) {
       System.err.println("Invalid Message ID - " + messageID);
-      return;
+      return null;
     }
 
-    List<Message> list = convertEntitiesToMessages(messageEntity);
+    List<Message> list = convertEntitiesToMessages(results);
     return list.get(0);
   }
 

@@ -95,7 +95,7 @@ public class Message {
     return lng;
   }
 
-  public ArrayList<replyEntity> getReplies() {
+  public ArrayList<String> getReplies() {
     return replies;
   }
 
