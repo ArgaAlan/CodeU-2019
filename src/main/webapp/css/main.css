@@ -176,19 +176,6 @@ p {
   padding:10px 10px;
 }
 
-/*.button2:link, .button2:visited {
-  background-color: #f44336;
-  color: white;
-  padding: 14px 25px;
-  text-align:center;
-  text-decoration: none;
-  display:inline-block;
-}
-.button2:hover, .button2:active {
-  background-color: red;
-}*/
-
-
 /* Formatting for delete button */
 button {
   font-family: 'Noto Sans TC', sans-serif;

@@ -44,11 +44,11 @@
     </div>
     <h1 id="page-title"><%= countryName %></h1>
 
-
-
-
+    <% 
+    //limit to 5 posts per subchannel in main country page
+    int limit = 5;
+    %>
      <h4 id = "food-div">Food Thread</h4>
-
     <div class="message-container">
       <% 
       int categorySize = 0; 
@@ -57,11 +57,11 @@
               categorySize++;
           }
        }
-
+       //no posts yet, display this button
       if (categorySize == 0) { %>
           <a href="/country/<%= countryCode %>/c/Food"><button class="limitPosts">Be the first to post on this thread.</button></a>
     <%  }
-        int limit = 5;
+        limit = 5;
         for(int i = 0; i < messages.size(); i++) {
           if (limit == 0) {
             break;
@@ -91,13 +91,12 @@
        }  %>
       </div>
 
-      <% if (categorySize != 0) { %>   
+      <% 
+      //at least one post in Food
+      if (categorySize != 0) { %>   
         <a href="/country/<%= countryCode %>/c/Food"><button class="limitPosts">Click to see full thread</button></a>
        <%  }
     %>
-
-
-
 
       <h4 id = "food-div">Culture Thread</h4>
       <div class="message-container">
@@ -113,13 +112,13 @@
         <a href="/country/<%= countryCode %>/c/Culture"><button class="limitPosts">Be the first to post on this thread.</button></a>
     <%  }
 
-        int limit1 = 5;
+        limit = 5;
         for(int i = 0; i < messages.size(); i++) {
-          if (limit1 == 0) {
+          if (limit == 0) {
             break;
           }
           if (messages.get(i).getCategory().equals("Culture")) {
-            limit1--;
+            limit--;
     %>
           <div class="message-div">
             <div class="message-header">
@@ -142,15 +141,14 @@
       <%    }
        }  %>
       </div>
-
-    <% if (categorySizeC != 0) { %>
+    <% 
+    //if there is at least one category size
+    if (categorySizeC != 0) { %>
           <a href="/country/<%= countryCode %>/c/Culture"><button class="limitPosts">Click here to see full thread</button></a>
     <%  }
 
 
-
-
-     
+    //Attractions 
     %>
       <h4 id = "food-div">Attractions Thread</h4>
       <div class="message-container">
@@ -161,20 +159,20 @@
               categorySizeA++;
           }
        }
-
+       //if no posts, button displays this message
       if (categorySizeA == 0) { %>
         <a href="/country/<%= countryCode %>/c/Attractions"><button class="limitPosts">Be the first to post on this thread.</button></a>
     <%  }
 
-        int limit2 = 5;
+        limit = 5;
         for(int i = 0; i < messages.size(); i++) {
-          if (limit2 == 0) {
+          //stops creating new posts after 5 most recent in that subcategory
+          if (limit == 0) {
             break;
           }
           if (messages.get(i).getCategory().equals("Attractions")) {
-            limit2--;
+            limit--;
     %>
-
           <div class="message-div">
             <div class="message-header">
               User: <%= messages.get(i).getUser() %> |
@@ -196,8 +194,9 @@
       <%    }
        }  %>
       </div>
-
-      <% if (categorySizeA != 0) { %>
+      <% 
+      //if there is at least one post, show this button
+      if (categorySizeA != 0) { %>
           <a href="/country/<%= countryCode %>/c/Attractions"><button class="limitPosts">Click here to see full thread</button></a>
      <% } %>
 
