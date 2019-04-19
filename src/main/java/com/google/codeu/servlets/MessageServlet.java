@@ -65,6 +65,7 @@ public class MessageServlet extends HttpServlet {
       request.setAttribute("editID", messageID);
       request.setAttribute("lat", request.getParameter("lat"));
       request.setAttribute("lng", request.getParameter("lng"));
+      request.setAttribute("imageUrl", request.getParameter("imageUrl"));
       try {
         String editURL =
             "/country/"

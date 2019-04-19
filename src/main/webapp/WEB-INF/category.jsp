@@ -68,16 +68,15 @@
           <%=editText%>
           </textarea>
           <input type="hidden" name="messageID" value="<%=(String) request.getAttribute("editID")%>"/>
-          <input type="hidden" name="lat" value="<%=(String) request.getAttribute("lat") %>" />
-          <input type="hidden" name="lng" value="<%=(String) request.getAttribute("lng") %>" />
-          <input type="hidden" name="imageUrl" value="<%=(String) request.getAttribute("image") %>" />
+          <input type="hidden" name="lat" id="lat" value="<%=(String) request.getAttribute("lat") %>" />
+          <input type="hidden" name="lng" id="lng" value="<%=(String) request.getAttribute("lng") %>" />
+          <input type="hidden" name="imageUrl" value="<%=(String) request.getAttribute("imageUrl") %>" />
           <button type="submit" value="Submit"> SUBMIT </button>
           <br/>
           Old image: <%=(String) request.getAttribute("imageUrl")%>
           <br/>
           Add different image to your message:
           <input type="file" name="image">
-          Old image: <%=(String) request.getAttribute("imageUrl")%>
           <br/>
         </form>
         <button onclick="getLocation()">Update your location</button>
@@ -113,7 +112,6 @@
                 <input type="hidden" name="lng" value="<%=messages.get(i).getLng()%>"/>
                 <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
                 <input type="hidden" name="imageUrl" value="<%=messages.get(i).getImageUrl()%>"/>
-                <%System.err.println("Old image " + messages.get(i).getImageUrl());%>
                 <button type="submit">EDIT</button>
               </form>
               <form id="delete-form" action="/messages" method="POST">
