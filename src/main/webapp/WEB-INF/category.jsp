@@ -11,7 +11,7 @@
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
 <% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService(); %>
-<% String uploadUrl = blobstoreService.createUploadUrl("/messages?countryCode="+countryCode + "&category="+category); %>
+<% String uploadUrl = blobstoreService.createUploadUrl("/messages"); %>
 
 <!DOCTYPE html>
 <html>
@@ -43,20 +43,22 @@
     <h2 id="category"><%= category %></h2>
 
     <% if(currentUser != null){ %>
-    <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
-    Enter a new message:
-    <br/>
-    <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-    <br/>
-    <input type="hidden" name="lat" value="" id="lat">
-    <input type="hidden" name="lng" value="" id="lng">
-    <button type="submit" value="Submit"> SUBMIT </button>
-    Add an image to your message:
-  <input type="file" name="image">
-    <br/>
-    </form>
-    <button onclick="getLocation()">Add your location</button>
-    <div id="map"></div>
+      <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
+        Enter a new message:
+        <br/>
+        <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+        <br/>
+        <input type="hidden" name="lat" value="" id="lat">
+        <input type="hidden" name="lng" value="" id="lng">
+        <input type="hidden" name="category" value="<%=category%>">
+        <input type="hidden" name="countryCode" value="<%=countryCode%>">
+        <button type="submit" value="Submit"> SUBMIT </button>
+        Add an image to your message:
+        <input type="file" name="image">
+        <br/>
+      </form>
+      <button onclick="getLocation()">Add your location</button>
+      <div id="map"></div>
     <% }  %>
     <div class="message-container">
     <%  if (messages.isEmpty()) { %>
