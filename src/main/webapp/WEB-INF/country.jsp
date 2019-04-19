@@ -44,29 +44,23 @@
     </div>
     <h1 id="page-title"><%= countryName %></h1>
 
-     <!--<div class = "button2"><a href = "https://www.google.com/">Learn more about Food! </a></div>-->
 
-     <!--<button class="limitPosts" onclick="myFunction()">Click to see top 5 posts</button>-->
 
-     <script>
-      var limit;
-      function myFunction() {
-        var choice = prompt("Limit number of posts to", "5"); 
-
-      }
-      function choose(choice) {
-        limit = choice;
-      }
-     </script>
 
      <h4 id = "food-div">Food Thread</h4>
 
     <div class="message-container">
-    <%  if (messages.isEmpty()) { %>
-          <p>No posts about this country yet.</p>
-          <p><strong> Be the first to post </strong> </p>
+      <% 
+      int categorySize = 0; 
+      for (int j = 0; j < messages.size(); j++) {
+            if (messages.get(j).getCategory().equals("Food")) {
+              categorySize++;
+          }
+       }
+
+      if (categorySize == 0) { %>
+          <a href="/country/<%= countryCode %>/c/Food"><button class="limitPosts">Be the first to post on this thread.</button></a>
     <%  }
-        
         int limit = 5;
         for(int i = 0; i < messages.size(); i++) {
           if (limit == 0) {
@@ -74,9 +68,7 @@
           }
           if (messages.get(i).getCategory().equals("Food")) {
             limit--;
-
     %>
-
           <div class="message-div">
             <div class="message-header">
               User: <%= messages.get(i).getUser() %> |
@@ -99,15 +91,28 @@
        }  %>
       </div>
 
-      <a href="/country/<%= countryCode %>/c/Food"><button class="limitPosts">Click to see full thread</button></a>
+      <% if (categorySize != 0) { %>   
+        <a href="/country/<%= countryCode %>/c/Food"><button class="limitPosts">Click to see full thread</button></a>
+       <%  }
+    %>
+
+
+
 
       <h4 id = "food-div">Culture Thread</h4>
       <div class="message-container">
-    <%  if (messages.isEmpty()) { %>
-          <p>No posts about this country yet.</p>
-          <p><strong> Be the first to post </strong> </p>
+      <% 
+      int categorySizeC = 0; 
+      for (int j = 0; j < messages.size(); j++) {
+            if (messages.get(j).getCategory().equals("Culture")) {
+              categorySizeC++;
+          }
+       }
+
+      if (categorySizeC == 0) { %>
+        <a href="/country/<%= countryCode %>/c/Culture"><button class="limitPosts">Be the first to post on this thread.</button></a>
     <%  }
-        
+
         int limit1 = 5;
         for(int i = 0; i < messages.size(); i++) {
           if (limit1 == 0) {
@@ -115,9 +120,7 @@
           }
           if (messages.get(i).getCategory().equals("Culture")) {
             limit1--;
-
     %>
-
           <div class="message-div">
             <div class="message-header">
               User: <%= messages.get(i).getUser() %> |
@@ -140,16 +143,29 @@
        }  %>
       </div>
 
-      <a href="/country/<%= countryCode %>/c/Culture"><button class="limitPosts">Click to see full thread</button></a>
+    <% if (categorySizeC != 0) { %>
+          <a href="/country/<%= countryCode %>/c/Culture"><button class="limitPosts">Click here to see full thread</button></a>
+    <%  }
 
 
+
+
+     
+    %>
       <h4 id = "food-div">Attractions Thread</h4>
       <div class="message-container">
-    <%  if (messages.isEmpty()) { %>
-          <p>No posts about this country yet.</p>
-          <p><strong> Be the first to post </strong> </p>
+      <% 
+      int categorySizeA = 0; 
+      for (int j = 0; j < messages.size(); j++) {
+            if (messages.get(j).getCategory().equals("Attractions")) {
+              categorySizeA++;
+          }
+       }
+
+      if (categorySizeA == 0) { %>
+        <a href="/country/<%= countryCode %>/c/Attractions"><button class="limitPosts">Be the first to post on this thread.</button></a>
     <%  }
-        
+
         int limit2 = 5;
         for(int i = 0; i < messages.size(); i++) {
           if (limit2 == 0) {
@@ -157,7 +173,6 @@
           }
           if (messages.get(i).getCategory().equals("Attractions")) {
             limit2--;
-
     %>
 
           <div class="message-div">
@@ -182,7 +197,9 @@
        }  %>
       </div>
 
-      <a href="/country/<%= countryCode %>/c/Attractions"><button class="limitPosts">Click to see full thread</button></a>
+      <% if (categorySizeA != 0) { %>
+          <a href="/country/<%= countryCode %>/c/Attractions"><button class="limitPosts">Click here to see full thread</button></a>
+     <% } %>
 
   </body>
 </html>
