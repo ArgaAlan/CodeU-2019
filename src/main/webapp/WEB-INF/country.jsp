@@ -99,6 +99,35 @@
           <p>No posts about this country yet.</p>
           <p><strong> Be the first to post </strong> </p>
 
+    <% if (currentUser != null) { %>
+      <form id="message-form" action="<%=uploadUrl%>" method="POST" enctype="multipart/form-data">
+        Enter a new message:
+        <br/>
+        <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+        <input type="hidden" name="category" value="" id="message-category">
+        <input type="hidden" name="countryCode" value="<%=countryCode%>">
+        <input type="hidden" name="lat" value="" id="lat">
+        <input type="hidden" name="lng" value="" id="lng">
+        <select id="myDropdown" onchange="updateMessageCategory()">
+        <%
+          Iterator iter1 = categories.iterator();
+          while (iter1.hasNext()) {
+          String categoryList = (String) iter1.next();
+        %>
+          <option><%= categoryList %></option>
+        <% }  %>
+        </select>
+        <input type="submit" value="Submit">
+        <br/>
+        Add an image to your message:
+        <input type="file" name="image">
+        <br/>
+      </form>
+      <button onclick="getLocation()">Add your location</button>
+      <div id="map"></div>
+    <% }  %>
+
+
     <% 
     //limit to 5 posts per subchannel in main country page
     int limit = 5;
@@ -116,6 +145,7 @@
       if (categorySize == 0) { %>
           <a href="/country/<%= countryCode %>/c/Food"><button class="limitPosts">Be the first to post on this thread.</button></a>
     <%  }
+ 
         limit = 5;
         for(int i = 0; i < messages.size(); i++) {
           if (limit == 0) {
@@ -131,7 +161,11 @@
               Category: <%= messages.get(i).getCategory() %>
             </div>
             <div class="message-body">
-              <%= messages.get(i).getText() %>
+              <% if(messages.get(i).hasAnImage()){ %>
+                <%= messages.get(i).getText() + "<br/>" + "<img src=\"" + messages.get(i).getImageUrl() + "\"/>"%>
+              <% } else { %>
+                <%= messages.get(i).getText() %>
+              <% } %>
             </div>
             <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
             <form id="delete-form" action="/messages" method="POST">
@@ -182,7 +216,11 @@
               Category: <%= messages.get(i).getCategory() %>
             </div>
             <div class="message-body">
-              <%= messages.get(i).getText() %>
+              <% if(messages.get(i).hasAnImage()){ %>
+                <%= messages.get(i).getText() + "<br/>" + "<img src=\"" + messages.get(i).getImageUrl() + "\"/>"%>
+              <% } else { %>
+                <%= messages.get(i).getText() %>
+              <% } %>
             </div>
             <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
             <form id="delete-form" action="/messages" method="POST">
@@ -236,7 +274,7 @@
             </div>
             <div class="message-body">
               <% if(messages.get(i).hasAnImage()){ %>
-            	  <%= messages.get(i).getText() + "<br/>" + "<img src=\"" + messages.get(i).getImageUrl() + "\"/>"%>
+                <%= messages.get(i).getText() + "<br/>" + "<img src=\"" + messages.get(i).getImageUrl() + "\"/>"%>
               <% } else { %>
                 <%= messages.get(i).getText() %>
               <% } %>
@@ -251,9 +289,10 @@
           <% } %>
             </div>
       <%    }
-       }  %>
+          }  %>
       </div>
-      <% 
+    <% 
+      
       //if there is at least one post, show this button
       if (categorySizeA != 0) { %>
           <a href="/country/<%= countryCode %>/c/Attractions"><button class="limitPosts">Click here to see full thread</button></a>
