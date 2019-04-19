@@ -31,8 +31,7 @@ public class Message {
   private String lat;
   private String lng;
   private String imageUrl;
-  private ArrayList<UUID> replies;
-  private UUID parent;
+  private ArrayList<String> replies;
 
   /**
    * Constructs a new {@link Message} posted by {@code user} to {@code country} with {@code text}
@@ -62,7 +61,6 @@ public class Message {
     this.lng = lng;
     this.imageUrl = "";
     this.replies = new ArrayList<>();
-    this.parent = null;
   }
 
   public String getCountry() {
@@ -97,20 +95,12 @@ public class Message {
     return lng;
   }
 
-  public ArrayList<UUID> getReplies() {
+  public ArrayList<replyEntity> getReplies() {
     return replies;
   }
 
-  public void addReply(UUID reply) {
+  public void addReply(String reply) {
     replies.add(reply);
-  }
-
-  public UUID getParent() {
-    return parent;
-  }
-
-  public void setParent(UUID parent) {
-    this.parent = parent;
   }
 
   public String getImageUrl() {

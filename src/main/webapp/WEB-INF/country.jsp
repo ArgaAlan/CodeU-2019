@@ -114,7 +114,14 @@
                 <%= messages.get(i).getText() %>
               <% } %>
             </div>
-            <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
+            <% if (currentUser != null) { %>
+              <form id="reply-form" action="/messages" method="POST">
+                <input type="hidden" name="action" value="reply"/>
+                <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
+                <input type="hidden" name="parentID" value="<%=messages.get(i).getId()%>"/>
+                <button type="submit" value="Submit">DELETE</button>
+              </form>
+              <% if (currentUser.equals(messages.get(i).getUser())) { %>
               <form id="delete-form" action="/messages" method="POST">
                 <input type="hidden" name="action" value="delete"/>
                 <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
