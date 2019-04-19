@@ -86,8 +86,6 @@
 	              <button type="submit" value="Submit">DELETE</button>
 	            </form>
             <% } %>
-            <% System.out.println(messages.get(i).getLat()); %>
-            <% System.out.println(messages.get(i).getLng()); %>
             <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, map<%=i%>)">See post location</button>
             <div id="map<%=i%>"></div>
           </div>

@@ -43,7 +43,7 @@ function seeLocation(posLat,posLng,mapId) {
     infoWindow = new google.maps.InfoWindow;
     var marker = new google.maps.Marker({
         position: position,
-        map: map,
-        title: 'Aqui anda'
+        map: map
       });
+    infoWindow.open(map, marker);
 }
