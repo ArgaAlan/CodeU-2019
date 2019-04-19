@@ -180,7 +180,11 @@
               Category: <%= messages.get(i).getCategory() %>
             </div>
             <div class="message-body">
+              <% if(messages.get(i).hasAnImage()){ %>
+            	  <%= messages.get(i).getText() + "<br/>" + "<img src=\"" + messages.get(i).getImageUrl() + "\"/>"%>
+              <% } else { %>
               <%= messages.get(i).getText() %>
+              <% } %>
             </div>
             <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
             <form id="delete-form" action="/messages" method="POST">
