@@ -18,8 +18,29 @@
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/message-loader.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+    <script>
+
+      var selectedCategory = "General";
+      var withoutCategoryURL = "/messages?countryCode=<%= countryCode %>&category="
+      var withCategoryURL = "/messages?countryCode=<%= countryCode %>&category=" + selectedCategory;
+
+      /* When the user clicks on the button,
+          toggle between hiding and showing the dropdown content */
+      function updateMessageCategory() {
+        var e = document.getElementById("myDropdown");
+        selectedCategory = e.options[e.selectedIndex].value;
+        withCategoryURL = withoutCategoryURL + selectedCategory;
+        document.getElementById("message-form").action = withCategoryURL;
+      }
+
+      function onLoad(){
+        buildUI();
+        updateMessageCategory();
+      }
+
+    </script>
   </head>
-  <body onload="buildUI()">
+  <body onload="onLoad()">
     <div class="navbar">
       <a href="/">Home</a>
     <% if (currentUser != null) { %>
@@ -35,8 +56,8 @@
           <div>
     <%  Iterator iter = categories.iterator();
         while (iter.hasNext()) {
-          String category = (String) iter.next();    %>
-          <a href="/country/<%= countryCode %>/c/<%= category %>"><%= category %></a>
+          String categoryList = (String) iter.next();    %>
+          <a href="/country/<%= countryCode %>/c/<%= categoryList %>"><%= categoryList %></a>
     <%  }   %>
   </div>
         </div>
@@ -44,6 +65,22 @@
     </div>
     <h1 id="page-title"><%= countryName %></h1>
 
+    <% if (currentUser != null) { %>
+    <form id="message-form" action="" method="POST" class>
+    Enter a new message:
+    <br/>
+    <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+      <select id="myDropdown" onchange="updateMessageCategory()">
+    <%  Iterator iter1 = categories.iterator();
+        while (iter1.hasNext()) {
+        String categoryList = (String) iter1.next();  %>
+        <option><%= categoryList %></option>
+        <% }  %>
+      </select>
+      <input type="submit" value="Submit">
+    </form>
+    <% }  %>
+    <br/>
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts about this country yet.</p>
@@ -72,9 +109,8 @@
               <button type="submit" value="Submit">DELETE</button>
             </form>
           <% } %>
-            </div>
+          </div>
       <% }  %>
-      </div>
-
+    </div>
   </body>
 </html>

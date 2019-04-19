@@ -15,6 +15,7 @@ public class Country {
     this.name = name;
     this.lat = lat;
     this.lng = lng;
+    categories.add("General");
     categories.add("Food");
     categories.add("Attractions");
     categories.add("Culture");
