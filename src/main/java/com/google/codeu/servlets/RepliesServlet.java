@@ -28,7 +28,7 @@ public class RepliesServlet extends HttpServlet {
   /** Stores a {@link Reply} in Datastore */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+    System.err.println("InPOST");
     User currentUser = datastore.getCurrentUser();
 
     // redirect to home if user is not logged in
@@ -38,26 +38,33 @@ public class RepliesServlet extends HttpServlet {
     }
 
     String parentID = (String) request.getAttribute("parentID");
+    System.err.println("Check 2");
+    System.err.println(parentID);
 
-    if (parentID != null) {
-      // This is a reply - image upload and location finding is disabled
-      Message parent = datastore.getMessageByID(parentID);
-      if (parent == null) {
-        response.sendRedirect("/");
-        return;
-      }
-
-      String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
-
-      Reply reply = new Reply(parentID, currentUser.getEmail(), text);
-      parent.addReply(reply.getId());
-
-      datastore.storeMessage(parent);
-      datastore.storeReply(reply);
-
-      response.sendRedirect("/thread/" + parentID);
+    if (parentID == null) {
+      response.sendRedirect("/");
       return;
     }
+    System.err.println("Check 3");
+
+    // This is a reply - image upload and location finding is disabled
+    Message parent = datastore.getMessageByID(parentID);
+    if (parent == null) {
+      response.sendRedirect("/");
+      return;
+    }
+    System.err.println("Check 4");
+    String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
+    System.err.println(text);
+
+    Reply reply = new Reply(parentID, currentUser.getEmail(), text);
+    parent.addReply(reply.getId());
+
+    datastore.storeMessage(parent);
+    datastore.storeReply(reply);
+
+    response.sendRedirect("/thread/" + parentID);
+    return;
   }
 
   /**
@@ -68,7 +75,7 @@ public class RepliesServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
-    String parentID = request.getParameter("parentID");
+    String parentID = (String) request.getParameter("parentID");
 
     if (parentID == null || parentID.isEmpty()) {
       // Request is invalid, return empty array

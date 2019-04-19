@@ -32,14 +32,16 @@
     <% } %>
     </div>
     <h1 id="page-title"> Message Thread </h1>
-
     <% if(currentUser != null){ %>
-      <form id="reply-form" action="/reply?parentID=<%= parent.getId() %>" method="POST">
+      <form id="reply-form" action="/reply" method="POST">
         Add a reply:
         <br/>
+        <%System.err.println(parent.getId());%>
         <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+        <input type="hidden" name="parentID" value="<%=parent.getId()%>">
         <br/>
         <button type="submit" value="Submit"> SUBMIT </button>
+      </form>
     <% }  %>
 
     <div id="message-container">
@@ -70,7 +72,6 @@
           </div>
       <% } %>
     </div>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
     </script>
   </body>
 </html>
