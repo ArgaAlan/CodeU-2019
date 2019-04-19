@@ -158,6 +158,8 @@ public class MessageServlet extends HttpServlet {
               category,
               lat,
               lng);
+      if (blobKeys == null || blobKeys.isEmpty())
+        message.setImageUrl(request.getParameter("imageUrl"));
     }
 
     if (blobKeys != null && !blobKeys.isEmpty()) {
