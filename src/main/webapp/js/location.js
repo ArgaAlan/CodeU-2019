@@ -2,7 +2,7 @@ var map, infoWindow;
 function getLocation() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -34.397, lng: 150.644},
-    zoom: 12
+    zoom: 16
   });
   infoWindow = new google.maps.InfoWindow;
 
@@ -34,17 +34,16 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.open(map);
 }
 
-function seeLocation(lat,lng,mapId) {
-	  map = new google.maps.Map(document.getElementById("map"), {
-	    center: {lat: -34.397, lng: 150.644},
-	    zoom: 6
-	  });
-	  infoWindow = new google.maps.InfoWindow;
-	  var pos = {
-		        lat: position.coords.latitude,
-		        lng: position.coords.longitude
-		      };
-	  infoWindow.setPosition(pos);
-	  infoWindow.setContent('Location found.');
-	  map.setCenter(pos);
-	}
+function seeLocation(posLat,posLng,mapId) {
+	var position = {lat: posLat, lng: posLng};
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 16,
+      center: position
+    });
+    var marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        title: 'Aqui anda'
+      });
+    infowindow.open(map, marker);
+}
