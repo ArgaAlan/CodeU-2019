@@ -17,7 +17,6 @@
 
 /* Prevent the page from becoming too wide. */
 body {
-  overflow: hidden;
   width: 80%;
   margin: 5%;
   text-align:center;

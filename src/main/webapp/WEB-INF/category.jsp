@@ -12,7 +12,7 @@
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
 <% String editText = (String) request.getAttribute("editText"); %>
 <% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService(); %>
-<% String uploadUrl = blobstoreService.createUploadUrl("/messages?countryCode="+countryCode + "&category="+category); %>
+<% String uploadUrl = blobstoreService.createUploadUrl("/messages"); %>
 
 <!DOCTYPE html>
 <html>
@@ -46,22 +46,24 @@
     <% if(currentUser != null){ %>
       <% if (editText == null) { %>
         Enter a new message:
-          <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
-            <br/>
-            <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-            <br/>
-            <input type="hidden" name="lat" value="" id="lat">
-            <input type="hidden" name="lng" value="" id="lng">
-            <button type="submit" value="Submit"> SUBMIT </button>
-            <br/>
-            Add an image to your message:
-            <input type="file" name="image">
-            <br/>
-          </form>
-          <button onclick="getLocation()">Add your location</button>
-          <div id="map"></div>
+        <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
+          <br/>
+          <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+          <br/>
+          <input type="hidden" name="lat" value="" id="lat">
+          <input type="hidden" name="lng" value="" id="lng">
+          <button type="submit" value="Submit"> SUBMIT </button>
+          <input type="hidden" name="category" value="<%=category%>">
+          <input type="hidden" name="countryCode" value="<%=countryCode%>">
+          <br/>
+          Add an image to your message:
+          <input type="file" name="image">
+          <br/>
+        </form>
+        <button onclick="getLocation()">Add your location</button>
+        <div id="map"></div>
       <% } else { %>
-        <form id="edit-message-form" action="<%= uploadUrl %>"  method="POST" enctype="multipart/form-data">
+        <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
           Edit your message:
           <br/>
           <textarea name="text" id="edit-message-input">
@@ -71,6 +73,8 @@
           <input type="hidden" name="lat" id="lat" value="<%=(String) request.getAttribute("lat") %>" />
           <input type="hidden" name="lng" id="lng" value="<%=(String) request.getAttribute("lng") %>" />
           <input type="hidden" name="imageUrl" value="<%=(String) request.getAttribute("imageUrl") %>" />
+          <input type="hidden" name="category" value="<%=category%>">
+          <input type="hidden" name="countryCode" value="<%=countryCode%>">
           <button type="submit" value="Submit"> SUBMIT </button>
           <br/>
           Old image: <%=(String) request.getAttribute("imageUrl")%>
@@ -81,7 +85,7 @@
         </form>
         <button onclick="getLocation()">Update your location</button>
         <div id="map"></div>
-        <% } %>
+      <% } %>
     <% }  %>
     <div id="message-container">
     <%  if (messages.isEmpty()) { %>
