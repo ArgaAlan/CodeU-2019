@@ -46,7 +46,7 @@
     <% if(currentUser != null){ %>
       <% if (editText == null) { %>
         Enter a new message:
-          <form id="message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST" class>
+          <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
             <br/>
             <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
             <br/>
@@ -61,7 +61,7 @@
           <button onclick="getLocation()">Add your location</button>
           <div id="map"></div>
       <% } else { %>
-        <form id="edit-message-form" action="/messages?countryCode=<%= countryCode %>&category=<%= category %>" method="POST">
+        <form id="edit-message-form" action="<%= uploadUrl %>"  method="POST" enctype="multipart/form-data">
           Edit your message:
           <br/>
           <textarea name="text" id="edit-message-input">
