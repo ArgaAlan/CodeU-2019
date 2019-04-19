@@ -71,7 +71,6 @@
     <br/>
     <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
       <select id="myDropdown" onchange="updateMessageCategory()">
-        <!-- <option value="" selected disabled hidden>Select Category</option> -->
     <%  Iterator iter1 = categories.iterator();
         while (iter1.hasNext()) {
         String categoryList = (String) iter1.next();  %>

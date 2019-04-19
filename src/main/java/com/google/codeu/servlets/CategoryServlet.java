@@ -3,7 +3,6 @@ package com.google.codeu.servlets;
 import com.google.codeu.data.Country;
 import com.google.codeu.data.Datastore;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
