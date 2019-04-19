@@ -34,7 +34,7 @@ public class RepliesServlet extends HttpServlet {
       return;
     }
 
-    Message reply = (Message) request.getAttribute("message");
+    Message reply = (Message) request.getAttribute("reply");
     UUID parentUUID = (UUID) request.getAttribute("parent");
     reply.setParent(parentUUID);
 

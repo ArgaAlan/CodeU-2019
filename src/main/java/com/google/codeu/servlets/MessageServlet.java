@@ -132,8 +132,11 @@ public class MessageServlet extends HttpServlet {
       message.setImageUrl(imageUrl);
     }
 
+    // Presumably, we'd set a "parent" parameter as a hidden parameter when the replies text form is filled out
+    // and submitted. If that is the case, then we hand it off to the RepliesServlet. If not, the getParameter
+    // returns null, and MessageServlet acts normally.
     if(request.getParameter("parent") != null){
-      request.setAttribute("message", message);
+      request.setAttribute("reply", message);
       request.getRequestDispatcher("/replies").forward(request,response);
     }
 
