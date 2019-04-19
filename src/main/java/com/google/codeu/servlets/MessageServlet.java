@@ -77,7 +77,8 @@ public class MessageServlet extends HttpServlet {
 
   /** Edits a {@link Message}. Either creates and stores the message, or Deletes the message */
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
 
     User currentUser = datastore.getCurrentUser();
 
@@ -89,6 +90,14 @@ public class MessageServlet extends HttpServlet {
 
     // Delete message if delete parameter is present
     if ("delete".equals(request.getParameter("action"))) {
+      // then refresh page
+      datastore.deleteMessageWithID(request.getParameter("messageID"));
+      response.sendRedirect(request.getParameter("callee"));
+      return;
+    }
+
+    // Go to reply page
+    if ("reply".equals(request.getParameter("action"))) {
       // then refresh page
       datastore.deleteMessageWithID(request.getParameter("messageID"));
       response.sendRedirect(request.getParameter("callee"));
@@ -132,12 +141,14 @@ public class MessageServlet extends HttpServlet {
       message.setImageUrl(imageUrl);
     }
 
-    // Presumably, we'd set a "parent" parameter as a hidden parameter when the replies text form is filled out
-    // and submitted. If that is the case, then we hand it off to the RepliesServlet. If not, the getParameter
+    // Presumably, we'd set a "parent" parameter as a hidden parameter when the replies text form is
+    // filled out
+    // and submitted. If that is the case, then we hand it off to the RepliesServlet. If not, the
+    // getParameter
     // returns null, and MessageServlet acts normally.
-    if(request.getParameter("parent") != null){
+    if (request.getParameter("parent") != null) {
       request.setAttribute("reply", message);
-      request.getRequestDispatcher("/replies").forward(request,response);
+      request.getRequestDispatcher("/replies").forward(request, response);
     }
 
     datastore.storeMessage(message);
