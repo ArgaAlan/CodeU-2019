@@ -79,13 +79,15 @@
               <% } %>
             </div>
             <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
-            <form id="delete-form" action="/messages" method="POST">
-              <input type="hidden" name="action" value="delete"/>
-              <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
-              <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-              <button type="submit" value="Submit">DELETE</button>
-            </form>
+	            <form id="delete-form" action="/messages" method="POST">
+	              <input type="hidden" name="action" value="delete"/>
+	              <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
+	              <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+	              <button type="submit" value="Submit">DELETE</button>
+	            </form>
             <% } %>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, map<%=i%>)">See post location</button>
+            <div id="map<%=i%>"></div>
           </div>
     <%    }
         }  %>
