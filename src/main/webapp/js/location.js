@@ -36,7 +36,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
 function seeLocation(posLat,posLng,mapId) {
 	var position = {lat: posLat, lng: posLng};
-    var map = new google.maps.Map(document.getElementById('map'), {
+    var map = new google.maps.Map(document.getElementById(mapId), {
       zoom: 16,
       center: position
     });

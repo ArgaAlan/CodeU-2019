@@ -17,7 +17,17 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/message-loader.js"></script>
+    <script src="/js/location.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
+    <style>
+      <% for(int i = 0; i < messages.size(); i++) { %>
+      		<%if(!messages.get(i).getLat().isEmpty()){%>
+      		#map<%=i%>{
+      		  height: 75px;  
+      		}
+      <% } %>
+      	<%	} %>
+    </style>
   </head>
   <body onload="buildUI()">
     <div class="navbar">
@@ -72,9 +82,14 @@
               <button type="submit" value="Submit">DELETE</button>
             </form>
           <% } %>
+          <% if(!messages.get(i).getLat().isEmpty()){ %>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
+            <div id="map<%=i%>"></div>
+            <% } %>
             </div>
       <% }  %>
       </div>
-
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
+    </script>
   </body>
 </html>

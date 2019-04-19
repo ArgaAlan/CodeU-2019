@@ -27,6 +27,13 @@
       #map {
         height: 75px;
       }
+      <% for(int i = 0; i < messages.size(); i++) { %>
+      		<%if(!messages.get(i).getLat().isEmpty()){%>
+      		#map<%=i%>{
+      		  height: 75px;  
+      		}
+      <% } %>
+      	<%	} %>
     </style>
   </head>
   <body onload="buildUI()">
@@ -86,8 +93,10 @@
 	              <button type="submit" value="Submit">DELETE</button>
 	            </form>
             <% } %>
-            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, map<%=i%>)">See post location</button>
+            <% if(!messages.get(i).getLat().isEmpty()){ %>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
             <div id="map<%=i%>"></div>
+            <% } %>
           </div>
     <%    }
         }  %>
