@@ -57,7 +57,8 @@ public class MessageServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // check if request for message edit information
+    // check if request is for message edit information
+    // If so, reload the page with necessary information about the message
     if ("getEditable".equals(request.getParameter("action"))) {
       String messageID = request.getParameter("messageID");
       String messageText = datastore.getMessageTextByID(messageID);
@@ -79,22 +80,21 @@ public class MessageServlet extends HttpServlet {
         System.err.println("Error in edit message - requestDispatcher failed");
         e.printStackTrace();
       }
-
-      response.setContentType("application/json");
-      String countryCode = request.getParameter("countryCode");
-
-      if (countryCode == null || countryCode.isEmpty()) {
-        // Request is invalid, return empty array
-        response.getWriter().println("[]");
-        return;
-      }
-
-      List<Message> messages = datastore.getCountryMessages(countryCode);
-      Gson gson = new Gson();
-      String json = gson.toJson(messages);
-
-      response.getWriter().println(json);
     }
+    response.setContentType("application/json");
+    String countryCode = request.getParameter("countryCode");
+
+    if (countryCode == null || countryCode.isEmpty()) {
+      // Request is invalid, return empty array
+      response.getWriter().println("[]");
+      return;
+    }
+
+    List<Message> messages = datastore.getCountryMessages(countryCode);
+    Gson gson = new Gson();
+    String json = gson.toJson(messages);
+
+    response.getWriter().println(json);
   }
 
   /**

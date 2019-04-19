@@ -121,7 +121,7 @@ public class Message {
   }
 
   public boolean hasAnImage() {
-    if (this.imageUrl == null || this.imageUrl.equals("")) {
+    if (this.imageUrl == null || this.imageUrl.isEmpty()) {
       return false;
     } else {
       return true;
