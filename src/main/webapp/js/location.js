@@ -40,10 +40,10 @@ function seeLocation(posLat,posLng,mapId) {
       zoom: 16,
       center: position
     });
+    infoWindow = new google.maps.InfoWindow;
     var marker = new google.maps.Marker({
         position: position,
         map: map,
         title: 'Aqui anda'
       });
-    infowindow.open(map, marker);
 }
