@@ -2,12 +2,16 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.google.codeu.data.Message" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
 
 <% String countryCode = (String) request.getAttribute("countryCode"); %>
 <% String countryName = (String) request.getAttribute("name"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
 <% Set<String> categories = (HashSet) request.getAttribute("categories"); %>
+<% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService(); %>
+<% String uploadUrl = blobstoreService.createUploadUrl("/messages"); %>
 
 <!DOCTYPE html>
 <html>
@@ -17,20 +21,17 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/message-loader.js"></script>
+    <script src="/js/location.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
     <script>
 
       var selectedCategory = "General";
-      var withoutCategoryURL = "/messages?countryCode=<%= countryCode %>&category="
-      var withCategoryURL = "/messages?countryCode=<%= countryCode %>&category=" + selectedCategory;
-
       /* When the user clicks on the button,
           toggle between hiding and showing the dropdown content */
       function updateMessageCategory() {
         var e = document.getElementById("myDropdown");
         selectedCategory = e.options[e.selectedIndex].value;
-        withCategoryURL = withoutCategoryURL + selectedCategory;
-        document.getElementById("message-form").action = withCategoryURL;
+        document.getElementById("message-category").value = selectedCategory;
       }
 
       function onLoad(){
@@ -66,19 +67,31 @@
     <h1 id="page-title"><%= countryName %></h1>
 
     <% if (currentUser != null) { %>
-    <form id="message-form" action="" method="POST" class>
-    Enter a new message:
-    <br/>
-    <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-      <select id="myDropdown" onchange="updateMessageCategory()">
-    <%  Iterator iter1 = categories.iterator();
-        while (iter1.hasNext()) {
-        String categoryList = (String) iter1.next();  %>
-        <option><%= categoryList %></option>
+      <form id="message-form" action="<%=uploadUrl%>" method="POST" enctype="multipart/form-data">
+        Enter a new message:
+        <br/>
+        <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+        <input type="hidden" name="category" value="" id="message-category">
+        <input type="hidden" name="countryCode" value="<%=countryCode%>">
+        <input type="hidden" name="lat" value="" id="lat">
+        <input type="hidden" name="lng" value="" id="lng">
+        <select id="myDropdown" onchange="updateMessageCategory()">
+        <%
+          Iterator iter1 = categories.iterator();
+          while (iter1.hasNext()) {
+          String categoryList = (String) iter1.next();
+        %>
+          <option><%= categoryList %></option>
         <% }  %>
-      </select>
-      <input type="submit" value="Submit">
-    </form>
+        </select>
+        <input type="submit" value="Submit">
+        <br/>
+        Add an image to your message:
+        <input type="file" name="image">
+        <br/>
+      </form>
+      <button onclick="getLocation()">Add your location</button>
+      <div id="map"></div>
     <% }  %>
     <br/>
     <div id="message-container">
@@ -98,19 +111,30 @@
               <% if(messages.get(i).hasAnImage()){ %>
             	  <%= messages.get(i).getText() + "<br/>" + "<img src=\"" + messages.get(i).getImageUrl() + "\"/>"%>
               <% } else { %>
-              <%= messages.get(i).getText() %>
+                <%= messages.get(i).getText() %>
               <% } %>
             </div>
             <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
-            <form id="delete-form" action="/messages" method="POST">
-              <input type="hidden" name="action" value="delete"/>
-              <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
-              <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-              <button type="submit" value="Submit">DELETE</button>
-            </form>
+              <form id="edit-form" action="/messages" method="GET">
+                <input type="hidden" name="action" value="getEditable"/>
+                <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
+                <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
+                <input type="hidden" name="lat" value="<%=messages.get(i).getLat()%>"/>
+                <input type="hidden" name="lng" value="<%=messages.get(i).getLng()%>"/>
+                <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+                <button type="submit">EDIT</button>
+              </form>
+              <form id="delete-form" action="/messages" method="POST">
+                <input type="hidden" name="action" value="delete"/>
+                <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
+                <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+                <button type="submit" value="Submit">DELETE</button>
+              </form>
           <% } %>
           </div>
       <% }  %>
     </div>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
+    </script>
   </body>
 </html>
