@@ -16,6 +16,7 @@
 
 package com.google.codeu.data;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 /** A single message posted by a user. */
@@ -30,6 +31,8 @@ public class Message {
   private String lat;
   private String lng;
   private String imageUrl;
+  private ArrayList<String> replies;
+  private UUID parent;
 
   /**
    * Constructs a new {@link Message} posted by {@code user} to {@code country} with {@code text}
@@ -58,6 +61,8 @@ public class Message {
     this.lat = lat;
     this.lng = lng;
     this.imageUrl = "";
+    this.replies = new ArrayList<>();
+    this.parent = null;
   }
 
   public String getCountry() {
