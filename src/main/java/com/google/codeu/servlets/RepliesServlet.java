@@ -50,7 +50,7 @@ public class RepliesServlet extends HttpServlet {
     // This is a reply - image upload and location finding is disabled
     Message parent = datastore.getMessageByID(parentID);
     if (parent == null) {
-      response.sendRedirect("/");
+      // response.sendRedirect("/");
       return;
     }
     System.err.println("Check 4");

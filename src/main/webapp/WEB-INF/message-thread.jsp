@@ -33,12 +33,13 @@
     </div>
     <h1 id="page-title"> Message Thread </h1>
     <% if(currentUser != null){ %>
+    <% String parentID = parent.getId().toString(); %>
       <form id="reply-form" action="/reply" method="POST">
         Add a reply:
         <br/>
         <%System.err.println(parent.getId());%>
         <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-        <input type="hidden" name="parentID" value="<%=parent.getId()%>">
+        <input type="hidden" name="parentID" value="<%=parentID%>">
         <br/>
         <button type="submit" value="Submit"> SUBMIT </button>
       </form>
