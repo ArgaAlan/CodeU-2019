@@ -31,7 +31,7 @@ public class Message {
   private String lat;
   private String lng;
   private String imageUrl;
-  private ArrayList<Message> replies;
+  private ArrayList<UUID> replies;
   private UUID parent;
 
   /**
@@ -95,6 +95,22 @@ public class Message {
 
   public String getLng() {
     return lng;
+  }
+
+  public ArrayList<UUID> getReplies() {
+    return replies;
+  }
+
+  public void addReply(UUID reply) {
+    replies.add(reply);
+  }
+
+  public UUID getParent() {
+    return parent;
+  }
+
+  public void setParent(UUID parent) {
+    this.parent = parent;
   }
 
   public String getImageUrl() {

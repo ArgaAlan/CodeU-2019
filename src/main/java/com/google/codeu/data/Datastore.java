@@ -48,6 +48,8 @@ public class Datastore {
     messageEntity.setProperty("category", message.getCategory());
     messageEntity.setProperty("latitude", message.getLat());
     messageEntity.setProperty("longitude", message.getLng());
+    messageEntity.setProperty("parent", message.getParent().toString());
+    messageEntity.setProperty("replies", message.getReplies());
     messageEntity.setProperty("image", message.getImageUrl());
     datastore.put(messageEntity);
   }
@@ -93,6 +95,39 @@ public class Datastore {
         new Query("Message")
             .setFilter(new Query.FilterPredicate("country", FilterOperator.EQUAL, countryCode))
             .addSort("timestamp", SortDirection.DESCENDING);
+
+    PreparedQuery results = datastore.prepare(query);
+
+    return convertEntitiesToMessages(results);
+  }
+
+  /**
+   * Gets message with a specific UUID
+   *
+   * @param messageID UUID of message which is being returned
+   * @return the message corresponding with the UUID
+   */
+  public Message getMessageByUUID(String messageID) {
+    Query query =
+            new Query("Message")
+                    .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, messageID));
+
+    PreparedQuery results = datastore.prepare(query);
+
+    List<Message> list =  convertEntitiesToMessages(results);
+    return list.get(0);
+  }
+
+  /**
+   * Gets messages posted as replies to a parent message.
+   *
+   * @return a list of replies to the parent message, or empty list if there are no reply messages.
+   *     List is sorted by time descending.
+   */
+  public List<Message> getRepliesByUUID(UUID parentUUID) {
+    Query query =
+            new Query("Message")
+                    .setFilter(new Query.FilterPredicate("parent", FilterOperator.EQUAL, parentUUID.toString()));
 
     PreparedQuery results = datastore.prepare(query);
 
