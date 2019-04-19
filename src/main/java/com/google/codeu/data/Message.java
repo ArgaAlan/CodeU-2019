@@ -31,7 +31,7 @@ public class Message {
   private String lat;
   private String lng;
   private String imageUrl;
-  private ArrayList<String> replies;
+  private ArrayList<Message> replies;
   private UUID parent;
 
   /**
