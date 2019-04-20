@@ -163,12 +163,17 @@ public class MessageServlet extends HttpServlet {
         message.setImageUrl(request.getParameter("imageUrl"));
     }
 
-    if (blobKeys != null && !blobKeys.isEmpty()) {
-      BlobKey blobKey = blobKeys.get(0);
-      ImagesService imagesService = ImagesServiceFactory.getImagesService();
-      ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-      String imageUrl = imagesService.getServingUrl(options);
-      message.setImageUrl(imageUrl);
+    try {
+      if (blobKeys != null && !blobKeys.isEmpty()) {
+        BlobKey blobKey = blobKeys.get(0);
+        ImagesService imagesService = ImagesServiceFactory.getImagesService();
+        ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+        String imageUrl = imagesService.getServingUrl(options);
+        message.setImageUrl(imageUrl);
+      }
+    } catch (Exception e) {
+      System.err.println("Invalid image upload");
+      e.printStackTrace();
     }
     datastore.storeMessage(message);
 
