@@ -178,7 +178,7 @@
           }
           if (messages.get(i).getCategory().equals("Food")) {
             limit--;
-    %>
+          } %>
           <div class="message-div">
             <div class="message-header">
               User: <%= messages.get(i).getUser() %> |

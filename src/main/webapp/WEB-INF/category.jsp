@@ -55,6 +55,7 @@
           <input type="hidden" name="category" value="<%=category%>">
           <input type="hidden" name="countryCode" value="<%=countryCode%>">
           <button type="submit" value="Submit"> SUBMIT </button>
+          <br/>
           Add an image to your message:
           <input type="file" name="image">
           <br/>
