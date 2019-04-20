@@ -135,9 +135,9 @@
       %>
           <div class="message-div">
             <div class="message-header">
-              User: <a href="http://localhost:8080/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
+              User: <a href="/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
               Time: <%= new Date(messages.get(i).getTimestamp()) %> |
-              Category: <a href="http://localhost:8080/country/MX/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
+              Category: <a href="/country/<%= messages.get(i).getCountry() %>/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
             </div>
             <div class="message-body">
               <% if(messages.get(i).hasAnImage()){ %>
@@ -198,9 +198,9 @@
         %>
             <div class="message-div">
               <div class="message-header">
-                User: <a href="http://localhost:8080/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
+                User: <a href="/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
                 Time: <%= new Date(messages.get(i).getTimestamp()) %> |
-                Category: <a href="http://localhost:8080/country/MX/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
+                Category: <a href="/country/<%= messages.get(i).getCountry() %>/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
               </div>
               <div class="message-body">
                 <% if(messages.get(i).hasAnImage()){ %>
@@ -261,9 +261,9 @@
        %>
            <div class="message-div">
              <div class="message-header">
-               User: <a href="http://localhost:8080/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
+               User: <a href="/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
                Time: <%= new Date(messages.get(i).getTimestamp()) %> |
-               Category: <a href="http://localhost:8080/country/MX/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
+               Category: <a href="/country/<%= messages.get(i).getCountry() %>/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
              </div>
              <div class="message-body">
                <% if(messages.get(i).hasAnImage()){ %>
@@ -324,9 +324,9 @@
       %>
           <div class="message-div">
             <div class="message-header">
-              User: <a href="http://localhost:8080/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
+              User: <a href="/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
               Time: <%= new Date(messages.get(i).getTimestamp()) %> |
-              Category: <a href="http://localhost:8080/country/MX/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
+              Category: <a href="/country/<%= messages.get(i).getCountry() %>/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
             </div>
             <div class="message-body">
               <% if(messages.get(i).hasAnImage()){ %>

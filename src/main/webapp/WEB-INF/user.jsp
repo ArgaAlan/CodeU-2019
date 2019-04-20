@@ -54,7 +54,7 @@
     %>
           <div class="message-div">
             <div class="message-header">
-              Country: <a href = "http://localhost:8080/country/<%= messages.get(i).getCountry() %>"> <%= messages.get(i).getCountry() %> </a> -
+              Country: <a href = "/country/<%= messages.get(i).getCountry() %>"> <%= messages.get(i).getCountry() %> </a> -
               Time: <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
