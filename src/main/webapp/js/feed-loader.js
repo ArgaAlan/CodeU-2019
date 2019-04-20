@@ -60,17 +60,28 @@ function fetchMessages(){
    const bodyDiv = document.createElement('div');
    bodyDiv.classList.add('message-body');
    bodyDiv.appendChild(document.createTextNode(message.text));
-  if (message.imageUrl != null || !message.imageUrl != "") {
-    bodyDiv.appendChild(document.createElement("br"));
-    var DOM_img = document.createElement("img");
-    DOM_img.src = message.imageUrl;
-    bodyDiv.appendChild(DOM_img);
-  }
+   if (message.imageUrl != null || !message.imageUrl != "") {
+     bodyDiv.appendChild(document.createElement("br"));
+     var DOM_img = document.createElement("img");
+     DOM_img.src = message.imageUrl;
+     bodyDiv.appendChild(DOM_img);
+   }
+
+   const replyForm = document.createElement('form');
+   replyForm.classList.add('message-form-button');
+   replyForm.action = "/thread/" + message.id.toString();
+   replyForm.id = 'reply-form';
+   const replyButton = document.createElement('button');
+   replyButton.type = "submit";
+   replyButton.value = "Submit";
+   replyButton.innerHTML = "See Thread and Reply";
+   replyForm.appendChild(replyButton);
 
    const messageDiv = document.createElement('div');
    messageDiv.classList.add('message-div');
    messageDiv.appendChild(headerDiv);
    messageDiv.appendChild(bodyDiv);
+   messageDiv.appendChild(replyForm);
 
    return messageDiv;
  }
