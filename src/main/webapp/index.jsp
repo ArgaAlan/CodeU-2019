@@ -77,6 +77,16 @@
     <h1>Welcome!</h1>
     <h3>Click on a country to start chatting!</h3>
     <div id="map"></div>
+    
+    <h3>We want everyone to share their experiences in when traveling so more people can have that information.
+    	You can go to any countries that you have visited and add your experiences based in the categories.
+    	We want to stop the problems of culture shock, which is things that might be different from your country
+    	and could get you in trouble, so go ahead an talk about that.
+    	You can add images, videos and your ubication to the post. For the images just add an image address or
+    	submit the file from your computer. For the videos just add the youtube URL. And finally for your location
+    	just press the button "Add your location".
+    	You can go to any country page and see the most recent messages for every category.
+    	We hope that you have a good time at our site, have fun!</h3>
 
     <font color = "#544610">
     <h1>
