@@ -42,10 +42,20 @@ function fetchMessages(){
  function buildMessageDiv(message) {
    const headerDiv = document.createElement('div');
    headerDiv.classList.add('message-header');
-   headerDiv.appendChild(document.createTextNode(
-   "User: " + message.user + ' - ' +
-   "Country: " + message.country + ' - ' +
-   new Date(message.timestamp)+ ' - '));
+   headerDiv.appendChild(document.createTextNode("User: "));
+
+   const userLink = document.createElement('a');
+   userLink.href = "/users/" + message.user;
+   userLink.innerHTML = message.user;
+   headerDiv.appendChild(userLink);
+   headerDiv.appendChild(document.createTextNode(' - ' + "Country: "));
+
+   const countryLink = document.createElement('a');
+   countryLink.href = "/country/" + message.country;
+   countryLink.innerHTML = message.country;
+   headerDiv.appendChild(countryLink);
+   headerDiv.appendChild(document.createTextNode(' - ' +
+   new Date(message.timestamp)));
 
    const bodyDiv = document.createElement('div');
    bodyDiv.classList.add('message-body');
