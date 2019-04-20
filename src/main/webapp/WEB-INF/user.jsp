@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/user-page.css">
     <script src="/js/message-loader.js"></script>
+    <script src="/js/location.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
   </head>
   <body onload="buildUI()">
@@ -53,7 +54,7 @@
     %>
           <div class="message-div">
             <div class="message-header">
-              Country: <%= messages.get(i).getCountry() %> -
+              Country: <a href = "/country/<%= messages.get(i).getCountry() %>"> <%= messages.get(i).getCountry() %> </a> -
               Time: <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
@@ -80,9 +81,15 @@
             <button type="submit" value="Submit">Delete</button>
           </form>
           <% } %>
+          <% if(messages.get(i).hasALocation()){ %>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
+            <div id="map<%=i%>" class="message_map" ></div>
+            <% } %>
           </div>
     <% }  %>
     </div>
     <% } %>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
+    </script>
   </body>
 </html>
