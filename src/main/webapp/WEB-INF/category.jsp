@@ -92,7 +92,7 @@
     %>
           <div class="message-div">
             <div class="message-header">
-              User: <%= messages.get(i).getUser() %> -
+              User: <a href="http://localhost:8080/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> -
               Time: <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
