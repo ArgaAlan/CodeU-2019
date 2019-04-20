@@ -45,17 +45,16 @@
 
     <% if(currentUser != null){ %>
       <% if (editText == null) { %>
-        Enter a new message:
         <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
+          Enter a new message:
           <br/>
           <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
           <br/>
           <input type="hidden" name="lat" value="" id="lat">
           <input type="hidden" name="lng" value="" id="lng">
-          <button type="submit" value="Submit"> SUBMIT </button>
           <input type="hidden" name="category" value="<%=category%>">
           <input type="hidden" name="countryCode" value="<%=countryCode%>">
-          <br/>
+          <button type="submit" value="Submit"> SUBMIT </button>
           Add an image to your message:
           <input type="file" name="image">
           <br/>
@@ -87,7 +86,7 @@
         <div id="map"></div>
       <% } %>
     <% }  %>
-    <div id="message-container">
+    <div class="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts in this category yet.</p>
           <p><strong> Be the first to post </strong> </p>

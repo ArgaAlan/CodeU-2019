@@ -56,6 +56,14 @@
   background-color: inherit;
 }
 
+.message-div-food {
+  border: thin solid green;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  background-color: inherit;
+}
+
+
 /* Add a bottom border to the message header. */
 .message-header {
   border-bottom: thin solid #1985A1;

@@ -91,6 +91,12 @@ h3 {
   font-size: 20px;
 }
 
+h4 {
+  color: white;
+  font-size: 30px;
+
+}
+
 p {
   color: #7D8E9F;
   font-size: 16px;
@@ -144,6 +150,30 @@ p {
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+.button2 {
+  font-size: 10px;
+  padding: 20px 20px;
+  background-color: white;
+  font-family: 'Noto Sans TC', sans-serif;
+  margin-bottom: 20px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #1985A1;
+  text-decoration: none;
+}
+
+.limitPosts {
+  font-size: 20px;
+  border-width: 1px;
+}
+
+.message-container {
+  /*background-color: white;*/
+  border-width: 3px;
+  border-color: red;
+  padding:10px 10px;
 }
 
 /* Formatting for delete button */
