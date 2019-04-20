@@ -84,6 +84,12 @@
   max-width: 75%;
 }
 
+.message-form-button {
+  display: inline;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
 /* Give the about me body a margin so the text
    isn't too close to the border. */
 .about-me-body {
