@@ -92,7 +92,7 @@
     %>
           <div class="message-div">
             <div class="message-header">
-              User: <a href="/users/<%= messages.get(i).getUser() %>"><%= messages.get(i).getUser() %></a> -
+              User: <a href="/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> -
               Time: <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
