@@ -95,15 +95,7 @@
       <button onclick="getLocation()">Add your location</button>
       <div id="map"></div>
     <% }  %>
-    <br/>
     <div id="message-container">
-    <br/>
-      <form id="category-form" action="/category" method="POST">
-        <input type="text" name="category" value="New Category">
-        <input type="hidden" name="countryCode" value="<%=countryCode%>">
-        <input type="submit" value="Submit">
-      </form>
-
     <%
     //limit to 5 posts per subchannel in main country page
     int limit = 5;
@@ -188,6 +180,17 @@
             <a href="/country/<%= countryCode %>/c/<%= categoriesList.get(j)%>"><button class="limitPosts">Click here view category</button></a>
         <% } %>
   <%}%>
+
+  <% if (currentUser != null) { %>
+    Don't see a category you like?
+    <br/>
+    Add a Category:
+    <form id="category-form" action="/category" method="POST">
+      <input type="text" name="category" placeholder="New Category">
+      <input type="hidden" name="countryCode" value="<%=countryCode%>">
+      <button type="submit" value="Submit">Submit</button>
+    </form>
+  <% } %>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
     </script>
   </body>
