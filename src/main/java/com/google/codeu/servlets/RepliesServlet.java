@@ -28,7 +28,6 @@ public class RepliesServlet extends HttpServlet {
   /** Stores a {@link Reply} in Datastore */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    System.err.println("InPOST");
     User currentUser = datastore.getCurrentUser();
 
     // redirect to home if user is not logged in
@@ -37,25 +36,20 @@ public class RepliesServlet extends HttpServlet {
       return;
     }
 
-    String parentID = (String) request.getAttribute("parentID");
-    System.err.println("Check 2");
-    System.err.println(parentID);
+    String parentID = (String) request.getParameter("parentID");
 
     if (parentID == null) {
       response.sendRedirect("/");
       return;
     }
-    System.err.println("Check 3");
 
     // This is a reply - image upload and location finding is disabled
     Message parent = datastore.getMessageByID(parentID);
     if (parent == null) {
-      // response.sendRedirect("/");
+      response.sendRedirect("/");
       return;
     }
-    System.err.println("Check 4");
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.relaxed());
-    System.err.println(text);
 
     Reply reply = new Reply(parentID, currentUser.getEmail(), text);
     parent.addReply(reply.getId());

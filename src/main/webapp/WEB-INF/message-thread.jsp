@@ -37,7 +37,6 @@
       <form id="reply-form" action="/reply" method="POST">
         Add a reply:
         <br/>
-        <%System.err.println(parent.getId());%>
         <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
         <input type="hidden" name="parentID" value="<%=parentID%>">
         <br/>
