@@ -77,8 +77,8 @@
     <h1>Welcome!</h1>
     <h3>Click on a country to start chatting!</h3>
     <div id="map"></div>
-    
-    <h3Our goal was to create a user-friendly experience for travelers all over the world to discuss various aspects they enjoyed about their trips, like great foods and "must-see" attractions. We also hoped that through this public forum type experience, we would be able to eliminate some of the negative culture shock that people sometimes encounter when traveling to new places. Travelers can discuss the negatives and positives about their trip, and can warn others who are visiting the same places about the negatives while also sharing their favorite parts of their journey! You can add images, videos, or your current location to the post. To add images, simply copy and paste the image address or upload a file from your computer. To add videos, paste the youtube URL into the message box. To add your location, just press the button "Add your location".
+
+    <h3> Our goal was to create a user-friendly experience for travelers all over the world to discuss various aspects they enjoyed about their trips, like great foods and "must-see" attractions. We also hoped that through this public forum type experience, we would be able to eliminate some of the negative culture shock that people sometimes encounter when traveling to new places. Travelers can discuss the negatives and positives about their trip, and can warn others who are visiting the same places about the negatives while also sharing their favorite parts of their journey! You can add images, videos, or your current location to the post. To add images, simply copy and paste the image address or upload a file from your computer. To add videos, paste the youtube URL into the message box. To add your location, just press the button "Add your location".
     	You can go to any country page and see the most recent messages for every category.
     	We hope that you have a good time at our site, have fun!</h3>
 
