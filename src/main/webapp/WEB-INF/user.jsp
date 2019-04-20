@@ -61,11 +61,11 @@
               <%= messages.get(i).getText() %>
             </div>
           <% if (isLoggedIn) { %>
-            <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>">
+            <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>" class="message-form-button">
               <button type="submit" value="Submit">See Thread and Reply</button>
             </form>
           <% if (isViewingSelf) { %>
-          <form id="edit-form" action="/messages" method="GET">
+          <form id="edit-form" action="/messages" method="GET" class="message-form-button">
             <input type="hidden" name="action" value="getEditable"/>
             <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
             <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
@@ -74,7 +74,7 @@
             <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
             <button type="submit">EDIT</button>
           </form>
-          <form id="delete-form" action="/messages" method="POST">
+          <form id="delete-form" action="/messages" method="POST" class="message-form-button">
             <input type="hidden" name="action" value="delete"/>
             <input type="hidden" name="callee" value="/users/<%=user%>"/>
             <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>

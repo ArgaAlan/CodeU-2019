@@ -103,11 +103,11 @@
               <% } %>
             </div>
             <% if (currentUser != null) { %>
-              <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>">
+              <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>" class="message-form-button">
                 <button type="submit" value="Submit">See Thread and Reply</button>
               </form>
               <% if (currentUser.equals(messages.get(i).getUser())) { %>
-                <form id="edit-form" action="/messages" method="GET">
+                <form id="edit-form" action="/messages" method="GET" class="message-form-button">
                   <input type="hidden" name="action" value="getEditable"/>
                   <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
                   <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
@@ -117,7 +117,7 @@
                   <input type="hidden" name="imageUrl" value="<%=messages.get(i).getImageUrl()%>"/>
                   <button type="submit">EDIT</button>
                 </form>
-                <form id="delete-form" action="/messages" method="POST">
+                <form id="delete-form" action="/messages" method="POST" class="message-form-button">
                   <input type="hidden" name="action" value="delete"/>
                   <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
                   <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
@@ -128,7 +128,7 @@
             }
           %>
         <% if(messages.get(i).hasALocation()){ %>
-            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')" class="message-form-button">See post location</button>
             <div id="map<%=i%>" class="message_map" ></div>
             <% } %>
           </div>
