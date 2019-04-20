@@ -59,7 +59,13 @@ function fetchMessages(){
 
    const bodyDiv = document.createElement('div');
    bodyDiv.classList.add('message-body');
-   bodyDiv.innerHTML = message.text;
+   bodyDiv.appendChild(document.createTextNode(message.text));
+  if (message.imageUrl != null || !message.imageUrl != "") {
+    bodyDiv.appendChild(document.createElement("br"));
+    var DOM_img = document.createElement("img");
+    DOM_img.src = message.imageUrl;
+    bodyDiv.appendChild(DOM_img);
+  }
 
    const messageDiv = document.createElement('div');
    messageDiv.classList.add('message-div');

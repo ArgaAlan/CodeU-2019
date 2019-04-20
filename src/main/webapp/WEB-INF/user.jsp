@@ -58,7 +58,11 @@
               Time: <%= new Date(messages.get(i).getTimestamp()) %>
             </div>
             <div class="message-body">
+              <% if(messages.get(i).hasAnImage()){ %>
+              <%= messages.get(i).getText() + "<br/>" + "<img src=\"" + messages.get(i).getImageUrl() + "\"/>"%>
+              <% } else { %>
               <%= messages.get(i).getText() %>
+              <% } %>
             </div>
           <% if (isLoggedIn) { %>
             <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>" class="message-form-button">
