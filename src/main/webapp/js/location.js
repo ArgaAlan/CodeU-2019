@@ -2,7 +2,7 @@ var map, infoWindow;
 function getLocation() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: -34.397, lng: 150.644},
-    zoom: 6
+    zoom: 16
   });
   infoWindow = new google.maps.InfoWindow;
 
@@ -32,4 +32,18 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
                         'Error: The Geolocation service failed.' :
                         'Error: Your browser doesn\'t support geolocation.');
   infoWindow.open(map);
+}
+
+function seeLocation(posLat,posLng,mapId) {
+	var position = {lat: posLat, lng: posLng};
+    var map = new google.maps.Map(document.getElementById(mapId), {
+      zoom: 16,
+      center: position
+    });
+    infoWindow = new google.maps.InfoWindow;
+    var marker = new google.maps.Marker({
+        position: position,
+        map: map
+      });
+    infoWindow.open(map, marker);
 }

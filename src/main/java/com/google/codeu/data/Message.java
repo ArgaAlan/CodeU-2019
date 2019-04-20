@@ -138,4 +138,12 @@ public class Message {
       return true;
     }
   }
+
+  public boolean hasALocation() {
+    if (this.lat.isEmpty() && this.lng.isEmpty()) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 }

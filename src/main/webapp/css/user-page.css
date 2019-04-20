@@ -96,3 +96,12 @@
   display: none;
 }
 
+/* Map design*/
+#map {
+        height: 75px;
+      }
+		
+	  .message_map {
+		height: 75px;
+	  }
+

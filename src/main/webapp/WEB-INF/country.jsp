@@ -169,6 +169,10 @@
                 </form>
               <% } %>
             <% } %>
+            <% if(messages.get(i).hasALocation()){ %>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
+            <div id="map<%=i%>" class="message_map" ></div>
+            <% } %>
           </div>
           <% } %>
         <% } %>
@@ -228,6 +232,10 @@
                   </form>
                 <% } %>
               <% } %>
+                <% if(messages.get(i).hasALocation()){ %>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
+            <div id="map<%=i%>" class="message_map" ></div>
+            <% } %>
             </div>
             <% } %>
           <% } %>
@@ -287,6 +295,10 @@
                  </form>
                <% } %>
              <% } %>
+                      <% if(messages.get(i).hasALocation()){ %>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
+            <div id="map<%=i%>" class="message_map" ></div>
+            <% } %>
            </div>
            <% } %>
          <% } %>
@@ -345,6 +357,10 @@
                   <button type="submit">EDIT</button>
                 </form>
               <% } %>
+            <% } %>
+                    <% if(messages.get(i).hasALocation()){ %>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
+            <div id="map<%=i%>" class="message_map" ></div>
             <% } %>
           </div>
           <% } %>

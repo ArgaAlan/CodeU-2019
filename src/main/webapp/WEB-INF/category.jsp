@@ -24,11 +24,6 @@
     <script src="/js/message-loader.js"></script>
     <script src="/js/location.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
-    <style>
-      #map {
-        height: 75px;
-      }
-    </style>
   </head>
   <body onload="buildUI()">
     <div class="navbar">
@@ -132,6 +127,10 @@
              }
             }
           %>
+        <% if(messages.get(i).hasALocation()){ %>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
+            <div id="map<%=i%>" class="message_map" ></div>
+            <% } %>
           </div>
     <%    }
         }  %>
