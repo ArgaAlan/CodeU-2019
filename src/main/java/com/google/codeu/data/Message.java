@@ -16,6 +16,7 @@
 
 package com.google.codeu.data;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 /** A single message posted by a user. */
@@ -30,6 +31,7 @@ public class Message {
   private String lat;
   private String lng;
   private String imageUrl;
+  private ArrayList<String> replies;
 
   /**
    * Constructs a new {@link Message} posted by {@code user} to {@code country} with {@code text}
@@ -38,6 +40,26 @@ public class Message {
   public Message(
       String user, String text, String country, String category, String lat, String lng) {
     this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, category, lat, lng);
+  }
+
+  // Constructor for edited messages which already have an ID, update timestamp
+  public Message(
+      String idStr,
+      String user,
+      String text,
+      String country,
+      String category,
+      String lat,
+      String lng) {
+    this(
+        UUID.fromString(idStr),
+        user,
+        text,
+        System.currentTimeMillis(),
+        country,
+        category,
+        lat,
+        lng);
   }
 
   public Message(
@@ -58,6 +80,7 @@ public class Message {
     this.lat = lat;
     this.lng = lng;
     this.imageUrl = "";
+    this.replies = new ArrayList<>();
   }
 
   public String getCountry() {
@@ -92,6 +115,14 @@ public class Message {
     return lng;
   }
 
+  public ArrayList<String> getReplies() {
+    return replies;
+  }
+
+  public void addReply(String reply) {
+    replies.add(reply);
+  }
+
   public String getImageUrl() {
     return imageUrl;
   }
@@ -101,7 +132,7 @@ public class Message {
   }
 
   public boolean hasAnImage() {
-    if (this.imageUrl.equals("")) {
+    if (this.imageUrl == null || this.imageUrl.isEmpty()) {
       return false;
     } else {
       return true;
