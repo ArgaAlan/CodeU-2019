@@ -24,16 +24,6 @@
     <script src="/js/message-loader.js"></script>
     <script src="/js/location.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
-    <style>
-      #map {
-        height: 75px;
-      }
-		
-	  .message_map {
-		height: 75px;
-	  }
-		
-    </style>
   </head>
   <body onload="buildUI()">
     <div class="navbar">

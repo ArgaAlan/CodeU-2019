@@ -40,11 +40,6 @@
       }
 
     </script>
-    <style>
-      .message_map {
-		height: 75px;
-	  }
-    </style>
   </head>
   <body onload="onLoad()">
     <div class="navbar">
@@ -174,11 +169,11 @@
                 </form>
               <% } %>
             <% } %>
-          </div>
-        <% if(messages.get(i).hasALocation()){ %>
+            <% if(messages.get(i).hasALocation()){ %>
             <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
             <div id="map<%=i%>" class="message_map" ></div>
             <% } %>
+          </div>
           <% } %>
         <% } %>
       </div>
@@ -237,11 +232,11 @@
                   </form>
                 <% } %>
               <% } %>
-            </div>
-          <% if(messages.get(i).hasALocation()){ %>
+                <% if(messages.get(i).hasALocation()){ %>
             <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
             <div id="map<%=i%>" class="message_map" ></div>
             <% } %>
+            </div>
             <% } %>
           <% } %>
         </div>
@@ -300,11 +295,11 @@
                  </form>
                <% } %>
              <% } %>
-           </div>
-         <% if(messages.get(i).hasALocation()){ %>
+                      <% if(messages.get(i).hasALocation()){ %>
             <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
             <div id="map<%=i%>" class="message_map" ></div>
             <% } %>
+           </div>
            <% } %>
          <% } %>
        </div>
@@ -363,11 +358,11 @@
                 </form>
               <% } %>
             <% } %>
-          </div>
-        <% if(messages.get(i).hasALocation()){ %>
+                    <% if(messages.get(i).hasALocation()){ %>
             <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
             <div id="map<%=i%>" class="message_map" ></div>
             <% } %>
+          </div>
           <% } %>
         <% } %>
       </div>
