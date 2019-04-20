@@ -38,7 +38,6 @@
       <br/>
       <textarea name="about-me" placeholder="About me" id="about-me-input"></textarea>
       <br/>
-      <!--<input type="submit" value="Submit">-->
       <button type="submit" value="Submit"> SUBMIT </button>
     </form>
     <hr/>
@@ -92,6 +91,6 @@
           </div>
     <% }  %>
     </div>
-
+    <% } %>
   </body>
 </html>
