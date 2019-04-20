@@ -24,9 +24,8 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+
+import java.util.*;
 
 /** Provides access to the data stored in Datastore. */
 public class Datastore {
@@ -356,6 +355,7 @@ public class Datastore {
     countryEntity.setProperty("name", country.getName());
     countryEntity.setProperty("lat", country.getLat());
     countryEntity.setProperty("lng", country.getLng());
+    countryEntity.setProperty("categories", country.getCategories());
     datastore.put(countryEntity);
   }
 
@@ -416,8 +416,10 @@ public class Datastore {
     String name = (String) countryEntity.getProperty("name");
     double lat = (double) countryEntity.getProperty("lat");
     double lng = (double) countryEntity.getProperty("lng");
+    List<String> list = (List<String>) countryEntity.getProperty("categories");
+    HashSet<String> categories = new HashSet<String>(list);
 
-    Country country = new Country(countryCode, name, lat, lng);
+    Country country = new Country(countryCode, name, lat, lng, categories);
     return country;
   }
 }
