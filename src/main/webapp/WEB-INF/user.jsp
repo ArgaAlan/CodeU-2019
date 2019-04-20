@@ -89,5 +89,7 @@
     <% }  %>
     </div>
     <% } %>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
+    </script>
   </body>
 </html>
