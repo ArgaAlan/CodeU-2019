@@ -47,9 +47,9 @@
     <div id="message-container">
       <div class="message-div">
         <div class="message-header">
-          User: <%= parent.getUser() %> --
+          User: <a href="/users/<%= parent.getUser() %>"><%= parent.getUser() %></a> --
           Time: <%= new Date(parent.getTimestamp()) %> --
-          Country: <%= parent.getCountry() %> --
+          Country: <a href="/country/<%= parent.getCountry() %>"><%= parent.getCountry() %></a> --
           Category: <%= parent.getCategory() %>
         </div>
         <div class="message-body">
