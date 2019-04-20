@@ -10,6 +10,7 @@
 <% String category = (String) request.getAttribute("category"); %>
 <% List<Message> messages = (List<Message>) request.getAttribute("messages"); %>
 <% String currentUser = (String) request.getAttribute("currentUser"); %>
+<% String editText = (String) request.getAttribute("editText"); %>
 <% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService(); %>
 <% String uploadUrl = blobstoreService.createUploadUrl("/messages"); %>
 
@@ -43,22 +44,48 @@
     <h2 id="category"><%= category %></h2>
 
     <% if(currentUser != null){ %>
-      <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
-        Enter a new message:
-        <br/>
-        <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
-        <br/>
-        <input type="hidden" name="lat" value="" id="lat">
-        <input type="hidden" name="lng" value="" id="lng">
-        <input type="hidden" name="category" value="<%=category%>">
-        <input type="hidden" name="countryCode" value="<%=countryCode%>">
-        <button type="submit" value="Submit"> SUBMIT </button>
-        Add an image to your message:
-        <input type="file" name="image">
-        <br/>
-      </form>
-      <button onclick="getLocation()">Add your location</button>
-      <div id="map"></div>
+      <% if (editText == null) { %>
+        <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
+          Enter a new message:
+          <br/>
+          <textarea name="text" placeholder="Enter a message" id="message-input"></textarea>
+          <br/>
+          <input type="hidden" name="lat" value="" id="lat">
+          <input type="hidden" name="lng" value="" id="lng">
+          <input type="hidden" name="category" value="<%=category%>">
+          <input type="hidden" name="countryCode" value="<%=countryCode%>">
+          <button type="submit" value="Submit"> SUBMIT </button>
+          <br/>
+          Add an image to your message:
+          <input type="file" name="image">
+          <br/>
+        </form>
+        <button onclick="getLocation()">Add your location</button>
+        <div id="map"></div>
+      <% } else { %>
+        <form id="message-form" action="<%= uploadUrl %>" method="POST" enctype="multipart/form-data">
+          Edit your message:
+          <br/>
+          <textarea name="text" id="edit-message-input">
+          <%=editText%>
+          </textarea>
+          <input type="hidden" name="messageID" value="<%=(String) request.getAttribute("editID")%>"/>
+          <input type="hidden" name="lat" id="lat" value="<%=(String) request.getAttribute("lat") %>" />
+          <input type="hidden" name="lng" id="lng" value="<%=(String) request.getAttribute("lng") %>" />
+          <input type="hidden" name="imageUrl" value="<%=(String) request.getAttribute("imageUrl") %>" />
+          <input type="hidden" name="category" value="<%=category%>">
+          <input type="hidden" name="countryCode" value="<%=countryCode%>">
+          <button type="submit" value="Submit"> SUBMIT </button>
+          <br/>
+          Old image: <%=(String) request.getAttribute("imageUrl")%>
+          <br/>
+          Add different image to your message:
+          <input type="file" name="image">
+          <br/>
+        </form>
+        <button onclick="getLocation()">Update your location</button>
+        <div id="map"></div>
+      <% } %>
     <% }  %>
     <div class="message-container">
     <%  if (messages.isEmpty()) { %>
@@ -81,12 +108,22 @@
               <% } %>
             </div>
             <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
-            <form id="delete-form" action="/messages" method="POST">
-              <input type="hidden" name="action" value="delete"/>
-              <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
-              <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-              <button type="submit" value="Submit">DELETE</button>
-            </form>
+              <form id="edit-form" action="/messages" method="GET">
+                <input type="hidden" name="action" value="getEditable"/>
+                <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
+                <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
+                <input type="hidden" name="lat" value="<%=messages.get(i).getLat()%>"/>
+                <input type="hidden" name="lng" value="<%=messages.get(i).getLng()%>"/>
+                <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+                <input type="hidden" name="imageUrl" value="<%=messages.get(i).getImageUrl()%>"/>
+                <button type="submit">EDIT</button>
+              </form>
+              <form id="delete-form" action="/messages" method="POST">
+                <input type="hidden" name="action" value="delete"/>
+                <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
+                <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+                <button type="submit" value="Submit">DELETE</button>
+              </form>
             <% } %>
           </div>
     <%    }

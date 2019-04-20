@@ -79,10 +79,9 @@
 
 /* Formats img tags from urls posted by user */
 .message-body img {
-  display: block;
-  margin: 10px;
+  display: inline;
+  margin-top: 25px;
   max-width: 75%;
-  max-height:75%;
 }
 
 /* Give the about me body a margin so the text
@@ -97,9 +96,3 @@
   display: none;
 }
 
-/* Gives a good visual to the image */
-.message-body img {
-  display: block;
-  margin-top: 25px;
-  max-width: 75%;
-}

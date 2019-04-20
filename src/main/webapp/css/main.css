@@ -45,7 +45,7 @@ h2 {
 
 /* Gives a good visual to the image */
 .message-body img {
-  display: block;
+  display: inline;
   margin-top: 25px;
   max-width: 75%;
 }

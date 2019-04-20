@@ -40,6 +40,26 @@ public class Message {
     this(UUID.randomUUID(), user, text, System.currentTimeMillis(), country, category, lat, lng);
   }
 
+  // Constructor for edited messages which already have an ID, update timestamp
+  public Message(
+      String idStr,
+      String user,
+      String text,
+      String country,
+      String category,
+      String lat,
+      String lng) {
+    this(
+        UUID.fromString(idStr),
+        user,
+        text,
+        System.currentTimeMillis(),
+        country,
+        category,
+        lat,
+        lng);
+  }
+
   public Message(
       UUID id,
       String user,
@@ -101,7 +121,7 @@ public class Message {
   }
 
   public boolean hasAnImage() {
-    if (this.imageUrl.equals("")) {
+    if (this.imageUrl == null || this.imageUrl.isEmpty()) {
       return false;
     } else {
       return true;

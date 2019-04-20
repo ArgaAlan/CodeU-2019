@@ -26,6 +26,7 @@ function addRichTextEditor(){
   const config = {removePlugins: []};
   ClassicEditor.create( document.getElementById('message-input'), config);
   ClassicEditor.create( document.getElementById('about-me-input'), config);
+  ClassicEditor.create( document.getElementById('edit-message-input'), config);
 }
 
 /** Fetches data and populates the UI of the page. */

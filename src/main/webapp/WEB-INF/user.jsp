@@ -61,12 +61,21 @@
               <%= messages.get(i).getText() %>
             </div>
         <% if (isViewingSelf) { %>
-        <form id="delete-form" action="/messages" method="POST">
-        <input type="hidden" name="action" value="delete"/>
-        <input type="hidden" name="callee" value="/users/<%=user%>"/>
-        <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-        <button type="submit" value="Submit">Delete</button>
-        </form>
+          <form id="edit-form" action="/messages" method="GET">
+            <input type="hidden" name="action" value="getEditable"/>
+            <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
+            <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
+            <input type="hidden" name="lat" value="<%=messages.get(i).getLat()%>"/>
+            <input type="hidden" name="lng" value="<%=messages.get(i).getLng()%>"/>
+            <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+            <button type="submit">EDIT</button>
+          </form>
+          <form id="delete-form" action="/messages" method="POST">
+            <input type="hidden" name="action" value="delete"/>
+            <input type="hidden" name="callee" value="/users/<%=user%>"/>
+            <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+            <button type="submit" value="Submit">Delete</button>
+          </form>
         <% } %>
           </div>
     <% }  %>

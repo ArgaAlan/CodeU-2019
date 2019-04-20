@@ -57,7 +57,30 @@ public class MessageServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+    // check if request is for message edit information
+    // If so, reload the page with necessary information about the message
+    if ("getEditable".equals(request.getParameter("action"))) {
+      String messageID = request.getParameter("messageID");
+      String messageText = datastore.getMessageTextByID(messageID);
+      request.setAttribute("editText", messageText);
+      request.setAttribute("editID", messageID);
+      request.setAttribute("lat", request.getParameter("lat"));
+      request.setAttribute("lng", request.getParameter("lng"));
+      request.setAttribute("imageUrl", request.getParameter("imageUrl"));
+      try {
+        String editURL =
+            "/country/"
+                + request.getParameter("country")
+                + "/c/"
+                + request.getParameter("category");
+        // Reload page with message information in form
+        request.getRequestDispatcher(editURL).forward(request, response);
+        return;
+      } catch (Exception e) {
+        System.err.println("Error in edit message - requestDispatcher failed");
+        e.printStackTrace();
+      }
+    }
     response.setContentType("application/json");
     String countryCode = request.getParameter("countryCode");
 
@@ -74,7 +97,9 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /** Edits a {@link Message}. Either creates and stores the message, or Deletes the message */
+  /**
+   * Edits a {@link Message}. Either creates/edits and stores the message, or Deletes the message
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -86,9 +111,8 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    // Delete message if delete parameter is present
+    // Delete message if delete parameter is present and refresh
     if ("delete".equals(request.getParameter("action"))) {
-      // then refresh page
       datastore.deleteMessageWithID(request.getParameter("messageID"));
       response.sendRedirect(request.getParameter("callee"));
       return;
@@ -121,8 +145,23 @@ public class MessageServlet extends HttpServlet {
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
     List<BlobKey> blobKeys = blobs.get("image");
 
-    Message message =
-        new Message(currentUser.getEmail(), textWithMedia, countryCode, category, lat, lng);
+    Message message;
+    if (request.getParameter("messageID") == null)
+      message = new Message(currentUser.getEmail(), textWithMedia, countryCode, category, lat, lng);
+    else {
+      // message being edited - already has ID
+      message =
+          new Message(
+              request.getParameter("messageID"),
+              currentUser.getEmail(),
+              textWithMedia,
+              countryCode,
+              category,
+              lat,
+              lng);
+      if (blobKeys == null || blobKeys.isEmpty())
+        message.setImageUrl(request.getParameter("imageUrl"));
+    }
 
     if (blobKeys != null && !blobKeys.isEmpty()) {
       BlobKey blobKey = blobKeys.get(0);
@@ -131,7 +170,6 @@ public class MessageServlet extends HttpServlet {
       String imageUrl = imagesService.getServingUrl(options);
       message.setImageUrl(imageUrl);
     }
-
     datastore.storeMessage(message);
 
     response.sendRedirect("/country/" + countryCode + "/c/" + category);

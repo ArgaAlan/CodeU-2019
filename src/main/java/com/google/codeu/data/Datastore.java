@@ -39,6 +39,22 @@ public class Datastore {
 
   /** Stores the Message in Datastore. */
   public void storeMessage(Message message) {
+    // Do not post message if user is not message poster or not logged on
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      System.err.println("Invalid Credentials: attempt to post message while not logged in");
+      return;
+    }
+    String userEmail = userService.getCurrentUser().getEmail();
+    if (!message.getUser().equals(userEmail)) {
+      System.err.println(
+          "Invalid Credentials: User "
+              + userEmail
+              + " attempt to post message by "
+              + message.getUser());
+      return;
+    }
+
     Entity messageEntity = new Entity("Message", message.getId().toString());
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("ID", message.getId().toString());
@@ -49,7 +65,24 @@ public class Datastore {
     messageEntity.setProperty("lat", message.getLat());
     messageEntity.setProperty("lng", message.getLng());
     messageEntity.setProperty("image", message.getImageUrl());
+
     datastore.put(messageEntity);
+  }
+
+  public String getMessageTextByID(String messageID) {
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, messageID));
+
+    PreparedQuery results = datastore.prepare(query);
+    Entity messageEntity = results.asSingleEntity();
+
+    if (messageEntity == null) {
+      System.err.println("Invalid Message ID - " + messageID);
+      return null;
+    }
+
+    return (String) messageEntity.getProperty("text");
   }
 
   public void deleteMessageWithID(String messageID) {
