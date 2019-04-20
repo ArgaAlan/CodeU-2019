@@ -24,11 +24,6 @@
     <script src="/js/message-loader.js"></script>
     <script src="/js/location.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js"></script>
-    <style>
-      #map {
-        height: 75px;
-      }
-    </style>
   </head>
   <body onload="buildUI()">
     <div class="navbar">
@@ -107,23 +102,34 @@
               <%= messages.get(i).getText() %>
               <% } %>
             </div>
-            <% if (currentUser != null && currentUser.equals(messages.get(i).getUser())) { %>
-              <form id="edit-form" action="/messages" method="GET">
-                <input type="hidden" name="action" value="getEditable"/>
-                <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
-                <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
-                <input type="hidden" name="lat" value="<%=messages.get(i).getLat()%>"/>
-                <input type="hidden" name="lng" value="<%=messages.get(i).getLng()%>"/>
-                <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-                <input type="hidden" name="imageUrl" value="<%=messages.get(i).getImageUrl()%>"/>
-                <button type="submit">EDIT</button>
+            <% if (currentUser != null) { %>
+              <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>">
+                <button type="submit" value="Submit">See Thread and Reply</button>
               </form>
-              <form id="delete-form" action="/messages" method="POST">
-                <input type="hidden" name="action" value="delete"/>
-                <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
-                <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-                <button type="submit" value="Submit">DELETE</button>
-              </form>
+              <% if (currentUser.equals(messages.get(i).getUser())) { %>
+                <form id="edit-form" action="/messages" method="GET">
+                  <input type="hidden" name="action" value="getEditable"/>
+                  <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
+                  <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
+                  <input type="hidden" name="lat" value="<%=messages.get(i).getLat()%>"/>
+                  <input type="hidden" name="lng" value="<%=messages.get(i).getLng()%>"/>
+                  <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+                  <input type="hidden" name="imageUrl" value="<%=messages.get(i).getImageUrl()%>"/>
+                  <button type="submit">EDIT</button>
+                </form>
+                <form id="delete-form" action="/messages" method="POST">
+                  <input type="hidden" name="action" value="delete"/>
+                  <input type="hidden" name="callee" value="/country/<%=countryCode%>/c/<%=category%>"/>
+                  <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
+                  <button type="submit" value="Submit">DELETE</button>
+                </form>
+          <%
+             }
+            }
+          %>
+        <% if(messages.get(i).hasALocation()){ %>
+            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
+            <div id="map<%=i%>" class="message_map" ></div>
             <% } %>
           </div>
     <%    }

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -101,7 +102,8 @@ public class MessageServlet extends HttpServlet {
    * Edits a {@link Message}. Either creates/edits and stores the message, or Deletes the message
    */
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
 
     User currentUser = datastore.getCurrentUser();
 
@@ -123,7 +125,6 @@ public class MessageServlet extends HttpServlet {
             request.getParameter("text"),
             Whitelist.relaxed().addTags("oembed").addAttributes("oembed", "url"));
     String textWithMedia = getMediaEmbeddedText(text);
-
     String countryCode = request.getParameter("countryCode");
     String category = request.getParameter("category");
 
