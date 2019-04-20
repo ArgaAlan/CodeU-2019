@@ -56,6 +56,14 @@
   background-color: inherit;
 }
 
+.message-div-food {
+  border: thin solid green;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  background-color: inherit;
+}
+
+
 /* Add a bottom border to the message header. */
 .message-header {
   border-bottom: thin solid #1985A1;
@@ -71,10 +79,9 @@
 
 /* Formats img tags from urls posted by user */
 .message-body img {
-  display: block;
-  margin: 10px;
+  display: inline;
+  margin-top: 25px;
   max-width: 75%;
-  max-height:75%;
 }
 
 /* Give the about me body a margin so the text
@@ -89,9 +96,3 @@
   display: none;
 }
 
-/* Gives a good visual to the image */
-.message-body img {
-  display: block;
-  margin-top: 25px;
-  max-width: 75%;
-}

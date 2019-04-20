@@ -46,6 +46,7 @@ public class CountryServlet extends HttpServlet {
       throws IOException, ServletException {
 
     String requestUrl = request.getRequestURI();
+
     String countryCode = requestUrl.substring("/country/".length());
     String category = null;
 
