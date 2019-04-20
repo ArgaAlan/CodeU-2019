@@ -64,9 +64,36 @@ public class Datastore {
     messageEntity.setProperty("category", message.getCategory());
     messageEntity.setProperty("lat", message.getLat());
     messageEntity.setProperty("lng", message.getLng());
+    messageEntity.setProperty("replies", message.getReplies());
     messageEntity.setProperty("image", message.getImageUrl());
 
     datastore.put(messageEntity);
+  }
+
+  /** Stores the Reply in Datastore. */
+  public void storeReply(Reply reply) {
+    // Do not post message if user is not message poster or not logged on
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+      System.err.println("Invalid Credentials: attempt to post replyEntity while not logged in");
+      return;
+    }
+    String userEmail = userService.getCurrentUser().getEmail();
+    if (!reply.getUser().equals(userEmail)) {
+      System.err.println(
+          "Invalid Credentials: User "
+              + userEmail
+              + " attempt to post reply by "
+              + reply.getUser());
+      return;
+    }
+    Entity replyEntity = new Entity("Reply", reply.getId());
+    replyEntity.setProperty("user", reply.getUser());
+    replyEntity.setProperty("ID", reply.getId());
+    replyEntity.setProperty("text", reply.getText());
+    replyEntity.setProperty("timestamp", reply.getTimestamp());
+    replyEntity.setProperty("parentID", reply.getParentId());
+    datastore.put(replyEntity);
   }
 
   public String getMessageTextByID(String messageID) {
@@ -130,6 +157,46 @@ public class Datastore {
     PreparedQuery results = datastore.prepare(query);
 
     return convertEntitiesToMessages(results);
+  }
+
+  /**
+   * Gets message with a specific ID
+   *
+   * @param messageID ID of message which is being returned
+   * @return the message corresponding with the ID
+   */
+  public Message getMessageByID(String messageID) {
+    Query query =
+        new Query("Message")
+            .setFilter(new Query.FilterPredicate("ID", FilterOperator.EQUAL, messageID));
+
+    PreparedQuery results = datastore.prepare(query);
+    Entity messageEntity = results.asSingleEntity();
+    if (messageEntity == null) {
+      System.err.println("Invalid Message ID - " + messageID);
+      return null;
+    }
+
+    List<Message> list = convertEntitiesToMessages(results);
+    return list.get(0);
+  }
+
+  /**
+   * Gets messages posted as replies to a parent message.
+   *
+   * @return a list of replies to the parent message, or empty list if there are no reply messages.
+   *     List is sorted by time descending.
+   */
+  public List<Reply> getRepliesByID(String parentID) {
+    Query query =
+        new Query("Reply")
+            .setFilter(
+                new Query.FilterPredicate("parentID", FilterOperator.EQUAL, parentID.toString()))
+            .addSort("timestamp", SortDirection.ASCENDING);
+
+    PreparedQuery results = datastore.prepare(query);
+
+    return convertEntitiesToReplies(results);
   }
 
   /**
@@ -208,9 +275,9 @@ public class Datastore {
   }
 
   /**
-   * Gets messages of all users specified by s/users/users/
+   * Gets messages of from a prepared query of messages
    *
-   * @return null, updates List<Message> messages
+   * @return List<Message> from the query results
    */
   public List<Message> convertEntitiesToMessages(PreparedQuery results) {
     List<Message> messages = new ArrayList<>();
@@ -237,6 +304,34 @@ public class Datastore {
       }
     }
     return messages;
+  }
+
+  /**
+   * Gets Replies from a prepared query for replies
+   *
+   * @return List<Replies> from the query results
+   */
+  public List<Reply> convertEntitiesToReplies(PreparedQuery results) {
+    List<Reply> replies = new ArrayList<>();
+
+    for (Entity entity : results.asIterable()) {
+      try {
+        String idString = entity.getKey().getName();
+        UUID id = UUID.fromString(idString);
+        String user = (String) entity.getProperty("user");
+        String text = (String) entity.getProperty("text");
+        long timestamp = (long) entity.getProperty("timestamp");
+        String parentIDStr = (String) entity.getProperty("parentID");
+        UUID parentID = UUID.fromString(parentIDStr);
+        Reply reply = new Reply(id, parentID, user, text, timestamp);
+        replies.add(reply);
+      } catch (Exception e) {
+        System.err.println("Error reading message.");
+        System.err.println(entity.toString());
+        e.printStackTrace();
+      }
+    }
+    return replies;
   }
 
   /** Returns the total number of messages for all users. */

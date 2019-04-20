@@ -51,7 +51,7 @@ public class CountryServlet extends HttpServlet {
     String category = null;
 
     // Confirm valid url format
-    if (countryCode == null || countryCode.equals("")) {
+    if (countryCode == null || countryCode.isEmpty()) {
       response.sendRedirect("/");
       return;
     }
