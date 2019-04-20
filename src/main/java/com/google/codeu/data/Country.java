@@ -10,6 +10,14 @@ public class Country {
   private double lng;
   Set<String> categories = new HashSet<String>();
 
+  public Country(String code, String name, double lat, double lng, Set<String> categories) {
+    this.code = code;
+    this.name = name;
+    this.lat = lat;
+    this.lng = lng;
+    this.categories = categories;
+  }
+
   public Country(String code, String name, double lat, double lng) {
     this.code = code;
     this.name = name;
@@ -40,4 +48,9 @@ public class Country {
   public Set<String> getCategories() {
     return categories;
   }
+
+  public void addCategory(String category) {
+    categories.add(category);
+  }
+
 }

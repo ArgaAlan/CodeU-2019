@@ -12,6 +12,8 @@
 <% Set<String> categories = (HashSet) request.getAttribute("categories"); %>
 <% BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService(); %>
 <% String uploadUrl = blobstoreService.createUploadUrl("/messages"); %>
+<% HashMap<String, Integer> catCounts = new HashMap(); %>
+<% ArrayList<String> categoriesList = new ArrayList<>(); %>
 
 <!DOCTYPE html>
 <html>
@@ -93,114 +95,46 @@
       <button onclick="getLocation()">Add your location</button>
       <div id="map"></div>
     <% }  %>
-    <br/>
     <div id="message-container">
-
     <%
     //limit to 5 posts per subchannel in main country page
     int limit = 5;
-    int categorySizeG = 0;
-    int categorySizeF = 0;
-    int categorySizeC = 0;
-    int categorySizeA = 0;
+
+    Iterator iter1 = categories.iterator();
+    while (iter1.hasNext()) {
+      String category = (String) iter1.next();
+      catCounts.put(category, new Integer(0));
+      categoriesList.add(category);
+    }
 
     for (int j = 0; j < messages.size(); j++) {
-          if (messages.get(j).getCategory().equals("General")) {
-            categorySizeG++;
-          }
-          else if (messages.get(j).getCategory().equals("Food")) {
-            categorySizeF++;
-          }
-          else if (messages.get(j).getCategory().equals("Culture")) {
-            categorySizeC++;
-          }
-          else if (messages.get(j).getCategory().equals("Attractions")) {
-            categorySizeA++;
-          }
-     }
+      if (catCounts.containsKey(messages.get(j).getCategory())) {
+        catCounts.put(messages.get(j).getCategory(), catCounts.get(messages.get(j).getCategory()) + 1);
+      }
+    }
+
+    for (int j = 0; j < categoriesList.size(); j++) {
     %>
 
-    <!-- GENERAL category-->
-    <h4 id = "food-div">General</h4>
-      <div class="message-container">
-      <%
-       //if no posts, button displays this message
-      if (categorySizeG == 0) { %>
-        <a href="/country/<%= countryCode %>/c/General"><button class="limitPosts">Be the first to post on this thread.</button></a>
-      <% }
-
-        for(int i = 0; i < messages.size() && i < limit; i++) {
-          //stops creating new posts after 5 most recent in that subcategory
-          if (messages.get(i).getCategory().equals("General")) {
-      %>
-          <div class="message-div">
-            <div class="message-header">
-              User: <a href="/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
-              Time: <%= new Date(messages.get(i).getTimestamp()) %> |
-              Category: <a href="/country/<%= messages.get(i).getCountry() %>/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
-            </div>
-            <div class="message-body">
-              <% if(messages.get(i).hasAnImage()){ %>
-                <%= messages.get(i).getText() + "<br/>" + "<img src=\"" + messages.get(i).getImageUrl() + "\"/>"%>
-              <% } else { %>
-                <%= messages.get(i).getText() %>
-              <% } %>
-            </div>
-            <% if (currentUser != null) { %>
-              <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>" class="message-form-button">
-                <button type="submit" value="Submit">See Thread and Reply</button>
-              </form>
-              <% if (currentUser.equals(messages.get(i).getUser())) { %>
-                <form id="delete-form" action="/messages" method="POST" class="message-form-button">
-                  <input type="hidden" name="action" value="delete"/>
-                  <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
-                  <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-                  <button type="submit" value="Submit">DELETE</button>
-                </form>
-                <form id="edit-form" action="/messages" method="GET" class="message-form-button">
-                  <input type="hidden" name="action" value="getEditable"/>
-                  <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
-                  <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
-                  <input type="hidden" name="lat" value="<%=messages.get(i).getLat()%>"/>
-                  <input type="hidden" name="lng" value="<%=messages.get(i).getLng()%>"/>
-                  <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-                  <input type="hidden" name="imageUrl" value="<%=messages.get(i).getImageUrl()%>"/>
-                  <button type="submit">EDIT</button>
-                </form>
-              <% } %>
-            <% } %>
-            <% if(messages.get(i).hasALocation()){ %>
-            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')"  class="message-form-button">See post location</button>
-            <div id="map<%=i%>" class="message_map" ></div>
-            <% } %>
-          </div>
-          <% } %>
-        <% } %>
-      </div>
-      <%
-      //if there is at least one post, show this button
-      if (categorySizeG != 0) { %>
-          <a href="/country/<%= countryCode %>/c/General"><button class="limitPosts">Click here to see full thread</button></a>
-      <% } %>
-
-      <!-- FOOD category-->
-      <h4 id = "food-div">Food Thread</h4>
+      <!-- All categories -->
+      <h4><%= categoriesList.get(j) %></h4>
         <div class="message-container">
         <%
          //if no posts, button displays this message
-        if (categorySizeF == 0) { %>
-          <a href="/country/<%= countryCode %>/c/Food"><button class="limitPosts">Be the first to post on this thread.</button></a>
+        if (catCounts.get(categoriesList.get(j)) == 0) { %>
+          <a href="/country/<%= countryCode %>/c/<%=categoriesList.get(j)%>"><button class="limitPosts">Be the first to post in this category.</button></a>
         <% }
-
-          for(int i = 0; i < messages.size() && i < limit; i++) {
+          int messageCount = 0;
+          for(int i = 0; i < messages.size() && messageCount < limit; i++) {
             //stops creating new posts after 5 most recent in that subcategory
-            if (messages.get(i).getCategory().equals("Food")) {
+            if (messages.get(i).getCategory().equals(categoriesList.get(j))) {
+              messageCount++;
         %>
             <div class="message-div">
               <div class="message-header">
                 User: <a href="/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
                 Time: <%= new Date(messages.get(i).getTimestamp()) %> |
-                Category: <a href="/country/<%= messages.get(i).getCountry() %>/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
+                Category: <a href="/country/<%=countryCode%>/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
               </div>
               <div class="message-body">
                 <% if(messages.get(i).hasAnImage()){ %>
@@ -210,17 +144,17 @@
                 <% } %>
               </div>
               <% if (currentUser != null) { %>
-                <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>">
+                <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>" class="message-form-button">
                   <button type="submit" value="Submit">See Thread and Reply</button>
                 </form>
                 <% if (currentUser.equals(messages.get(i).getUser())) { %>
-                  <form id="delete-form" action="/messages" method="POST">
+                  <form id="delete-form" action="/messages" method="POST" class="message-form-button">
                     <input type="hidden" name="action" value="delete"/>
                     <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
                     <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
                     <button type="submit" value="Submit">DELETE</button>
                   </form>
-                  <form id="edit-form" action="/messages" method="GET">
+                  <form id="edit-form" action="/messages" method="GET" class="message-form-button">
                     <input type="hidden" name="action" value="getEditable"/>
                     <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
                     <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
@@ -232,146 +166,31 @@
                   </form>
                 <% } %>
               <% } %>
-                <% if(messages.get(i).hasALocation()){ %>
-            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
-            <div id="map<%=i%>" class="message_map" ></div>
-            <% } %>
+              <% if(messages.get(i).hasALocation()){ %>
+              <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')"  class="message-form-button">See post location</button>
+              <div id="map<%=i%>" class="message_map" ></div>
+              <% } %>
             </div>
             <% } %>
           <% } %>
         </div>
-      <%
-      //if there is at least one post, show this button
-      if (categorySizeF != 0) { %>
-          <a href="/country/<%= countryCode %>/c/Food"><button class="limitPosts">Click here to see full thread</button></a>
-     <% } %>
-
-     <!-- CULTURE category-->
-     <h4 id = "food-div">Culture Thread</h4>
-       <div class="message-container">
-       <%
-        //if no posts, button displays this message
-       if (categorySizeC == 0) { %>
-         <a href="/country/<%= countryCode %>/c/Culture"><button class="limitPosts">Be the first to post on this thread.</button></a>
-       <% }
-
-         for(int i = 0; i < messages.size() && i < limit; i++) {
-           //stops creating new posts after 5 most recent in that subcategory
-           if (messages.get(i).getCategory().equals("Culture")) {
-       %>
-           <div class="message-div">
-             <div class="message-header">
-               User: <a href="/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
-               Time: <%= new Date(messages.get(i).getTimestamp()) %> |
-               Category: <a href="/country/<%= messages.get(i).getCountry() %>/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
-             </div>
-             <div class="message-body">
-               <% if(messages.get(i).hasAnImage()){ %>
-                 <%= messages.get(i).getText() + "<br/>" + "<img src=\"" + messages.get(i).getImageUrl() + "\"/>"%>
-               <% } else { %>
-                 <%= messages.get(i).getText() %>
-               <% } %>
-             </div>
-             <% if (currentUser != null) { %>
-               <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>">
-                 <button type="submit" value="Submit">See Thread and Reply</button>
-               </form>
-               <% if (currentUser.equals(messages.get(i).getUser())) { %>
-                 <form id="delete-form" action="/messages" method="POST">
-                   <input type="hidden" name="action" value="delete"/>
-                   <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
-                   <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-                   <button type="submit" value="Submit">DELETE</button>
-                 </form>
-                 <form id="edit-form" action="/messages" method="GET">
-                   <input type="hidden" name="action" value="getEditable"/>
-                   <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
-                   <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
-                   <input type="hidden" name="lat" value="<%=messages.get(i).getLat()%>"/>
-                   <input type="hidden" name="lng" value="<%=messages.get(i).getLng()%>"/>
-                   <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-                   <input type="hidden" name="imageUrl" value="<%=messages.get(i).getImageUrl()%>"/>
-                   <button type="submit">EDIT</button>
-                 </form>
-               <% } %>
-             <% } %>
-                      <% if(messages.get(i).hasALocation()){ %>
-            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
-            <div id="map<%=i%>" class="message_map" ></div>
-            <% } %>
-           </div>
-           <% } %>
-         <% } %>
-       </div>
-     <%
-     //if there is at least one post, show this button
-     if (categorySizeA != 0) { %>
-         <a href="/country/<%= countryCode %>/c/Attractions"><button class="limitPosts">Click here to see full thread</button></a>
-    <% } %>
-
-    <!-- CULTURE category-->
-    <h4 id = "food-div">Attractions Thread</h4>
-      <div class="message-container">
-      <%
-       //if no posts, button displays this message
-      if (categorySizeC == 0) { %>
-        <a href="/country/<%= countryCode %>/c/Attractions"><button class="limitPosts">Be the first to post on this thread.</button></a>
-      <% }
-
-        for(int i = 0; i < messages.size() && i < limit; i++) {
-          //stops creating new posts after 5 most recent in that subcategory
-          if (messages.get(i).getCategory().equals("Attractions")) {
-      %>
-          <div class="message-div">
-            <div class="message-header">
-              User: <a href="/users/<%= messages.get(i).getUser() %>"> <%= messages.get(i).getUser() %> </a> |
-              Time: <%= new Date(messages.get(i).getTimestamp()) %> |
-              Category: <a href="/country/<%= messages.get(i).getCountry() %>/c/<%= messages.get(i).getCategory() %>"> <%= messages.get(i).getCategory() %> </a>
-            </div>
-            <div class="message-body">
-              <% if(messages.get(i).hasAnImage()){ %>
-                <%= messages.get(i).getText() + "<br/>" + "<img src=\"" + messages.get(i).getImageUrl() + "\"/>"%>
-              <% } else { %>
-                <%= messages.get(i).getText() %>
-              <% } %>
-            </div>
-            <% if (currentUser != null) { %>
-              <form id="reply-form" action="/thread/<%=messages.get(i).getId()%>">
-                <button type="submit" value="Submit">See Thread and Reply</button>
-              </form>
-              <% if (currentUser.equals(messages.get(i).getUser())) { %>
-                <form id="delete-form" action="/messages" method="POST">
-                  <input type="hidden" name="action" value="delete"/>
-                  <input type="hidden" name="callee" value="/country/<%=countryCode%>"/>
-                  <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-                  <button type="submit" value="Submit">DELETE</button>
-                </form>
-                <form id="edit-form" action="/messages" method="GET">
-                  <input type="hidden" name="action" value="getEditable"/>
-                  <input type="hidden" name="country" value="<%=messages.get(i).getCountry()%>"/>
-                  <input type="hidden" name="category" value="<%=messages.get(i).getCategory()%>"/>
-                  <input type="hidden" name="lat" value="<%=messages.get(i).getLat()%>"/>
-                  <input type="hidden" name="lng" value="<%=messages.get(i).getLng()%>"/>
-                  <input type="hidden" name="messageID" value="<%=messages.get(i).getId()%>"/>
-                  <input type="hidden" name="imageUrl" value="<%=messages.get(i).getImageUrl()%>"/>
-                  <button type="submit">EDIT</button>
-                </form>
-              <% } %>
-            <% } %>
-                    <% if(messages.get(i).hasALocation()){ %>
-            <button onclick="seeLocation(<%=messages.get(i).getLat()%>, <%=messages.get(i).getLng()%>, 'map<%=i%>')">See post location</button>
-            <div id="map<%=i%>" class="message_map" ></div>
-            <% } %>
-          </div>
-          <% } %>
+        <%
+        //if there is at least one post, show this button
+        if (catCounts.get(categoriesList.get(j)) != 0) { %>
+            <a href="/country/<%= countryCode %>/c/<%= categoriesList.get(j)%>"><button class="limitPosts">Click here view category</button></a>
         <% } %>
-      </div>
-    <%
-    //if there is at least one post, show this button
-    if (categorySizeA != 0) { %>
-        <a href="/country/<%= countryCode %>/c/Attractions"><button class="limitPosts">Click here to see full thread</button></a>
-   <% } %>
+  <%}%>
 
+  <% if (currentUser != null) { %>
+    Don't see a category you like?
+    <br/>
+    Add a Category:
+    <form id="category-form" action="/category" method="POST">
+      <input type="text" name="category" placeholder="New Category">
+      <input type="hidden" name="countryCode" value="<%=countryCode%>">
+      <button type="submit" value="Submit">Submit</button>
+    </form>
+  <% } %>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCK_yt5P_kfz23tAb8tE_fptjRAn5jaB0">
     </script>
   </body>
