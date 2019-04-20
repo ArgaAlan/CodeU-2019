@@ -60,7 +60,7 @@
       <button onclick="getLocation()">Add your location</button>
       <div id="map"></div>
     <% }  %>
-    <div id="message-container">
+    <div class="message-container">
     <%  if (messages.isEmpty()) { %>
           <p>No posts in this category yet.</p>
           <p><strong> Be the first to post </strong> </p>
