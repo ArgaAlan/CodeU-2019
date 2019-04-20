@@ -61,8 +61,8 @@
         </div>
       </div>
       <% for(int i = 0; i < replies.size(); i++) { %>
-          <div class="reply-div">
-            <div class="reply-header">
+          <div class="message-div">
+            <div class="message-header">
               User: <%= replies.get(i).getUser() %> --
               Time: <%= new Date(replies.get(i).getTimestamp()) %>
             </div>
