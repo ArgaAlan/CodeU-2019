@@ -60,11 +60,26 @@ function fetchMessages(){
    const bodyDiv = document.createElement('div');
    bodyDiv.classList.add('message-body');
    bodyDiv.innerHTML = message.text;
+   if (message.imageUrl != null || !message.imageUrl != "") {
+     bodyDiv.innerHTML += '<br/>';
+     bodyDiv.innerHTML += '<img src="' + message.imageUrl + '" />';
+   }
+
+   const replyForm = document.createElement('form');
+   replyForm.classList.add('message-form-button');
+   replyForm.action = "/thread/" + message.id.toString();
+   replyForm.id = 'reply-form';
+   const replyButton = document.createElement('button');
+   replyButton.type = "submit";
+   replyButton.value = "Submit";
+   replyButton.innerHTML = "See Thread or Reply";
+   replyForm.appendChild(replyButton);
 
    const messageDiv = document.createElement('div');
    messageDiv.classList.add('message-div');
    messageDiv.appendChild(headerDiv);
    messageDiv.appendChild(bodyDiv);
+   messageDiv.appendChild(replyForm);
 
    return messageDiv;
  }
