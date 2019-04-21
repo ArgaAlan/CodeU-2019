@@ -59,12 +59,10 @@ function fetchMessages(){
 
    const bodyDiv = document.createElement('div');
    bodyDiv.classList.add('message-body');
-   bodyDiv.appendChild(document.createTextNode(message.text));
+   bodyDiv.innerHTML = message.text;
    if (message.imageUrl != null || !message.imageUrl != "") {
-     bodyDiv.appendChild(document.createElement("br"));
-     var DOM_img = document.createElement("img");
-     DOM_img.src = message.imageUrl;
-     bodyDiv.appendChild(DOM_img);
+     bodyDiv.innerHTML += '<br/>';
+     bodyDiv.innerHTML += '<img src="' + message.imageUrl + '" />';
    }
 
    const replyForm = document.createElement('form');
@@ -74,7 +72,7 @@ function fetchMessages(){
    const replyButton = document.createElement('button');
    replyButton.type = "submit";
    replyButton.value = "Submit";
-   replyButton.innerHTML = "See Thread and Reply";
+   replyButton.innerHTML = "See Thread or Reply";
    replyForm.appendChild(replyButton);
 
    const messageDiv = document.createElement('div');
