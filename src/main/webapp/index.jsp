@@ -101,10 +101,11 @@
       <br />
       Aaron works at Google in Seattle, and has been at Google for
       8.5 years. He's worked on Google Chrome, Google Clips, and Daydream VR.
-      He forgot to intruduce himself with a fun fact, so Nicole decided to make
-      one up.
       <br />
-      Fun Fact: Alongside his time at Google, Aaron has also led a very successful
+      Fun Fact: Aaron just won an Emmy this April!
+      <br />
+      <i> Extra Fun Fact that Nicole initially made up because Aaron forgot to introduce himself with one: </i>
+      Alongside his time at Google, Aaron has also led a very successful
       career in part-time professional yodeling. It has been rumored that, on
       a clear day, his yodels can be heard over five miles away.
     </p>
