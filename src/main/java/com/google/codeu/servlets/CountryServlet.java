@@ -31,12 +31,15 @@ public class CountryServlet extends HttpServlet {
       String[] cells = line.split(",");
 
       String code = cells[0];
-      String name = cells[1];
-      double lat = Double.parseDouble(cells[2]);
-      double lng = Double.parseDouble(cells[3]);
+      if (datastore.getCountry(code) == null) {
+        // Country does not yet exist in Datastore - store country
+        String name = cells[1];
+        double lat = Double.parseDouble(cells[2]);
+        double lng = Double.parseDouble(cells[3]);
 
-      Country country = new Country(code, name, lat, lng);
-      datastore.storeCountry(country);
+        Country country = new Country(code, name, lat, lng);
+        datastore.storeCountry(country);
+      }
     }
     scanner.close();
   }
